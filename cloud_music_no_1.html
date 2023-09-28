@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="ace.js"></script>
 <script src="dat.gui.js"></script>
-<script src="jquery-3.6.1.js"></script>
+<script src="jquery.js"></script>
 <script src="p5.js"></script>
 <script src="sprintf.js"></script>
 <script src="three.js"></script>
@@ -2197,6 +2197,9 @@ void mainImage( out vec4 fragColor, in vec2 fragCoord )
                     $(output_selector).val(this.value);
                 });
             });
+           // Reset controls to defaults every time the window loads!
+           $("#default")[0].click();
+           $("#save")[0].click();
         };
     </script>
  </html>

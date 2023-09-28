@@ -16,9 +16,9 @@ class StrudelReplComponent extends HTMLElement {
       const code = (this.innerHTML + '').replace('<!--', '').replace('-->', '').trim();
       let iframe = document.createElement('iframe');
       console.log("location.origin: ", location.origin);
-      // Fix up the "home" part of the URI to work with my version of Strudel's REPL.
-      // We need to find the part of the pathname in between the origin 
-      // and the file name, and insert that into the request URI.
+      //~ // Fix up the "home" part of the URI to work with my version of Strudel's REPL.
+      //~ // We need to find the part of the pathname in between the origin 
+      //~ // and the file name, and insert that into the request URI.
       let src;
       let last_slash = location.href.lastIndexOf("/");
       if (last_slash > origin.length) {
@@ -30,11 +30,12 @@ class StrudelReplComponent extends HTMLElement {
       console.log("src:", src);
       iframe.setAttribute('src', src);
       iframe.setAttribute('allow-same-origin', '');
-      iframe.setAttribute('allowfullscreen', '');
+      iframe.setAttribute('allowfullscreen', 'true');
       this.appendChild(iframe);
       iframe.setAttribute('width', '800px');
       iframe.setAttribute('height', '600px');
       iframe.style.display = "visible";
+      iframe.style.background = "transparent";
       this.i_frame = iframe;
       this.content_window = this.i_frame.contentWindow;
       this.content_document = this.i_frame.contentDocument;

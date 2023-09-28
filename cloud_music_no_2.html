@@ -4,7 +4,7 @@
 <title>Cloud Music No. 2</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="dat.gui.js"></script>
-<script src="jquery-3.6.1.js"></script>
+<script src="jquery.js"></script>
 <script src="p5.js"></script>
 <script src="sprintf.js"></script>
 <script src="three.js"></script>
@@ -556,7 +556,9 @@ f3 0 524288 -12 20.0  ;unscaled ln(I(x)) from 0 to 20.0
         var current_events = new Map();
         var prior_events = current_events;
         var rendering_frame = 0;
-        
+        let spectral_tilt = 0;
+        let totalLoudness = 0;
+        const midpoint = audio_texture_width / 2;
         function write_audio_texture(analyser, texture_unit, texture, sampler) {
            if (analyser != null) {
                 analyser.getByteFrequencyData(frequency_domain_data);
@@ -566,6 +568,7 @@ f3 0 524288 -12 20.0  ;unscaled ln(I(x)) from 0 to 20.0
                     let sample = frequency_domain_data[i];
                     sample = sample / 255.;
                     audio_data[i] = sample;
+                    totalLoudness += sample;
                  }
                 let audio_data_width = audio_texture_width * 2;
                 for (let j = 0; j < audio_texture_width; ++j) {
@@ -573,8 +576,14 @@ f3 0 524288 -12 20.0  ;unscaled ln(I(x)) from 0 to 20.0
                     let sample = time_domain_data[j];
                     sample = sample / 255.;
                     audio_data[audio_texture_width + j] = sample;
+                    if (j < midpoint) {
+                        spectral_tilt -= Math.abs(sample);
+                    } else {
+                        spectral_tilt += Math.abs(sample);
+                    }
                 }
             }
+
             gl.activeTexture(gl.TEXTURE0 + texture_unit);
             gl.bindTexture(gl.TEXTURE_2D, texture);
             gl.bindSampler(texture_unit, sampler);
@@ -1289,7 +1298,7 @@ f3 0 524288 -12 20.0  ;unscaled ln(I(x)) from 0 to 20.0
                     csound_message_callback("Pasted controls state from system clipboard.\n");
                 });
             });
-           $('#default').on('click', function() {
+            $('#default').on('click', function() {
                 $('.persistent-element').each(function() {
                    this.value = this.defaultValue;
                     if (csound) {
@@ -1299,6 +1308,9 @@ f3 0 524288 -12 20.0  ;unscaled ln(I(x)) from 0 to 20.0
                     $(output_selector).val(this.value);
                 });
             });
+            // Reset controls to defaults every time the window loads!
+            $("#default")[0].click();
+
         };
     </script>
  </html>

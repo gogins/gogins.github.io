@@ -12,90 +12,26 @@
  *
  * This module brings chords and scales, and operations upon them, 
  * from the CsoundAC library for algorithmic composition into the 
- * Strudel (Tidal Cycles-based) JavaScript pattern language.
+ * Strudel (Tidal Cycles-based) JavaScript pattern language. This is 
+ * done by deriving from the StatefulPatterns class new classes whose 
+ * member functions become Patterns.
  *
- * The resulting Patterns must still go through the Strudel note Pattern 
- * in order to trigger audio output.
+ * Another use of StatefulPatterns is to define algorithmic note generators, 
+ * generally driven by a `pure` pattern that acts as a clock.
+ *
+ * Please note, however, that this module, although it defines a number of 
+ * Patterns, is not built into Strudel and is designed to be dynamically 
+ * imported in patches created by users in the Strudel REPL. Therefore, code 
+ * in this module, as with all other modules directly imported in code 
+ * run by the Strudel REPL, must not use template strings.
  */
-let csac_debugging = true;
 let csound = globalThis.__csound__;
 let csoundac = globalThis.__csoundac__;
+let audioContext = new AudioContext();
+let note_counter = 0;
 
-/** 
- * The following Patterns are defined in this module:
- *
- * acChord:    Insert a CsoundAC Chord into the Pattern's context.
- * acCT:       Transpose the Chord in the Pattern's context.
- * acCI:       Invert the Chord in the Pattern's context.
- * acCK:       Apply the interchange by inversion operation to the Chord in 
- *             the Pattern's context.
- * acCQ:       Apply the contextual transposition operation to the Chord in 
- *             the Pattern's context.
- * acCN:       Move notes in the Pattern to fit the pitch-class set of the 
- *             Chord in the Pattern's context.
- * acScale:    Insert a CsoundAC Scale into the Pattern's context.
- * acSS:       Insert the Chord at the specified scale step of the Scale in 
- *             the Pattern's context, into the context.
- * acST:       Transpose the Chord in the Pattern's context by the specified 
- *             number of scale steps in the Scale in the context.
- * acSM:       Modulate from the Scale in the Pattern's context, using the 
- *             Chord in the context as a pivot, choosing one of the possible 
- *             modulations by index.
- * acSN:       Move notes in the Pattern to fit the Scale in the Pattern's 
- *             context.
- * acPitv:     Insert a CsoundAC PITV group into the Pattern's context.
- * acPP:       Set the prime form index of the PITV element in the Pattern's 
- *             context.
- * acPI:       Set the inversion index of the PITV element in the Pattern's 
- *             context.
- * acPT:       Set the transposition index of the PITV element in the 
- *             Pattern's context.
- * acPV:       Set the voicing index of the PITV element in the Pattern's 
- *             context.
- * acPC:       Insert the Chord corresponding to the PITV element into the 
- *             Pattern's context.
- * acPN:       Move notes in the Pattern to fit the pitch-class set of the 
- *             element of the PITV 
- *             group in the Pattern's context.
- * acPNV:      Move notes in the Pattern to fit the element of the PITV 
- *             group in the Pattern's context.
- *
- * This is the design pattern for usage:
- *
- * "-8 [2,4,6]"
- * .acScale('C major') // Creates a CsoundAC Scale. 
- * .acSS("<0 -1 -2 -3 -4 -5 -6 -4>") // Generates a pattern of Chords from scale steps of the Scale.
- * .acCN() // Moves the notes in the topmost Pattern to the K'd Chords.
- */
-
-const isObject = val => val && typeof val === 'object' && !Array.isArray(val);
-
-/**
- * CsoundAC operations are applied to whole Haps only, so that Haps within 
- * that whole will use the Score or Chord of the whole, and will not create 
- * spurious operations.
- */
-const isHapWhole = function(hap) {
-    let isWhole = (hap.whole.begin.equals(hap.part.begin) && hap.whole.end.equals(hap.part.end));
-    return isWhole;
-}
-
-/**
- * Enables or disables print statement debugging in this module.
- */
-export function debug(enabled) {
-    csac_debugging = enabled;
-}
-
-/**
- * Prints a diagnostic message to both the Strudel logger and the Csound 
- * log.
- */
-export function diagnostic(message) {
-    const text = `[csac]${message}`;
-    logger(text, 'debug');
-    if (csound) csound.message(text);
-};
+import {diagnostic, diagnostic_level, ALWAYS, DEBUG, INFORMATION, WARNING, ERROR, NEVER, StatefulPatterns} from '../statefulpatterns.mjs';
+export {diagnostic, diagnostic_level, ALWAYS, DEBUG, INFORMATION, WARNING, ERROR, NEVER, StatefulPatterns};
 
 /**
  * Returns the frequency corresponding to any of various ways that pitch 
@@ -122,6 +58,28 @@ const getFrequency = (hap) => {
     }
     return value;
 };
+
+/**
+ * A utility that assigns a pitch represented as a MIDI key number to the Hap, 
+ * using the existing pitch property if it exists.
+ */
+export function setPitch(hap, midi_key) {
+    if (typeof hap.value === 'undefined') {
+        hap.value = midi_key;
+    } else if (typeof hap.value === 'object') {
+        if (typeof hap.value.freq !== 'undefined') {
+            hap.value.freq = midiToFreq(midi_key);
+        } else if (typeof hap.value.note !== 'undefined') {
+            hap.value.note = midi_key;
+        } else if (typeof hap.value.n !== 'undefined') {
+            hap.value.n = midi_key;
+        }
+    } else {
+        // Number or string all get the MIDI key.
+        hap.value = midi_key;
+    } 
+    return hap;
+}
 
 /**
  * A utility that returns the MIDI key number for a frequency in Hz, 
@@ -154,9 +112,138 @@ export function Clone(a, b) {
         let a_pitch = a.getPitch(voice);
         let b_pitch = b.getPitch(voice);
         b.setPitch(voice, a_pitch);
-        // if (csac_debugging) diagnostic(`voice ${voice}: a: ${a_pitch} old b: ${b_pitch} new b: ${b.getPitch(voice)}`);
+        if (diagnostic_level() >= DEBUG) registerPatterns(['[voice ', voice, 'a:', a_pitch, 'old b:', b_pitch, 'new b:', b.getPitch(voice), '\n'].join(' '));
     }
 }
+
+/**
+ * Sends notes to Csound for rendering with MIDI semantics. The Hap value is
+ * translated to these Csound pfields:
+ *
+ *  p1 -- Csound instrument either as a number (1-based, can be a fraction),
+ *        or as a string name.
+ *  p2 -- time in beats (usually seconds) from start of performance.
+ *  p3 -- duration in beats (usually seconds).
+ *  p4 -- MIDI key number (as a real number, not an integer but in [0, 127].
+ *  p5 -- MIDI velocity (as a real number, not an integer but in [0, 127].
+ *  p6 -- Strudel controls, as a string.
+ */
+export const csoundn_ = register('csoundn_', (instrument, pat) => {
+  let p1 = instrument;
+  if (typeof instrument === 'string') {
+    p1 = ['${', instrument, '}'].join();
+  }
+  return pat.onTrigger((tidal_time, hap) => {
+    if (!csound) {
+      diagnostic('[csoundn]: Csound is not yet loaded.\n', WARNING);
+      return;
+    }
+    // For stateful Patterns, in order to display notes in `pianoroll`,
+    // it is necessary to send haps to `pianoroll` from this (the output).
+    if (typeof globalThis.haps_from_outputs !== 'undefined') {
+        globalThis.haps_from_outputs.push(hap);
+    }
+    note_counter = note_counter + 1;
+    // Time in seconds counting from now.
+    const p2 = tidal_time - audioContext.currentTime;
+    // Either this, or early return.
+    if (p2 < 0) {
+        p2 = 0;
+    }
+    const p3 = hap.duration.valueOf() + 0;
+    const frequency = getFrequency(hap);
+    // Translate frequency to MIDI key number _without_ rounding.
+    const C4 = 261.62558;
+    let octave = Math.log(frequency / C4) / Math.log(2.0) + 8.0;
+    const p4 = octave * 12.0 - 36.0;
+    // We prefer floating point precision, but over the MIDI range [0, 127].
+    const p5 = 127 * (hap.context?.velocity ?? 0.9);
+    // All Strudel controls as a string.
+    const p6 = '\"' + Object.entries({ ...hap.value, frequency })
+      .flat()
+      .join('/') + '\"';
+    const i_statement = ['i', p1, p2, p3, p4, p5, p6, '\n'].join(' ');
+    hap = setPitch(hap, Math.round(p4));
+    diagnostic('[csoundn] ' + i_statement, INFORMATION);
+    csound.inputMessage(i_statement);
+    // The trigger hijacks the default output, hence it is non-dominant with gain 0.
+    if (diagnostic_level() >= INFORMATION) diagnostic('[csoundn] sync: ' + ' note_counter: ' + note_counter + ' note: ' + p4 + '\n');
+  }, false).gain(0);
+});
+
+/**
+ * Sends notes to Csound for rendering with MIDI semantics. The Hap value is
+ * translated to these Csound pfields:
+ *
+ *  p1 -- Csound instrument either as a number (1-based, can be a fraction),
+ *        or as a string name.
+ *  p2 -- time in beats (usually seconds) from start of performance.
+ *  p3 -- duration in beats (usually seconds).
+ *  p4 -- MIDI key number (as a real number, not an integer but in [0, 127].
+ *  p5 -- MIDI velocity (as a real number, not an integer but in [0, 127].
+ *  p6 -- Strudel controls, as a string.
+ *
+ * This implementation does not use a trigger. Each cycle schedules a block 
+ * of Csound events.
+ */
+export const csoundn = register('csoundn', (instrument, pat) => {
+    let p1 = instrument;
+    if (typeof instrument === 'string') {
+        p1 = ['${', instrument, '}'].join();
+    }
+    return pat.withHap((hap) => {
+         if (!csound) {
+          diagnostic('[csounds]: Csound is not yet loaded.\n', WARNING);
+          return;
+        }
+        note_counter = note_counter + 1;
+        // Time in seconds counting from the start of this cycle.
+        // Either this, or early return.
+        if (hap.part.begin.equals(hap.whole.begin) == false) {
+            return hap;
+        }
+        let hap_begin = hap.whole.begin.valueOf();
+        let cyclist_last_begin = globalThis.__cyclist__.lastBegin;
+        let cyclist_latency = globalThis.__cyclist__.latency;
+        let p2 = hap_begin - cyclist_last_begin + cyclist_latency;
+        if (p2 < 0) {
+            return hap;
+        }
+        const p3 = hap.duration.valueOf() + 0;
+        const frequency = getFrequency(hap);
+        // Translate frequency to MIDI key number _without_ rounding.
+        const C4 = 261.62558;
+        let octave = Math.log(frequency / C4) / Math.log(2.0) + 8.0;
+        const p4 = octave * 12.0 - 36.0;
+        // We prefer floating point precision, but over the MIDI range [0, 127].
+        ///const p5 = 127 * (hap.context?.velocity ?? 0.9);
+        let p5;
+        if (typeof hap.value.gain === 'undefined') {
+            p5 = 80;
+        } else {
+            p5 = 127 * hap.value.gain;
+        }
+        const p6 = 0; // Not used here.
+        let p7 = .5; // Pan, will update from controls if in controls.
+        // For stateful Patterns, in order to display notes in `pianoroll`,
+        // it is necessary to send haps to `pianoroll` from this (the output).
+        if (typeof globalThis.haps_from_outputs !== 'undefined') {
+            hap.value.gain = p5 / 127;
+            globalThis.haps_from_outputs.push(hap);
+        }
+        // All Strudel controls as a string.
+        const controls = '\"' + Object.entries({ ...hap.value, frequency })
+          .flat()
+          .join('/') + '\"';
+        ///const i_statement = ['i', p1, p2, p3, p4, p5, p6, '\n'].join(' ');
+        const i_statement = ['i', p1, p2, p3, p4, p5, p6, p7, controls, '\n'].join(' ');
+        console.log('[csoundn] ' + i_statement);
+        csound.readScore(i_statement);
+         if (diagnostic_level() >= INFORMATION) diagnostic('[csoundn] sync: ' + ' note_counter: ' + note_counter + ' note: ' + p4 + '\n');
+        return hap;
+        // Silence the default output. This is the hack!
+    }).gain(0);
+});
 
 /**
  * Creates and initializes a CsoundAC Chord object. This function should be 
@@ -169,9 +256,9 @@ export function Clone(a, b) {
  * neo-Riemannian music theory.
  */
 export function Chord(name) {
-    if (csac_debugging) diagnostic('[csacChord] Creating Chord...');
+    if (diagnostic_level() >= DEBUG) diagnostic('[csacChord] Creating Chord...\n');
     let chord_ = csoundac.chordForName(name);
-    if (csac_debugging) diagnostic(`[csacChord] ${chord_.toString()}`);
+    if (diagnostic_level() >= DEBUG) diagnostic('[csacChord]:' + chord_.toString() + '\n');
     return chord_;
 }
 
@@ -186,9 +273,10 @@ export function Chord(name) {
  * dominants and tonicizations based on scale degree.
  */
 export function Scale(name) {
-    if (csac_debugging) diagnostic('[Scale] Creating Scale...');
+    name = name.replace('_', ' ');
+    if (diagnostic_level() >= DEBUG) diagnostic('[Scale] Creating Scale...\n');
     let scale_ = csoundac.scaleForName(name);
-    if (csac_debugging) diagnostic(`[Scale] ${scale_.name()}`);
+    if (diagnostic_level() >= DEBUG) diagnostic('[Scale] ' + scale_.name() + '\n');
     return scale_;
 }
 
@@ -205,7 +293,7 @@ export function Scale(name) {
  * generating harmonies and voicings by independently varying P, I, T, and V.
  */
 export function Pitv(voices, range) {
-    if (csac_debugging) diagnostic('[Pitv] Creating PITV group...');
+    if (diagnostic_level() >= DEBUG) diagnostic('[Pitv] Creating PITV group...\n');
     let pitv = new csoundac.PITV();
     pitv.initialize(voices, range, 1., false);
     pitv.P = 0;
@@ -217,531 +305,426 @@ export function Pitv(voices, range) {
 }
 
 /**
- * A Pattern that inserts a CsoundAC Chord object into its context. The chord 
- * can be either the string name of a CsoundAC Chord, or a previously created 
- * Chord object.
+ * Creates a class to hold state, and defines Patterns for creating and using 
+ * that state to work with CsoundAC Chords. An instance of this class must be 
+ * created at module scope and passed to the relevant Patterns.
  */
-export const acChord = register('acChord', function(chord, pat) {
-    return pat.withHap((hap) => {
-        let ac_chord;
-        if (typeof chord == 'string') {
-            ac_chord = new csoundac.chordForName(chord);
-            if (csac_debugging) diagnostic(`[acChord]: created ${ac_chord.toString()}\n`);
+export class ChordPatterns extends StatefulPatterns {
+    constructor(chord, modality) {
+        super();
+        this.registerPatterns();
+        if (typeof chord === 'string') {
+            this.ac_chord = csoundac.chordForName(chord);
+            if (diagnostic_level() >= DEBUG) diagnostic('[ChordPatterns] created new chord.\n');
         } else {
-            ac_chord = chord;
-            if (csac_debugging) diagnostic(`[acChord]: using ${ac_chord.toString()}\n`);
+            this.ac_chord = chord;            if (diagnostic_level() >= DEBUG) diagnostic('[ChordPatterns] using existing chord.\n');
         }
-        return hap.withValue(() => hap.value).setContext({
-            ...hap.context,
-            ac_chord
-        });
-    });
-});
-
-/**
- * A Pattern that transposes the Chord in its context by the specified number 
- * of semitones. This enables transposing Chords in a patternified way.
- */
-export const acCT = register('acCT', (semitones, pat) => {
-    return pat.withHap((hap) => {
-        let ac_chord;
-        if (!hap.context.ac_chord) {
-            throw new Error('Can only use acCT after .acChord\n');
-        }
-        ac_chord = hap.context.ac_chord;
-        let new_chord = ac_chord.T(semitones);
-        if (csac_debugging) {
-            let message = `[acCT]: ${ac_chord.toString()} ${ac_chord.eOP().name()} T(${semitones}) =>\n[csac][acCT]: ${new_chord.toString()} ${new_chord.eOP().name()}\n`
-            diagnostic(message);
-        }
-        ac_chord = new_chord;
-        return hap.withValue(() => hap.value).setContext({
-            ...hap.context,
-            ac_chord
-        });
-    });
-});
-
-/**
- * A Pattern that reflects the Chord in its context in the specified pitch. 
- * This enables inverting Chords in a patternified way. The pitch is normally 0.
- */
-export const acCI = register('acCI', (pitch, pat) => {
-    return pat.withHap((hap) => {
-        let ac_chord;
-        if (!hap.context.ac_chord) {
-            throw new Error('Can only use acCI after .acChord\n');
-        }
-        ac_chord = hap.context.ac_chord;
-        let new_chord = ac_chord.I(pitch);
-        if (csac_debugging) {
-            let message = `[acCI]: ${ac_chord.toString()} ${ac_chord.eOP().name()} I(${pitch}) =>\n[acCI]: ${new_chord.toString()} ${new_chord.eOP().name()}`
-            diagnostic(message);
-        }
-        ac_chord = new_chord;
-        return hap.withValue(() => hap.value).setContext({
-            ...hap.context,
-            ac_chord
-        });
-    });
-});
-
-/**
- * A Pattern that transforms the Chord in its context using the interchange by 
- * inversion operation of the Generalized Contextual Group of Fiore and 
- * Satyendra. This enables exchanging a "major" sounding pitch-class set with 
- * the corresponding "minor" sounding pitch-class set, and vice versa, in a 
- * patternified way.
- */
-export const acCK = register('acCK', (pat) => {
-    return pat.withHap((hap) => {
-        let ac_chord;
-        if (!hap.context.ac_chord) {
-            throw new Error('Can only use acCK after .acChord\n');
-        }
-        ac_chord = hap.context.ac_chord;
-        let new_chord = ac_chord.K();
-        if (csac_debugging) {
-            let message = `[acCK]: ${ac_chord.toString()} ${ac_chord.eOP().name()} K =>\n[csac][acCK]: ${new_chord.toString()} ${new_chord.eOP().name()}\n`
-            diagnostic(message);
-        }
-        ac_chord = new_chord;
-        return hap.withValue(() => hap.value).setContext({
-            ...hap.context,
-            ac_chord
-        });
-    });
-});
-
-/**
- * A Pattern that transforms the Chord in its context using the contextual 
- * transposition operation of the Generalized Contextual Group of Fiore and 
- * Satyendra. This enables tranposing the specified Chord by the specified 
- * number of semitones _up_ if the Chord is a _transposed_ form of the 
- * modality Chord, and by the specified number of semitones _down_ if the 
- * Chord is an _inverted_ form of the modality Chord. This enables applying 
- * contextual transpositions to Chords in a patternified way. The modality 
- * must be a previously created Chord or Scale.
- */
-export const acCQ = register('acCQ', (semitones, modality, pat) => {
-    return pat.withHap((hap) => {
-        let ac_chord;
-        if (!hap.context.ac_chord) {
-            throw new Error('Can only use acCQ after .acChord\n');
-        }
-        ac_chord = hap.context.ac_chord;
-        let new_chord = ac_chord.Q(semitones, modality, 1.);
-        if (csac_debugging) {
-            let message = `[acCQ]: ${ac_chord.toString()} ${ac_chord.eOP().name()} Q(${semitones}) =>\n[acCQ]: ${new_chord.toString()} ${new_chord.eOP().name()}`
-            diagnostic(message);
-        }
-        ac_chord = new_chord;
-        return hap.withValue(() => hap.value).setContext({
-            ...hap.context,
-            ac_chord
-        });
-    });
-});
-
-/**
- * A Pattern that conforms notes to the closest _pitch-class set_ of the 
- * CsoundAC Chord that is in its context.
- */
-export const acCN = register('acCN', (pat) => {
-    return pat.withHap((hap) => {
-        let ac_chord;
-        if (!hap.context.ac_chord) {
-            throw new Error('Can only use acCN after .acChord.\n');
-        }
-        ac_chord = hap.context.ac_chord;
-        let frequency;
-        try {
-            frequency = getFrequency(hap);
-        } catch (error) {
-            diagnostic('[acCN] not a note!\n');
-            return;
-        }
-        let current_midi_key = frequencyToMidiInteger(frequency);
-        let epcs = ac_chord.epcs();
-        let note = csoundac.conformToPitchClassSet(current_midi_key, epcs);
-        //let result = hap.withValue(() => new_midi_key);
-        //let result = hap.withValue(() => (isObject ? { ...hap.value, note } : note)).setContext({ ...hap.context, ac_chord });
-        let result = hap.withValue(() => note).setContext({
-            ...hap.context,
-            ac_chord
-        });
-        if (csac_debugging) {
-            diagnostic(`[acCN]: ${ac_chord.toString()} ${ac_chord.eOP().name()} old note: ${current_midi_key} new note: ${result.value}\n`);
-            diagnostic(`[acCN]: old hap: ${hap.show()}\n`);
-            diagnostic(`[acCN]: new hap: ${result.show()}\n`);
-        }
-        return result;
-    });
-});
-
-/**
- * A Pattern that inserts a CsoundAC Scale object into its context. The scale can 
- * be either the string name of a CsoundAC Scale, or a previously created Scale.
- */
-export const acScale = register('acScale', function(scale, pat) {
-    return pat.withHap((hap) => {
-        let ac_scale;
-        if (typeof scale == 'string') {
-            ac_scale = new csoundac.Scale(scale);
-            if (csac_debugging) diagnostic(`[acScale]: created ${ac_scale.toString()}\n`);
+        if (typeof modality == 'undefined') {
+            this.ac_modality = this.ac_chord;
         } else {
-            ac_scale = scale;
-            if (csac_debugging) diagnostic(`[acScale]: using ${ac_scale.toString()}\n`);
+            this.ac_modality = modality;
         }
-        if (csac_debugging) diagnostic(`[acScale]: hap: ${hap.show()}\n`);
-        return hap.withValue(() => hap.value).setContext({
-            ...hap.context,
-            ac_scale
-        });
-    });
-});
-
-/**
- * A Pattern that inserts the Chord corresponding to the specified scale step 
- * of the Scale in the context, into the context. This enables generating tonal 
- * chord progressions in a patternified way. 
- */
-export const acSS = register('acSS', (scale_step, voices, pat) => {
-    return pat.withHap((hap) => {
-        let ac_scale;
-        if (!hap.context.ac_scale) {
-            throw new Error('Can only use acSS after .acChord.\n');
-        }
-        let ac_chord = ac_scale.chord(scale_step, voices, 3);
-        if (csac_debugging) diagnostic(`[acSS]: old chord: ${current_chord.toString()} scale step: ${scale_step} new chord: ${new_chord.toString()}`);
-        let result = hap.withValue(() => (isObject ? {
-            ...hap.value,
-            ac_chord
-        } : ac_chord)).setContext({
-            ...hap.context,
-            ac_chord
-        });
-        return result;
-    });
-});
-
-/**
- * A Pattern that transposes the Chord in its context by the specified number 
- * of scale steps in the Scale in the context. This enables generating tonal 
- * chord progressions within the Scale in a patternified way.
- */
-export const acST = register('acST', (scale_steps, pat) => {
-    return pat.withHap((hap) => {
-        let ac_scale;
-        if (!hap.context.ac_scale) {
-            throw new Error('Can only use acST after .acScale\n');
-        }
-        ac_scale = hap.context.ac_scale;
-        let ac_chord;
-        if (!hap.context.ac_chord) {
-            throw new Error('Can only use acST after .acChord\n');
-        }
-        ac_chord = hap.context.ac_chord;
-        let new_chord = ac_scale.transpose_degrees(ac_chord, scale_steps, 3);
-        if (csac_debugging) diagnostic(`[acST]: old chord: ${ac_chord.toString()} scale steps: ${scale_steps} new chord: ${new_chord.toString()}`);
-        ac_chord = new_chord;
-        return hap.withValue(() => hap.value).setContext({
-            ...hap.context,
-            ac_chord
-        });
-    });
-});
-
-/**
- * A Pattern that modulates from one Scale to another, assuming that the 
- * Chord in the context is a pivot chord of the Scale in the context. This 
- * enables generating correct tonal key changes in a patternified way. The  
- * new Scale replaces the old one in the context and can then be used in 
- * Scale-based Patterns. The specified index picks one of the possible modulations.
- */
-export const acSM = register('acSM', (index, pat) => {
-    return pat.withHap((hap) => {
-        let ac_scale;
-        if (!hap.context.ac_scale) {
-            throw new Error('Can only use acSM after .acScale\n');
-        }
-        ac_scale = hap.context.ac_scale;
-        let ac_chord;
-        if (!hap.context.ac_chord) {
-            throw new Error('Can only use acSM after .acChord\n');
-        }
-        ac_chord = hap.context.ac_chord;
-        let pivot_chord_eop = ac_chord.eOP();
-        let possible_modulations = ac_scale.modulations(pivot_chord_eop);
-        let new_scale = ac_scale;
-        let modulation_count = possible_modulations.size();
-        let wrapped_index = -1;
-        if (modulation_count > 0) {
-            wrapped_index = index % modulation_count;
-            new_scale = possible_modulations.get(wrapped_index);
-            if (csac_debugging) {
-                let message_ = `
-[acSM]: modulating in: ${ac_scale.toString()} ${ac_scale.name()} 
-[acSM]: from pivot:    ${pivot_chord_eop.toString()} ${pivot_chord_eop.name()}
-[acSM]: modulations:   ${modulation_count} => ${wrapped_index}
-[acSM]: modulated to:  ${new_scale.toString()} ${new_scale.name()}
-`;
-                diagnostic(message_);
-                diagnostic(`[acSM]: hap: ${hap.show()}\n`);
+        this.value = 0;
+    }
+    /**
+     * Applies a Chord or chord name to this.
+     */
+    acC(is_onset, chord_id, hap) {
+        if (is_onset === true) {
+            if (typeof chord_id === 'string') {
+                this.ac_chord = csoundac.chordForName(chord_id);
+                if (diagnostic_level() >= DEBUG) diagnostic('[acC] onset: created new chord.\n');
+            } else {
+                this.ac_chord = chord_id;
+                if (diagnostic_level() >= DEBUG) diagnostic('[acC] onset: using existing chord.\n');
             }
-            ac_scale = new_scale;
+            if (diagnostic_level() >= DEBUG) {
+                let message = ['[acC] onset: chord:', this.ac_chord.toString(), this.ac_chord.eOP().name(), hap.show(), '\n'].join(' ');
+                diagnostic(message);
+            }
         }
-        let result = hap.withValue(() => (isObject ? {
-            ...hap.value,
-            ac_scale
-        } : new_midi_key)).setContext({
-            ...hap.context,
-            ac_scale
-        });
-        return result;
-    });
-});
+        return hap;
+    }
+    /**
+     * Applies a transposition to the Chord of this.
+     */
+    acCT(is_onset, semitones, hap) {
+        if (is_onset === true) {
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acCT onset] current chord:    ', this.ac_chord.toString(), this.ac_chord.eOP().name(), hap.show(), '\n'].join(' '));
+            this.ac_chord = this.ac_chord.T(semitones);
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acCT onset] transformed chord:', this.ac_chord.toString(), this.ac_chord.eOP().name(), hap.show(), '\n'].join(' '));
+        }
+        return hap;
+    }
+    /**
+     * Applies an inversion to the Chord of this. The 
+     * default center of reflection is 0.
+     */
+    acCI(is_onset, center, hap) {
+        if (is_onset === true) {
+            if (typeof center === 'undefined') {
+                center = 0;
+            }
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acCI] onset: current chord:    ', this.ac_chord.toString(), this.ac_chord.eOP().name(), hap.show(), '\n'].join(' '));
+            this.ac_chord = this.ac_chord.I(center);
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acCI] onset: transformed chord:', this.ac_chord.toString(), this.ac_chord.eOP().name(), hap.show(), '\n'].join(' '));
+        }
+        return hap;
+    }
+    /**
+     * Applies the interchange by inversion operation of the Generalized 
+     * Contextual Group of Fiore and Satyendra to the Chord of this.
+     */
+    acCK(is_onset, hap) {
+        if (is_onset === true) {
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acCK onset] current chord:    ', this.ac_chord.toString(), this.ac_chord.eOP().name(), hap.show(), '\n'].join(' '));
+            this.ac_chord = this.ac_chord.K();
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acCK onset] transformed chord:', this.ac_chord.toString(), this.ac_chord.eOP().name(), hap.show(), '\n'].join(' '));
+        }
+        return hap;
+    }
+    /**
+     * Applies the contexual transposition operation of the Generalized 
+     * Contextual Group of Fiore and Satyendra to the Chord of this. The 
+     * modality is set in the constructor of this class.
+     */
+    acCQ(is_onset, semitones, hap) {
+        if (is_onset === true) {
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acCQ onset] current chord:    ', this.ac_chord.toString(), this.ac_chord.eOP().name(), hap.show(), '\n'].join(' '));
+            this.ac_chord = this.ac_chord.Q(semitones, this.ac_modality, 1);
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acCQ onset] transformed chord:', this.ac_chord.toString(), this.ac_chord.eOP().name(), hap.show(), '\n'].join(' '));
+        }
+        return hap;
+    }
+    //~ /**
+     //~ * Applies the nth octavewise revoicing of the Chord of this that is 
+     //~ * generated by iterating octavewise revoicings within the indicated 
+     //~ * 0-based range.
+     //~ */
+    //~ acCO(is_onset, revoicingNumber_, range, hap) {
+        //~ if (is_onset === true) {
+            //~ if (diagnostic_level() >= DEBUG) diagnostic(['[acCO onset] current chord:    ', this.ac_chord.toString(), this.ac_chord.eOP().name(), hap.show(), '\n'].join(' '));
+            //~ this.ac_chord = csoundac.octavewiseRevoicing(this.ac_chord, revoicingNumber_, range);
+            //~ if (diagnostic_level() >= DEBUG) diagnostic(['[acCO onset] transformed chord:', this.ac_chord.toString(), this.ac_chord.eOP().name(), hap.show(), '\n'].join(' '));
+        //~ } 
+        //~ return hap;
+    //~ }
+    /**
+     * Transforms the Chord of this to its 'OP' form; 'chord' is an extremely 
+     * flexible and therefore ambiguous term, but the 'OP' form is what most 
+     * musicians usually mean by 'chord': A chord where the octaves of the 
+     * pitches do not matter and the order of the voices does not matter. This 
+     * transformation can be useful for returning chords that have been 
+     * transformed such that their voices are out of range back to a more 
+     * normal form.
+     */
+    acCOP(is_onset, hap) {
+        if (is_onset === true) {
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acCOP onset] current chord:    ', this.ac_chord.toString(), this.ac_chord.eOP().name(), hap.show(), '\n'].join(' '));
+            this.ac_chord = this.ac_chord.eOP();
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acCOP onset] transformed chord:', this.ac_chord.toString(), this.ac_chord.eOP().name(), hap.show(), '\n'].join(' '));
+        }
+        return hap;
+    }
+    /**
+     * Applies the Chord of this to the _pitch-class_ of the Hap, i.e., moves 
+     * the _pitch-class_ of the Hap to the nearest _pitch-class_ of the Chord.
+     */
+    acCV(is_onset, hap) {
+        if (is_onset === true) {
+            //if (diagnostic_level() >= DEBUG) diagnostic('[acCV onset].\n');
+        } else {
+            let frequency;
+            try {
+                frequency = getFrequency(hap);
+            } catch (error) {
+                diagnostic('[acCV query]: not a note!\n');
+                return;
+            }
+            let current_midi_key = frequencyToMidiInteger(frequency);
+            let epcs = this.ac_chord.epcs();
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acCV query] current chord:  ', this.ac_chord.toString(), this.ac_chord.eOP().name(), '\n'].join(' '));
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acCV query] current hap:    ', hap.show(), '\n'].join(' '));
+            let note = csoundac.conformToPitchClassSet(current_midi_key, epcs);
+            hap = setPitch(hap, note);
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acCV query] new hap:        ', hap.show(), '\n'].join(' '));
+        }
+        return hap;
+    }
+}
 
 /**
- * A Pattern that conforms notes to the closest _pitch-class_ of the CsoundAC Scale 
- * that is in its context.
+ * Creates a class to hold state, and defines Patterns for creating and using 
+ * that state to work with CsoundAC Scales. An instance of this class must be 
+ * created at module scope and passed to the relevant Patterns. The 
+ * constructor sets the number of voices in Chords associated with the Scale,
+ * by default 4.
  */
-export const acSN = register('acSN', (pat) => {
-    return pat.withHap((hap) => {
-        let ac_scale;
-        if (!hap.context.ac_scale) {
-            throw new Error('Can only use acSN after .acScale.\n');
+export class ScalePatterns extends StatefulPatterns {
+    constructor(scale, voices = 3) {
+        super();
+        this.registerPatterns();
+        this.voices = voices;
+        if (typeof scale === 'string') {
+            // Have to use underscores instead of spaces in the Strudel REPL.
+            scale = scale.replace('_', ' ');
+            this.ac_scale = csoundac.scaleForName(scale);
+            if (diagnostic_level() >= DEBUG) diagnostic('[acS onset] created new scale.\n');
+        } else {
+            this.ac_scale = scale;
+            if (diagnostic_level() >= DEBUG) diagnostic('[acS onset] using existing scale.\n');
         }
-        ac_scale = hap.context.ac_scale;
-        let frequency;
-        try {
-            frequency = getFrequency(hap);
-        } catch (error) {
-            diagnostic('[acSN] not a note!\n');
-            return;
+        this.ac_chord = this.ac_scale.chord(1, this.voices, 3);
+    }
+    /**
+     * acS:        Insert a CsoundAC Scale into the Pattern's state. The Chord 
+     *             of this is moved to the same scale degree in the new Scale
+     *             that it had in the old Scale.
+     */
+    acS(is_onset, scale, hap) {
+        if (is_onset === true) {
+            // Doesn't seem to work.
+            // let scale_degree = this.ac_scale.degree(this.ac_chord, 3);
+            if (typeof scale === 'string') {
+                // Have to use underscores instead of spaces in the Strudel REPL.
+                scale = scale.replace('_', ' ');
+                this.ac_scale = csoundac.scaleForName(scale);
+                if (diagnostic_level() >= DEBUG) diagnostic('[acS onset] created new scale.\n');
+            } else {
+                this.ac_scale = scale;
+                if (diagnostic_level() >= DEBUG) diagnostic('[acS onset] using existing scale.\n');
+            }
+            this.ac_chord = this.ac_scale.chord(1, this.voices, 3);
+            if (diagnostic_level() >= DEBUG) {
+                diagnostic(['[acS onset] new scale:', this.ac_scale.toString(), this.ac_scale.name(), '\n'].join(' '));
+                diagnostic(['[acS onset] new chord:', this.ac_chord.toString(), this.ac_chord.name(), '\n'].join(' '));
+            }
         }
-        let current_midi_key = frequencyToMidiInteger(frequency);
-        let epcs = ac_scale.epcs();
-        let new_midi_key = csoundac.conformToPitchClassSet(current_midi_key, epcs);
-        let result = hap.withValue(() => new_midi_key);
-        if (csac_debugging) diagnostic(`[acSN]: ${ac_scale.toString()} ${ac_scale.eOP().name()} old note: ${current_midi_key} new note: ${result.value}\n`);
-        if (csac_debugging) diagnostic(`[acSN]: hap: ${hap.show()}\n`);
-        return result;
-    });
-});
+        return hap;
+    }
+    /** 
+     *acSS:        Insert the Chord at the specified scale step of the Scale in 
+     *             the Pattern's state, into the state.
+     */
+    acSS(is_onset, scale_step, hap) {
+        if (is_onset === true) {
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acSS onset] current chord:    ', this.ac_chord.toString(), this.ac_chord.eOP().name(), '\n'].join(' '));
+            this.ac_chord = this.ac_scale.chord(scale_step, this.voices, 3);
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acSS onset] transformed chord:', this.ac_chord.toString(), this.ac_chord.eOP().name(), '\n'].join(' '));
+        }  
+        return hap;
+    }
+    /**
+     * acST:       Transpose the Chord in the Pattern's state by the specified 
+     *             number of scale steps in the Scale in the state.
+     */
+    acST(is_onset, scale_steps, hap) {
+        if (is_onset === true) {
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acST onset] current chord:    ', this.ac_chord.toString(), this.ac_chord.eOP().name(), '\n'].join(' '));
+            this.ac_chord = this.ac_scale.transpose_degrees(this.ac_chord, scale_steps, 3);    
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acST onset] transformed chord:', this.ac_chord.toString(), this.ac_chord.eOP().name(), '\n'].join(' '));
+        }
+        return hap;
+    }
+    /**
+     * acSM:       Modulate from the Scale in the Pattern's state, using the 
+     *             Chord in the state as a pivot, choosing one of the possible 
+     *             modulations by index.
+     */
+    acSM(is_onset, index, hap) {
+        if (is_onset === true) {
+            let pivot_chord_eop = this.ac_chord.eOP();
+            let possible_modulations = this.ac_scale.modulations(pivot_chord_eop);
+            let new_scale = this.ac_scale;
+            let modulation_count = possible_modulations.size();
+            let wrapped_index = -1;
+            if (modulation_count > 0) {
+                wrapped_index = index % modulation_count;
+                new_scale = possible_modulations.get(wrapped_index);
+                if (diagnostic_level() >= DEBUG) {
+                    let message_ = [
+    '[acSM onset] modulating in:', this.ac_scale.toString(), this.ac_scale.name(), '\n',
+    '[acSM onset] from pivot:   ', pivot_chord_eop.toString(), pivot_chord_eop.name(), '\n',
+    '[acSM onset] modulations:  ', modulation_count, '=>', wrapped_index, '\n',
+    '[acSM onset] modulated to: ', new_scale.toString(), new_scale.name()
+    ].join(' ');
+                    diagnostic(message_);
+                    diagnostic('[acSM]: hap: ' + hap.show() + '\n');
+                }
+                this.ac_scale = new_scale;
+            }
+        }
+        return hap;
+    }
+    /**
+     * acSV:       Move notes in the Pattern to fit the Scale in the Pattern's 
+     *             state.
+     */
+    acSV(is_onset, hap) {
+        if (is_onset === true) {
+        } else {
+            let frequency;
+            try {
+                frequency = getFrequency(hap);
+            } catch (error) {
+                diagnostic('[acSV query] not a note!\n');
+                return;
+            }
+            let current_midi_key = frequencyToMidiInteger(frequency);
+            let epcs = this.ac_scale.epcs();
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acSV query] current scale:  ', this.ac_scale.toString(), this.ac_scale.eOP().name(), '\n'].join(' '));
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acSV query] current hap:    ', hap.show(), '\n'].join(' '));
+            let note = csoundac.conformToPitchClassSet(current_midi_key, epcs);
+            hap = setPitch(hap, note);
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acSV query] new hap:        ', hap.show(), '\n'].join(' '));
+        }
+        return hap;
+    }
+    /**
+     * acSCV:      Move notes in the Pattern to fit the Chord in the Pattern's 
+     *             state.
+     */
+    acSCV(is_onset, hap) {
+        if (is_onset === true) {
+        } else {
+            let frequency;
+            try {
+                frequency = getFrequency(hap);
+            } catch (error) {
+                diagnostic('[acSCV query] not a note!\n');
+                return;
+            }
+            let current_midi_key = frequencyToMidiInteger(frequency);
+            let epcs = this.ac_chord.epcs();
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acSCV query] current scale:  ', this.ac_scale.toString(), this.ac_scale.eOP().name(), '\n'].join(' '));
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acSCV query] current chord:  ', this.ac_chord.toString(), this.ac_chord.eOP().name(), '\n'].join(' '));
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acSCV query] current hap:    ', hap.show(), '\n'].join(' '));
+            let note = csoundac.conformToPitchClassSet(current_midi_key, epcs);
+            hap = setPitch(hap, note);
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acSCV query] new hap:        ', hap.show(), '\n'].join(' '));
+        }
+        return hap;
+    }
+}
 
 /**
- * A Pattern that inserts a CsoundAC PITV object intoto its context. The PITV 
- * object must have been previously created.
+ * Creates a class to hpitvold state and defines Patterns for creating and using 
+ * that state to work with CsoundAC PITV groups. An instance of this class 
+ * must be created at module scope and passed to the relevant Patterns.
  */
-export const acPitv = register('acPitv', function(pitv, pat) {
-    return pat.withHap((hap) => {
-        let ac_pitv = pitv;
-        if (csac_debugging) {
-            diagnostic(`[acPitv]: using ${ac_pitv.toString()}\n`);
-            pitv.list(true, false, false);
+export class PitvPatterns extends StatefulPatterns {
+    constructor(pitv) {
+        super();
+        this.registerPatterns();
+        this.pitv = pitv;
+    }
+    /**
+     * acP:        Insert a CsoundAC PITV group into the Pattern's state.
+     */
+    acP(is_onset, pitv, hap) {
+        if (is_onset == true) {
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acP onset] current PITV:  ', this.this.pitv.list(true, true, false), '\n'].join(' '));
+            this.pitv = pitv;
+        } 
+        return hap;
+    }
+    /**
+     * acPP:       Set the prime form index of the PITV element in the Pattern's 
+     *             state.
+     */
+    acPP(is_onset, P, hap) {
+        if (is_onset === true) {
+            this.pitv.P = P;
         }
-        return hap.withValue(() => hap.value).setContext({
-            ...hap.context,
-            ac_pitv
-        });
-    });
-});
+        return hap;
+    }
+    /**
+     * acPI:       Set the inversion index of the PITV element in the Pattern's 
+     *             state.
+     */
+    acPI(is_onset, I, hap) {
+        if (is_onset === true) {
+            this.pitv.I = I;
+        }
+        return hap;
+    }
+    /**
+     * acPT:       Set the transposition index of the PITV element in the 
+     *             Pattern's state.
+     */
+    acPT(is_onset, T, hap) {
+        if (is_onset === true) {
+            this.pitv.T = T;
+        }
+        return hap;
+    }
+    /**
+     * acPO:       Set the octavewise voicing index of the PITV element in the 
+     *             Pattern's state.
+     */
+    acPO(is_onset, V, hap) {
+        if (is_onset == true) {
+            this.pitv.V = V;
+        }
+        return hap;
+    }
+    /**
+     * acPC:       Insert the Chord corresponding to the PITV element into the 
+     *             Pattern's state.
+     */
+    acPC(is_onset, hap) {
+        if (is_onset === true) {
+            this.ac_chord = this.pitv.toChord(this.pitv.P, this.pitv.I, this.pitv.T, this.pitv.V, true).get(0);
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acPC onset]:', this.ac_chord.toString(), this.ac_chord.eOP().name(), '\n'].join(' '));
+        }
+        return hap;
+    }
+    /**
+     * acPV:       Move notes in the Pattern to fit the pitch-class set of the 
+     *             element of the PITV group in the Pattern's state.
+     */
+    acPV(is_onset, hap) {
+        if (is_onset === true) {
+        } else {
+            let frequency;
+            try {
+                frequency = getFrequency(hap);
+            } catch (error) {
+                diagnostic('[acPV] not a note!\n', WARNING);
+                return;
+            }
+            let current_midi_key = frequencyToMidiInteger(frequency);
+            let eop = this.pitv.toChord(this.pitv.P, this.pitv.I, this.pitv.T, this.pitv.V, true).get(1);
+            let epcs = eop.epcs();
+            let new_midi_key = csoundac.conformToPitchClassSet(current_midi_key, epcs);
+            hap = setPitch(hap, new_midi_key);
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acPV query]:', eop.toString(), eop.name(), 'old note:', current_midi_key, 'new note:', hap.show(), '\n'].join(' '));
+         }
+        return hap;
+    }
+    /**
+     * acPVV:      Move notes in the Pattern to fit the element of the PITV 
+     *             group in the Pattern's state.
+     */
+    acPVV(is_onset, hap) {
+        if (is_onset === true) {
+        } else {
+            let frequency;
+            try {
+                frequency = getFrequency(hap);
+            } catch (error) {
+                diagnostic('[acPVV query] not a note!\n', WARNING);
+                return;
+            }
+            let current_midi_key = frequencyToMidiInteger(frequency);
+            let voiced_chord = this.pitv.toChord(this.pitv.P, this.pitv.I, this.pitv.T, this.pitv.V, true).get(0);
+            let new_midi_key = csoundac.closestPitch(current_midi_key, voiced_chord);
+            hap = setPitch(hap, new_midi_key);
+            if (diagnostic_level() >= DEBUG) diagnostic(['[acPVV query]:', 'old note:', current_midi_key, 'new note:', hap.show(), '\n'].join(' '));
+        }
+        return hap;
+    }
+}
 
-/**
- * A Pattern that sets the indicated set-type index of the PITV element. This 
- * enables mutating Chords in a patternified way.
- */
-export const acPP = register('acPP', (P, pat) => {
-    return pat.withHap((hap) => {
-        let ac_pitv;
-        if (!hap.context.ac_pitv) {
-            throw new Error('Can only use acPP after .acPitv.\n');
-        }
-        ac_pitv = hap.context.ac_pitv;
-        ac_pitv.P = P;
-        if (csac_debugging) diagnostic(`[acPP]: ${ac_pitv.P}`);
-        return hap.withValue(() => hap.value).setContext({
-            ...hap.context,
-            ac_pitv
-        });
-    });
-});
 
-/**
- * A Pattern that sets the indicated index of inversion of the PITV element. 
- * This enables inverting a PITV element in a patternified way.
- */
-export const acPI = register('acPI', (I, pat) => {
-    return pat.withHap((hap) => {
-        let ac_pitv;
-        if (!hap.context.ac_pitv) {
-            throw new Error('Can only use acPI after .acPitv.\n');
-        }
-        ac_pitv = hap.context.ac_pitv;
-        ac_pitv.I = I;
-        if (csac_debugging) diagnostic(`[acPI]: ${ac_pitv.I}`);
-        return hap.withValue(() => hap.value).setContext({
-            ...hap.context,
-            ac_pitv
-        });
-    });
-});
 
-/**
- * A Pattern that sets the indicated index of pitch-class transposition of 
- * the PITV element. This enables transposing a PITV element in a patternified 
- * way.
- */
-export const acPT = register('acPT', (T, pat) => {
-    return pat.withHap((hap) => {
-        let ac_pitv;
-        if (!hap.context.ac_pitv) {
-            throw new Error('Can only use acPI after .acPitv.\n');
-        }
-        ac_pitv = hap.context.ac_pitv;
-        ac_pitv.T = T;
-        if (csac_debugging) diagnostic(`[acPT]: ${ac_pitv.T}`);
-        return hap.withValue(() => hap.value).setContext({
-            ...hap.context,
-            ac_pitv
-        });
-    });
-});
-
-/**
- * A Pattern that sets the indicated index of octavewise revoicing of the 
- * PITV element. This enables revoicing a PITV element in a patternified way.
- */
-export const acPV = register('acPV', (V, pat) => {
-    return pat.withHap((hap) => {
-        let ac_pitv;
-        if (!hap.context.ac_pitv) {
-            throw new Error('Can only use acPV after .acPitv.\n');
-        }
-        ac_pitv = hap.context.ac_pitv;
-        ac_pitv.V = V;
-        if (csac_debugging) diagnostic(`[acPV]: ${ac_pitv.V}`);
-        return hap.withValue(() => hap.value).setContext({
-            ...hap.context,
-            ac_pitv
-        });
-    });
-});
-
-/**
- * A Pattern that inserts the Chord corresponding to the element of the 
- * PITV group in the context, into the context.
- */
-export const acPC = register('acPC', (pat) => {
-    return pat.withHap((hap) => {
-        let ac_pitv;
-        if (!hap.context.ac_pitv) {
-            throw new Error('Can only use acPV after .acPitv.\n');
-        }
-        ac_pitv = hap.context.ac_pitv;
-        let frequency;
-        try {
-            frequency = getFrequency(hap);
-        } catch (error) {
-            diagnostic('[acPC] not a note!', 'warning');
-            return;
-        }
-        let ac_chord = ac_pitv.toChord(pitv.P, pitv.I, pitv.T, pitv.V, true).get(0);
-        let result = hap.withValue(() => hap.value).setContext({
-            ...hap.context,
-            ac_chord
-        });
-        if (csac_debugging) diagnostic(`[acCN]: ${ac_chord.toString()} ${ac_chord.eOP().name()} old note: ${current_midi_key} new note: ${result.value}\n`);
-        return result;
-    });
-});
-
-/**
- * A Pattern that that conforms the notes of a Pattern to the current 
- * element of the PITV object. The notes are moved to the closest _pitch- 
- * class_ of the _pitch-class set_ of the PITV element.
- */
-export const acPN = register('acPN', (pat) => {
-    return pat.withHap((hap) => {
-        let ac_pitv;
-        if (!hap.context.ac_pitv) {
-            throw new Error('Can only use acPV after .acPitv.\n');
-        }
-        ac_pitv = hap.context.ac_pitv;
-        let frequency;
-        try {
-            frequency = getFrequency(hap);
-        } catch (error) {
-            diagnostic('[acPC] not a note!', 'warning');
-            return;
-        }
-        let current_midi_key = frequencyToMidiInteger(frequency);
-        let ac_chord = pitv.toChord(pitv.P, pitv.I, pitv.T, pitv.V, true).get(0);
-        let epcs = ac_chord.epcs();
-        let new_midi_key = csoundac.conformToPitchClassSet(current_midi_key, epcs);
-        let result = hap.withValue(() => new_midi_key);
-        if (csac_debugging) diagnostic(`[acPNV]: ${ac_chord.toString()} ${ac_chord.eOP().name()} old note: ${current_midi_key} new note: ${result.value}\n`);
-        return result;
-    });
-});
-
-/**
- * A Pattern that that conforms the notes of a Pattern to the current 
- * element of the PITV object. The notes are moved to the closest _note_ 
- * of the chord _voicing_ of the PITV element.
- */
-export const acPNV = register('acPNV', (pat) => {
-    return pat.withHap((hap) => {
-        let ac_pitv;
-        if (!hap.context.ac_pitv) {
-            throw new Error('Can only use acPV after .acPitv.\n');
-        }
-        ac_pitv = hap.context.ac_pitv;
-        let frequency;
-        try {
-            frequency = getFrequency(hap);
-        } catch (error) {
-            diagnostic('[acPC] not a note!', 'warning');
-            return;
-        }
-        let current_midi_key = frequencyToMidiInteger(frequency);
-        let ac_chord = pitv.toChord(pitv.P, pitv.I, pitv.T, pitv.V, true).get(0);
-        let new_midi_key = csoundac.closestPitch(current_midi_key, voiced_chord);
-        let result = hap.withValue(() => hap.value).setContext({
-            ...hap.context,
-            ac_chord
-        });
-        if (csac_debugging) diagnostic(`[acPNV]: ${ac_chord.toString()} ${ac_chord.eOP().name()} old note: ${current_midi_key} new note: ${result.value}\n`);
-        return result;
-    });
-});
-
-/**
- * A Pattern that calls a closure that may be defined in a user level 
- * Strudel patch. To be used something like this:
- *
- * const c = .88;
- * let y = .5;
- * const logistic = function(pat, hap) {
- *   // In many cases, the closure should be computed only at the beginning 
- *   // of its cycle.
- *   if (hap.hasOnset() == true) {
- *     y = 4 * c * y * (1 - y);
- *   }
- *   let midi_key = Math.round(y * 36 + 36);
- *   return midi_key;
- * };
- * .acG(logistic)
- */
-export const acG = register('acG', (closure, pat) => {
-    return pat.withHap((hap) => {
-        let result = closure(pat, hap);
-        result = hap.withValue(() => result);
-        if (csac_debugging) {
-            diagnostic(`[acG]: ${ac_chord.toString()} ${ac_chord.eOP().name()} old note: ${current_midi_key} new note: ${result.value}\n`);
-            diagnostic(`[acG]: ${hap.show()}\n`);
-        }
-        return result;
-    });
-});
