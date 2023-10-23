@@ -16,9 +16,9 @@ class StrudelReplComponent extends HTMLElement {
       const code = (this.innerHTML + '').replace('<!--', '').replace('-->', '').trim();
       let iframe = document.createElement('iframe');
       console.log("location.origin: ", location.origin);
-      //~ // Fix up the "home" part of the URI to work with my version of Strudel's REPL.
-      //~ // We need to find the part of the pathname in between the origin 
-      //~ // and the file name, and insert that into the request URI.
+      // Fix up the "home" part of the URI to work with my version of Strudel's REPL.
+      // We need to find the part of the pathname in between the origin 
+      // and the file name, and insert that into the request URI.
       let src;
       let last_slash = location.href.lastIndexOf("/");
       if (last_slash > origin.length) {

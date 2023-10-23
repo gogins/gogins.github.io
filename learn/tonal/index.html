@@ -50,7 +50,7 @@
   <link rel="stylesheet" href="/_astro/first-effects.287062ea.css" />
 <link rel="stylesheet" href="/_astro/first-effects.31a47b8a.css" />
 <link rel="stylesheet" href="/_astro/first-effects.56b16646.css" />
-<link rel="stylesheet" href="/_astro/intro.f4b92629.css" /><script type="module" src="/_astro/hoisted.1e00e57f.js"></script></head>
+<link rel="stylesheet" href="/_astro/intro.f4b92629.css" /><script type="module" src="/_astro/hoisted.cc73f00b.js"></script></head>
 
   <body class="h-app-height text-gray-50 bg-background">
     <div class="w-full h-full space-y-4 flex flex-col">
@@ -279,7 +279,7 @@ window.addEventListener('DOMContentLoaded', () => {
             <h1 id="tonal-functions">Tonal Functions<a aria-hidden="true" tabIndex="-1" href="/learn/tonal#tonal-functions"><span class="icon icon-link"></span></a></h1>
 <p>These functions use <a href="https://github.com/tonaljs/tonal">tonaljs</a> to provide helpers for musical operations.</p>
 <h3 id="voicing">voicing()<a aria-hidden="true" tabIndex="-1" href="/learn/tonal#voicing"><span class="icon icon-link"></span></a></h3>
-<astro-island uid="Z1tFs6h" component-url="/_astro/JsDoc.ecee9527.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;voicing&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Turns chord symbols into voicings. You can use the following control params:</p>
+<astro-island uid="Z1tFs6h" component-url="/_astro/JsDoc.6488bf77.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;voicing&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Turns chord symbols into voicings. You can use the following control params:</p>
 <ul>
 <li><code>chord</code>: Note, followed by chord symbol, e.g. C Am G7 Bb^7</li>
 <li><code>dict</code>: voicing dictionary to use, falls back to default dictionary</li>
@@ -297,7 +297,7 @@ window.addEventListener('DOMContentLoaded', () => {
 <p>All of the above controls are optional, except <code>chord</code>.
 If you pass a pattern of strings to voicing, they will be interpreted as chords.</p></div><ul><li>dictionary<!-- --> (<!-- -->string<!-- -->): <!-- -->which voicing dictionary to use.</li></ul><div class="space-y-2"><pre>voicing(&quot;&lt;C Am F G&gt;&quot;)</pre><pre>n(&quot;0 1 2 3 4 5 6 7&quot;).chord(&quot;&lt;C Am F G&gt;&quot;).voicing()</pre></div></astro-island>
 <h3 id="scalename">scale(name)<a aria-hidden="true" tabIndex="-1" href="/learn/tonal#scalename"><span class="icon icon-link"></span></a></h3>
-<astro-island uid="13ksnK" component-url="/_astro/JsDoc.ecee9527.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;scale&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Turns numbers into notes in the scale (zero indexed). Also sets scale for other scale operations, like <a href="#pattern-scaleTranspose">Pattern#scaleTranspose</a>.</p>
+<astro-island uid="13ksnK" component-url="/_astro/JsDoc.6488bf77.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;scale&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Turns numbers into notes in the scale (zero indexed). Also sets scale for other scale operations, like <a href="#pattern-scaleTranspose">Pattern#scaleTranspose</a>.</p>
 <p>A scale consists of a root note (e.g. <code>c4</code>, <code>c</code>, <code>f#</code>, <code>bb4</code>) followed by semicolon (':') and then a <a href="https://github.com/tonaljs/tonal/blob/main/packages/scale-type/data.ts">scale type</a>.</p>
 <p>The root note defaults to octave 3, if no octave number is given.</p></div><ul><li>scale<!-- --> (<!-- -->string<!-- -->): <!-- -->Name of scale</li></ul><div class="space-y-2"><pre>n(&quot;0 2 4 6 4 2&quot;).scale(&quot;C:major&quot;)</pre><pre>n(&quot;[0,7] 4 [2,7] 4&quot;)
 .scale(&quot;C:&lt;major minor&gt;/2&quot;)
@@ -306,24 +306,24 @@ If you pass a pattern of strings to voicing, they will be interpreted as chords.
 .s(&quot;folkharp&quot;)</pre></div></astro-island>
 <h3 id="transposesemitones">transpose(semitones)<a aria-hidden="true" tabIndex="-1" href="/learn/tonal#transposesemitones"><span class="icon icon-link"></span></a></h3>
 <p>Transposes all notes to the given number of semitones:</p>
-<script>(self.Astro=self.Astro||{}).only=t=>{(async()=>await(await t())())()},window.dispatchEvent(new Event("astro:only"));</script><astro-island uid="Z2fDbFV" component-url="/_astro/MiniRepl.eb0582fe.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;\&quot;c2 c3\&quot;.fast(2).transpose(\&quot;&lt;0 -2 5 3&gt;\&quot;.slow(2)).note()&quot;]}" ssr="" client="only" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island>
+<script>(self.Astro=self.Astro||{}).only=t=>{(async()=>await(await t())())()},window.dispatchEvent(new Event("astro:only"));</script><astro-island uid="Z2fDbFV" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;\&quot;c2 c3\&quot;.fast(2).transpose(\&quot;&lt;0 -2 5 3&gt;\&quot;.slow(2)).note()&quot;]}" ssr="" client="only" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island>
 <p>This method gets really exciting when we use it with a pattern as above.</p>
 <p>Instead of numbers, scientific interval notation can be used as well:</p>
-<astro-island uid="Z1l28bi" component-url="/_astro/MiniRepl.eb0582fe.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;\&quot;c2 c3\&quot;.fast(2).transpose(\&quot;&lt;1P -2M 4P 3m&gt;\&quot;.slow(2)).note()&quot;]}" ssr="" client="only" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island>
+<astro-island uid="Z1l28bi" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;\&quot;c2 c3\&quot;.fast(2).transpose(\&quot;&lt;1P -2M 4P 3m&gt;\&quot;.slow(2)).note()&quot;]}" ssr="" client="only" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island>
 <h3 id="scaletransposesteps">scaleTranspose(steps)<a aria-hidden="true" tabIndex="-1" href="/learn/tonal#scaletransposesteps"><span class="icon icon-link"></span></a></h3>
 <p>Transposes notes inside the scale by the number of steps:</p>
-<astro-island uid="Z1CyLQ5" component-url="/_astro/MiniRepl.eb0582fe.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;\&quot;-8 [2,4,6]\&quot;\n.scale(&#39;C4 bebop major&#39;)\n.scaleTranspose(\&quot;&lt;0 -1 -2 -3 -4 -5 -6 -4&gt;\&quot;)\n.note()&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>&quot;-8 [2,4,6]&quot;
+<astro-island uid="Z1CyLQ5" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;\&quot;-8 [2,4,6]\&quot;\n.scale(&#39;C4 bebop major&#39;)\n.scaleTranspose(\&quot;&lt;0 -1 -2 -3 -4 -5 -6 -4&gt;\&quot;)\n.note()&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>&quot;-8 [2,4,6]&quot;
 .scale(&#x27;C4 bebop major&#x27;)
 .scaleTranspose(&quot;&lt;0 -1 -2 -3 -4 -5 -6 -4&gt;&quot;)
 .note()</pre></astro-island>
 <h3 id="voicingsrange">voicings(range?)<a aria-hidden="true" tabIndex="-1" href="/learn/tonal#voicingsrange"><span class="icon icon-link"></span></a></h3>
 <p>Turns chord symbols into voicings, using the smoothest voice leading possible:</p>
-<astro-island uid="1Fd9gf" component-url="/_astro/MiniRepl.eb0582fe.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;stack(\&quot;&lt;C^7 A7 Dm7 G7&gt;\&quot;.voicings(&#39;lefthand&#39;), \&quot;&lt;C3 A2 D3 G2&gt;\&quot;).note()&quot;]}" ssr="" client="only" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island>
+<astro-island uid="1Fd9gf" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;stack(\&quot;&lt;C^7 A7 Dm7 G7&gt;\&quot;.voicings(&#39;lefthand&#39;), \&quot;&lt;C3 A2 D3 G2&gt;\&quot;).note()&quot;]}" ssr="" client="only" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island>
 <h3 id="rootnotesoctave--2">rootNotes(octave = 2)<a aria-hidden="true" tabIndex="-1" href="/learn/tonal#rootnotesoctave--2"><span class="icon icon-link"></span></a></h3>
 <p>Turns chord symbols into root notes of chords in given octave.</p>
-<astro-island uid="Z21gkNb" component-url="/_astro/MiniRepl.eb0582fe.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;\&quot;&lt;C^7 A7b13 Dm7 G7&gt;\&quot;.rootNotes(3).note()&quot;]}" ssr="" client="only" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island>
+<astro-island uid="Z21gkNb" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;\&quot;&lt;C^7 A7b13 Dm7 G7&gt;\&quot;.rootNotes(3).note()&quot;]}" ssr="" client="only" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:&quot;react&quot;}"></astro-island>
 <p>Together with layer, struct and voicings, this can be used to create a basic backing track:</p>
-<astro-island uid="ZODsGC" component-url="/_astro/MiniRepl.eb0582fe.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;\&quot;&lt;C^7 A7b13 Dm7 G7&gt;\&quot;.layer(\n  x =&gt; x.voicings(&#39;lefthand&#39;).struct(\&quot;~ x\&quot;).note(),\n  x =&gt; x.rootNotes(2).note().s(&#39;sawtooth&#39;).cutoff(800)\n)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>&quot;&lt;C^7 A7b13 Dm7 G7&gt;&quot;.layer(
+<astro-island uid="ZODsGC" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;\&quot;&lt;C^7 A7b13 Dm7 G7&gt;\&quot;.layer(\n  x =&gt; x.voicings(&#39;lefthand&#39;).struct(\&quot;~ x\&quot;).note(),\n  x =&gt; x.rootNotes(2).note().s(&#39;sawtooth&#39;).cutoff(800)\n)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>&quot;&lt;C^7 A7b13 Dm7 G7&gt;&quot;.layer(
   x =&gt; x.voicings(&#x27;lefthand&#x27;).struct(&quot;~ x&quot;).note(),
   x =&gt; x.rootNotes(2).note().s(&#x27;sawtooth&#x27;).cutoff(800)
 )</pre></astro-island>

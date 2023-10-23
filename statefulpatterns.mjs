@@ -4,7 +4,7 @@
  * Author: Michael Gogins
  * 
  * This module implements "stateful Patterns" by defining a base class, 
- * `StatefulPatterns`, that knows how to register class methods as Patterns
+ * `StatefulPatterns`, that knows how to register class methods as Patterns.
  */
 let csound = globalThis.__csound__;
 let csoundac = globalThis.__csoundac__;
@@ -37,8 +37,8 @@ export const NEVER = 0;
  * Prints a diagnostic message to both the Strudel logger and the Csound 
  * log. Messages are printed only for the specifed diagnostic level or less.
  */
-export function diagnostic(message, level = INFORMATION) {
-    if (level <= diagnostic_level_) {
+export function diagnostic(message, level = WARNING) {
+    if (level >= diagnostic_level_) {
         const text = 'L' + level + ' ' + audioContext.currentTime.toFixed(4) + ' [csac]' + message;
         logger(text, 'debug');
         if (csound) csound.message(text);
@@ -50,8 +50,9 @@ export function diagnostic(message, level = INFORMATION) {
  * that hold state between queries. Derived classes, which must be defined at 
  * module scope, must in their constructor call `this.registerPatterns`, which 
  * will automatically register (most of) of their methods as Strudel Patterns, 
- * each of which takes an instance of the class as a first parameter. Class 
- * methods must have the following syntax and semantics:
+ * each of which takes an instance of the class as a first parameter, and the 
+ * Pattern as the last parameter. Class methods must have the following syntax 
+ * and semantics:
  * ```
  * Class.Pat(is_onset, [0 or more arguments to be patternified], hap) {...}
  * ```
@@ -91,10 +92,10 @@ export class StatefulPatterns {
                     let registration = register(name, (stateful, pat) => {
                         return pat.onTrigger((t, hap) => {
                             method.call(stateful, true, hap);
-                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] onset:' + JSON.stringify({x, stateful}, null, 4));
+                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] onset:' + JSON.stringify({x, stateful}, null, 4) + '\n');
                         }, false).withHap((hap) => {
                             stateful.current_time = getAudioContext().currentTime;
-                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] query value:' + JSON.stringify({x, stateful}, null, 4));
+                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] value:' + JSON.stringify({x, stateful}, null, 4) + '\n');
                             hap = method.call(stateful, false, hap);
                             return hap;
                         });
@@ -106,10 +107,10 @@ export class StatefulPatterns {
                     let registration = register(name, (stateful, p2, pat) => {
                         return pat.onTrigger((t, hap) => {
                             method.call(stateful, true, p2, hap);
-                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] onset:' + JSON.stringify({x, stateful}, null, 4));
+                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] onset:' + JSON.stringify({x, stateful}, null, 4) + '\n');
                         }, false).withHap((hap) => {
                             stateful.current_time = getAudioContext().currentTime;
-                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] query value:' + JSON.stringify({x, stateful}, null, 4));
+                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] value:' + JSON.stringify({x, stateful}, null, 4) + '\n');
                             hap = method.call(stateful, false, p2, hap);
                             return hap;
                         });
@@ -119,10 +120,10 @@ export class StatefulPatterns {
                     let registration = register(name, (stateful, p2, p3, pat) => {
                         return pat.onTrigger((t, hap) => {
                             method.call(stateful, true, p2, p3, hap);
-                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] onset:' + JSON.stringify({x, stateful}, null, 4));
+                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] onset:' + JSON.stringify({x, stateful}, null, 4) + '\n');
                         }, false).withHap((hap) => {
                             stateful.current_time = getAudioContext().currentTime;
-                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] query value:' + JSON.stringify({x, stateful}, null, 4));
+                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] value:' + JSON.stringify({x, stateful}, null, 4) + '\n');
                             hap = method.call(stateful, false, p2, p3, hap);
                             return hap;
                         });
@@ -132,10 +133,10 @@ export class StatefulPatterns {
                     let registration = register(name, (stateful, p2, p3, p4, pat) => {
                         return pat.onTrigger((t, hap) => {
                             method.call(stateful, true, p2, p3, p4, hap);
-                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] onset:' + JSON.stringify({x, stateful}, null, 4));
+                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] onset:' + JSON.stringify({x, stateful}, null, 4) + '\n');
                         }, false).withHap((hap) => {
                             stateful.current_time = getAudioContext().currentTime;
-                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] query value:' + JSON.stringify({x, stateful}, null, 4));
+                            if (diagnostic_level_ >= DEBUG) diagnostic('[registerStateful][' + method.name + '] value:' + JSON.stringify({x, stateful}, null, 4) + '\n');
                             hap = method.call(stateful, false, p2, p3, p4, hap);
                             return hap;
                         });

@@ -50,7 +50,7 @@
   <link rel="stylesheet" href="/_astro/first-effects.287062ea.css" />
 <link rel="stylesheet" href="/_astro/first-effects.31a47b8a.css" />
 <link rel="stylesheet" href="/_astro/first-effects.56b16646.css" />
-<link rel="stylesheet" href="/_astro/intro.f4b92629.css" /><script type="module" src="/_astro/hoisted.1e00e57f.js"></script></head>
+<link rel="stylesheet" href="/_astro/intro.f4b92629.css" /><script type="module" src="/_astro/hoisted.cc73f00b.js"></script></head>
 
   <body class="h-app-height text-gray-50 bg-background">
     <div class="w-full h-full space-y-4 flex flex-col">
@@ -280,22 +280,22 @@ window.addEventListener('DOMContentLoaded', () => {
 <p>We can play sounds with <code>s</code>, in two different ways:</p>
 <ul>
 <li><code>s</code> can trigger audio samples, where a sound file is loaded in the background and played back:
-<astro-island uid="ZNlrW3" component-url="/_astro/MiniRepl.eb0582fe.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;bd hh sd hh\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;bd hh sd hh&quot;)</pre></astro-island>
+<astro-island uid="ZNlrW3" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;bd hh sd hh\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;bd hh sd hh&quot;)</pre></astro-island>
 </li>
 <li><code>s</code> can trigger audio synthesisers, which are synthesised in real-time using code also running in the background:
-<astro-island uid="Z23ljC3" component-url="/_astro/MiniRepl.eb0582fe.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;sawtooth square triangle sine\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;sawtooth square triangle sine&quot;)</pre></astro-island>
+<astro-island uid="Z23ljC3" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;sawtooth square triangle sine\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;sawtooth square triangle sine&quot;)</pre></astro-island>
 </li>
 </ul>
 <p>You can learn more about both of these approaches in the pages <a href="/learn/synths">Synths</a> and <a href="/learn/samples">Samples</a>.</p>
 <h1 id="combining-notes-and-sounds">Combining notes and sounds<a aria-hidden="true" tabIndex="-1" href="/learn/sounds#combining-notes-and-sounds"><span class="icon icon-link"></span></a></h1>
 <p>In both of the above cases, we are no longer directly controlling the <code>note</code>/<code>freq</code> of the sound heard via <code>s</code>, as we were in the <a href="/strudel/notes">Notes</a> page.</p>
 <p>So how can we both control the sound and the pitch? We can <em>combine</em> <code>note</code>/<code>freq</code> with <code>s</code> to change the sound of our pitches:</p>
-<astro-island uid="2uvqDK" component-url="/_astro/MiniRepl.eb0582fe.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;a3 c#4 e4 a4\&quot;).s(\&quot;sawtooth\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>note(&quot;a3 c#4 e4 a4&quot;).s(&quot;sawtooth&quot;)</pre></astro-island>
-<astro-island uid="Xz2Sg" component-url="/_astro/MiniRepl.eb0582fe.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;57 61 64 69\&quot;).s(\&quot;sine\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>note(&quot;57 61 64 69&quot;).s(&quot;sine&quot;)</pre></astro-island>
-<astro-island uid="Z1elfnW" component-url="/_astro/MiniRepl.eb0582fe.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;freq(\&quot;220 275 330 440\&quot;).s(\&quot;triangle\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>freq(&quot;220 275 330 440&quot;).s(&quot;triangle&quot;)</pre></astro-island>
+<astro-island uid="2uvqDK" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;a3 c#4 e4 a4\&quot;).s(\&quot;sawtooth\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>note(&quot;a3 c#4 e4 a4&quot;).s(&quot;sawtooth&quot;)</pre></astro-island>
+<astro-island uid="Xz2Sg" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;note(\&quot;57 61 64 69\&quot;).s(\&quot;sine\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>note(&quot;57 61 64 69&quot;).s(&quot;sine&quot;)</pre></astro-island>
+<astro-island uid="Z1elfnW" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;freq(\&quot;220 275 330 440\&quot;).s(\&quot;triangle\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>freq(&quot;220 275 330 440&quot;).s(&quot;triangle&quot;)</pre></astro-island>
 <p>The last example will actually sound the same with or without <code>s</code>, because <code>triangle</code> is the default value for <code>s</code>.</p>
 <p>What about combining different notes with different sounds at the same time?</p>
-<astro-island uid="Z2bILYw" component-url="/_astro/MiniRepl.eb0582fe.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;freq(\&quot;220 275 330 440 550\&quot;).s(\&quot;triangle sawtooth sine\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>freq(&quot;220 275 330 440 550&quot;).s(&quot;triangle sawtooth sine&quot;)</pre></astro-island>
+<astro-island uid="Z2bILYw" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;freq(\&quot;220 275 330 440 550\&quot;).s(\&quot;triangle sawtooth sine\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>freq(&quot;220 275 330 440 550&quot;).s(&quot;triangle sawtooth sine&quot;)</pre></astro-island>
 <p>Hmm, something interesting is going on there, related to there being five notes and three sounds.</p>
 <p>Let’s now take a step back and think about the Strudel <a href="/learn/code">Code</a> we’ve been hearing so far.</p>
           
