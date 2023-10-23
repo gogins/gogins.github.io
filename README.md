@@ -51,6 +51,9 @@ a JavaScript port of the live coding system [Tidal Cycles](https://tidalcycles.o
 
 - [Cloud Music No. 9](cloud_music_no_9.html).
 
+- [Cancycle](cancycle.html), a piece in three sections designed for live 
+  coding.
+
 ### Experiments
 
 I am working on supporting the use of CsoundAC in the Strudel REPL. The most 
