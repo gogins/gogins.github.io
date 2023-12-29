@@ -70,61 +70,21 @@
     <!--
     
 const csac = await import('../csoundac.mjs');
-/**
- * Classes can be used to define stateful Patterns; such classes can have an 
- * 'evaluate' method that sets a 'value' property, which could be of any type. 
- * Using classes makes it easy to encapsulate different collections of state.
- *
- * This particular `stateful` class is instrumented with debug information to 
- * prove whether or not evaluations are triggered when they should be, e.g. 
- * cps of 1 should evaluate once per second, cps of 2 should evaluate twice 
- * per second, and so on; also, there should be exactly 1 call to `evaluate`
- * for every note triggered by the Pattern.
- */
-class LogisticPattern extends csac.StatefulPatterns {
-    constructor(c = .998, y = .5) {
-        super();
-        this.registerPatterns();
-        // Initial values.
-        this.c = c;
-        this.y = y;
-        this.value = 36;
-        this.prior_time = 0;
-        this.current_time = 0;
-        this.delta_time = 0;
-    }
-    /**
-     * Patternify the 'c' coefficient of the logistic equation.
-     */
-    Logistic(is_onset, c, hap) {
-        if (is_onset) {
-            // This has been invoked from a trigger and should update state.
-            this.c = c;
-            let y1 = 4 * this.c * this.y * (1 - this.y);
-            this.value = Math.round(y1 * 36 + 36);
-            csac.diagnostic('[Logistic onset] value: ' + this.value + '\n');
-            this.y = y1;
-            this.delta_time = this.current_time - this.prior_time;
-            this.prior_time = this.current_time;
-        }
-        hap.value = this.midi_key;
-        csac.diagnostic('[Logistic query] ' + hap.show() + '\n');
-        return hap;
-     }
-}
 
-let logisticInstance = new LogisticPattern();
-let GM = csac.Chord('GM9');
+let GM = csac.Chord('Gm9');
 let chordPattern = new csac.ChordPatterns(GM);
-run(8)
-.scale('C4 major')  
-.acCV(chordPattern)  
+pure(1).fast(3)
 .acCQ(chordPattern, "0 1 2 3 4 5".slow(8))
-.every(64, x=>x.acCK(chordPattern))
+.acCK(chordPattern, "<1 0>".slow(12))
+.acCRP(chordPattern, 60)
+.every(16, x=>x.acCVV(chordPattern, 60, "<0 1 2 3 4>"))
+.acCT(chordPattern, "<3 -7>".slow(8))
+.acCO(chordPattern, "<1 1 1 1 -2 -3>".slow(16))
+.acCVVL(chordPattern, 60, 36, "0, 1 2, 0 3, 4".fast(7))
 .note()
-.pianoroll({labels:1,fillActive:1,cycles:32,playhead:.9})  
-.csoundn("6")    
-.legato(3)  
+.csoundn("<6 7 1 9>")    
+.pianoroll({labels:1,fillActive:1,cycles:32,playhead:.9})
+
 -->
     
     </strudel-repl-component>
@@ -297,7 +257,7 @@ run(8)
     <input type="button" id='default' value="Defaults" class="w3-btn w3-hover-text-light-green"/>
     </form>   
     </div>
-    <div id='console_view' class="w3-text-sand" style="position:absolute;top:70px;z-index:4;width:100vw;height:90vh;background:transparent;color;margin-left:53px;">
+    <div id='console_view' class="w3-text-sand" style="position:absolute;top:70px;z-index:4;width:100vw;height:90vh;background:transparent;margin-left:53px;">
     </div>
     <div id="about_view" class="w3-container " style="position:absolute;top:70px;z-index:5;background:transparent;color:rgb(255, 255, 200, 67%);max-height: calc(100vh - 70px);overflow-y:auto;">
 

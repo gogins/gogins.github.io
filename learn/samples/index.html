@@ -1,267 +1,11 @@
-<!DOCTYPE html>
-<html dir="ltr" lang="en" class="initial dark">
-  <head>
-    <!-- Global Metadata --><meta charset="utf-8">
-<meta name="viewport" content="width=device-width">
-<meta name="generator" content="Astro v2.3.2">
-
-<link rel="icon" type="image/svg+xml" href="favicon.ico">
-
-<meta name="description" content="Strudel is a music live coding environment for the browser, porting the TidalCycles pattern language to JavaScript.">
-<link rel="icon" href="/favicon.ico">
-<link rel="apple-touch-icon" href="/icons/apple-icon-180.png" sizes="180x180">
-<meta name="theme-color" content="#222222">
-
-<base href="/">
-
-<!-- Scrollable a11y code helper -->
-<script src="./make-scrollable-code-focusable.js"></script>
-
-
-<!-- this does not work for some reason: -->
-<!-- <style is:global define:vars={strudelTheme}></style> -->
-<!-- the following variables are just a fallback to make sure everything is readable without JS -->
-
-<link rel="manifest" href="/manifest.webmanifest">
-
-
-    <!-- Page Metadata --><link rel="canonical" href="https://strudel.tidalcycles.org/learn/samples/">
-
-<!-- OpenGraph Tags -->
-<meta property="og:title" content="Samples 🚀 Strudel">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://strudel.tidalcycles.org/learn/samples/">
-<meta property="og:locale" content="en">
-<meta property="og:image" content="https://strudel.tidalcycles.org/icon.png">
-<meta property="og:image:alt" content="Strudel Logo">
-<meta name="description" property="og:description" content="Strudel is a music live coding editor that brings TidalCycles to the browser.">
-<meta property="og:site_name" content="Strudel">
-
-<!-- Twitter Tags -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:site">
-<meta name="twitter:title" content="Samples 🚀 Strudel">
-<meta name="twitter:description" content="Strudel is a music live coding editor that brings TidalCycles to the browser.">
-<meta name="twitter:image" content="https://strudel.tidalcycles.org/icon.png">
-<meta name="twitter:image:alt" content="Strudel Logo">
-    <title>
+<!DOCTYPE html><html dir="ltr" lang="en" class="initial dark"><head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width"><meta name="generator" content="Astro v3.4.2"><link rel="icon" type="image/svg+xml" href="/favicon.ico"><meta name="description" content="Strudel is a music live coding environment for the browser, porting the TidalCycles pattern language to JavaScript."><link rel="icon" href="/favicon.ico"><link rel="apple-touch-icon" href="/icons/apple-icon-180.png" sizes="180x180"><meta name="theme-color" content="#222222"><base href="/"><!-- Scrollable a11y code helper --><script `${baseNoTrailing}/make-scrollable-code-focusable.js`="/make-scrollable-code-focusable.js"></script><!-- this does not work for some reason: --><!-- <style is:global define:vars={strudelTheme}></style> --><!-- the following variables are just a fallback to make sure everything is readable without JS --><link rel="manifest" href="/manifest.webmanifest"><!-- Page Metadata --><link rel="canonical" href="https://strudel.cc/learn/samples/"><!-- OpenGraph Tags --><meta property="og:title" content="Samples 🚀 Strudel"><meta property="og:type" content="article"><meta property="og:url" content="https://strudel.cc/learn/samples/"><meta property="og:locale" content="en"><meta property="og:image" content="https://strudel.cc/icon.png"><meta property="og:image:alt" content="Strudel Logo"><meta name="description" property="og:description" content="Strudel is a music live coding editor that brings TidalCycles to the browser."><meta property="og:site_name" content="Strudel"><!-- Twitter Tags --><meta name="twitter:card" content="summary_large_image"><meta name="twitter:site"><meta name="twitter:title" content="Samples 🚀 Strudel"><meta name="twitter:description" content="Strudel is a music live coding editor that brings TidalCycles to the browser."><meta name="twitter:image" content="https://strudel.cc/icon.png"><meta name="twitter:image:alt" content="Strudel Logo"><title>
       Samples 🌀 Strudel
-    </title>
-  <link rel="stylesheet" href="/_astro/first-effects.287062ea.css" />
-<link rel="stylesheet" href="/_astro/first-effects.31a47b8a.css" />
-<link rel="stylesheet" href="/_astro/first-effects.56b16646.css" />
-<link rel="stylesheet" href="/_astro/intro.f4b92629.css" /><script type="module" src="/_astro/hoisted.cc73f00b.js"></script></head>
-
-  <body class="h-app-height text-gray-50 bg-background">
-    <div class="w-full h-full space-y-4 flex flex-col">
-      <header class="max-w-full fixed top-0 w-full z-[100]">
-        <nav class="flex justify-between py-2 px-4 items-center h-14 max-h-14 bg-lineHighlight text-foreground astro-2W66RQV5" title="Top Navigation">
-  <div class="flex overflow-visible items-center grow astro-2W66RQV5" style="overflow:visible">
-    <a href="/" class="flex items-center text-2xl space-x-2 astro-2W66RQV5">
-      <h1 class="font-bold flex space-x-2 items-baseline text-xl astro-2W66RQV5">
-        <span class="astro-2W66RQV5">🌀</span>
-        <div class="flex space-x-1 items-baseline astro-2W66RQV5">
-          <span class=" astro-2W66RQV5">strudel</span>
-          <span class="text-sm astro-2W66RQV5">DOCS</span>
-        </div>
-      </h1>
-    </a>
-  </div>
-  
-  <div class="search-item h-10 astro-2W66RQV5">
-    <!-- <Search client:idle /> -->
-  </div>
-  <a href="./" class="hidden md:flex cursor-pointer items-center space-x-1 astro-2W66RQV5"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="w-5 h-5 astro-2W66RQV5"><path fill-rule="evenodd" d="M3.25 3A2.25 2.25 0 001 5.25v9.5A2.25 2.25 0 003.25 17h13.5A2.25 2.25 0 0019 14.75v-9.5A2.25 2.25 0 0016.75 3H3.25zm.943 8.752a.75.75 0 01.055-1.06L6.128 9l-1.88-1.693a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 01-1.06-.055zM9.75 10.25a.75.75 0 000 1.5h2.5a.75.75 0 000-1.5h-2.5z" clip-rule="evenodd"></path></svg><span class="astro-2W66RQV5">go to REPL</span>
-  </a>
-  <div class="md:hidden astro-2W66RQV5">
-    <style>astro-island,astro-slot{display:contents}</style><script>(self.Astro=self.Astro||{}).idle=t=>{const e=async()=>{await(await t())()};"requestIdleCallback"in window?window.requestIdleCallback(e):setTimeout(e,200)},window.dispatchEvent(new Event("astro:idle"));var l;{const c={0:t=>t,1:t=>JSON.parse(t,o),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(JSON.parse(t,o)),5:t=>new Set(JSON.parse(t,o)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(JSON.parse(t)),9:t=>new Uint16Array(JSON.parse(t)),10:t=>new Uint32Array(JSON.parse(t))},o=(t,s)=>{if(t===""||!Array.isArray(s))return s;const[e,n]=s;return e in c?c[e](n):void 0};customElements.get("astro-island")||customElements.define("astro-island",(l=class extends HTMLElement{constructor(){super(...arguments);this.hydrate=()=>{if(!this.hydrator||this.parentElement&&this.parentElement.closest("astro-island[ssr]"))return;const s=this.querySelectorAll("astro-slot"),e={},n=this.querySelectorAll("template[data-astro-template]");for(const r of n){const i=r.closest(this.tagName);!i||!i.isSameNode(this)||(e[r.getAttribute("data-astro-template")||"default"]=r.innerHTML,r.remove())}for(const r of s){const i=r.closest(this.tagName);!i||!i.isSameNode(this)||(e[r.getAttribute("name")||"default"]=r.innerHTML)}const a=this.hasAttribute("props")?JSON.parse(this.getAttribute("props"),o):{};this.hydrator(this)(this.Component,a,e,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),window.removeEventListener("astro:hydrate",this.hydrate),window.dispatchEvent(new CustomEvent("astro:hydrate"))}}connectedCallback(){!this.hasAttribute("await-children")||this.firstChild?this.childrenConnectedCallback():new MutationObserver((s,e)=>{e.disconnect(),this.childrenConnectedCallback()}).observe(this,{childList:!0})}async childrenConnectedCallback(){window.addEventListener("astro:hydrate",this.hydrate);let s=this.getAttribute("before-hydration-url");s&&await import(s),this.start()}start(){const s=JSON.parse(this.getAttribute("opts")),e=this.getAttribute("client");if(Astro[e]===void 0){window.addEventListener(`astro:${e}`,()=>this.start(),{once:!0});return}Astro[e](async()=>{const n=this.getAttribute("renderer-url"),[a,{default:r}]=await Promise.all([import(this.getAttribute("component-url")),n?import(n):()=>()=>{}]),i=this.getAttribute("component-export")||"default";if(!i.includes("."))this.Component=a[i];else{this.Component=a;for(const d of i.split("."))this.Component=this.Component[d]}return this.hydrator=r,this.hydrate},s,this)}attributeChangedCallback(){this.hydrator&&this.hydrate()}},l.observedAttributes=["props"],l))}</script><astro-island uid="1LQWOd" component-url="/_astro/MobileNav.ca3813bb.js" component-export="default" renderer-url="/_astro/client.0daade25.js" props="{&quot;sidebar&quot;:[0,{&quot;Workshop&quot;:[1,&quot;[[0,{\&quot;text\&quot;:[0,\&quot;Getting Started\&quot;],\&quot;link\&quot;:[0,\&quot;workshop/getting-started\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;First Sounds\&quot;],\&quot;link\&quot;:[0,\&quot;workshop/first-sounds\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;First Notes\&quot;],\&quot;link\&quot;:[0,\&quot;workshop/first-notes\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;First Effects\&quot;],\&quot;link\&quot;:[0,\&quot;workshop/first-effects\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Pattern Effects\&quot;],\&quot;link\&quot;:[0,\&quot;workshop/pattern-effects\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Recap\&quot;],\&quot;link\&quot;:[0,\&quot;workshop/recap\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Workshop in German\&quot;],\&quot;link\&quot;:[0,\&quot;de/workshop/getting-started\&quot;]}]]&quot;],&quot;Making Sound&quot;:[1,&quot;[[0,{\&quot;text\&quot;:[0,\&quot;Samples\&quot;],\&quot;link\&quot;:[0,\&quot;learn/samples\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Synths\&quot;],\&quot;link\&quot;:[0,\&quot;learn/synths\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Audio Effects\&quot;],\&quot;link\&quot;:[0,\&quot;learn/effects\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;MIDI &amp; OSC\&quot;],\&quot;link\&quot;:[0,\&quot;learn/input-output\&quot;]}]]&quot;],&quot;More&quot;:[1,&quot;[[0,{\&quot;text\&quot;:[0,\&quot;Mini-Notation\&quot;],\&quot;link\&quot;:[0,\&quot;learn/mini-notation\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Coding syntax\&quot;],\&quot;link\&quot;:[0,\&quot;learn/code\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Offline\&quot;],\&quot;link\&quot;:[0,\&quot;learn/pwa\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Patterns\&quot;],\&quot;link\&quot;:[0,\&quot;technical-manual/patterns\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Pattern Alignment\&quot;],\&quot;link\&quot;:[0,\&quot;technical-manual/alignment\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Strudel vs Tidal\&quot;],\&quot;link\&quot;:[0,\&quot;learn/strudel-vs-tidal\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Music metadata\&quot;],\&quot;link\&quot;:[0,\&quot;learn/metadata\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;CSound\&quot;],\&quot;link\&quot;:[0,\&quot;learn/csound\&quot;]}]]&quot;],&quot;Pattern Functions&quot;:[1,&quot;[[0,{\&quot;text\&quot;:[0,\&quot;Introduction\&quot;],\&quot;link\&quot;:[0,\&quot;functions/intro\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Creating Patterns\&quot;],\&quot;link\&quot;:[0,\&quot;learn/factories\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Time Modifiers\&quot;],\&quot;link\&quot;:[0,\&quot;learn/time-modifiers\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Control Parameters\&quot;],\&quot;link\&quot;:[0,\&quot;functions/value-modifiers\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Signals\&quot;],\&quot;link\&quot;:[0,\&quot;learn/signals\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Conditional Modifiers\&quot;],\&quot;link\&quot;:[0,\&quot;learn/conditional-modifiers\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Accumulation\&quot;],\&quot;link\&quot;:[0,\&quot;learn/accumulation\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Tonal Functions\&quot;],\&quot;link\&quot;:[0,\&quot;learn/tonal\&quot;]}]]&quot;],&quot;Understand&quot;:[1,&quot;[[0,{\&quot;text\&quot;:[0,\&quot;Pitch\&quot;],\&quot;link\&quot;:[0,\&quot;understand/pitch\&quot;]}]]&quot;],&quot;Development&quot;:[1,&quot;[[0,{\&quot;text\&quot;:[0,\&quot;REPL\&quot;],\&quot;link\&quot;:[0,\&quot;technical-manual/repl\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Sounds\&quot;],\&quot;link\&quot;:[0,\&quot;technical-manual/sounds\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Packages\&quot;],\&quot;link\&quot;:[0,\&quot;technical-manual/packages\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Docs\&quot;],\&quot;link\&quot;:[0,\&quot;technical-manual/docs\&quot;]}],[0,{\&quot;text\&quot;:[0,\&quot;Testing\&quot;],\&quot;link\&quot;:[0,\&quot;technical-manual/testing\&quot;]}]]&quot;]}]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MobileNav&quot;,&quot;value&quot;:true}" await-children=""><nav data-headlessui-state=""><button class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" id="headlessui-disclosure-button-:R1:" type="button" aria-expanded="false" data-headlessui-state=""><span class="sr-only">Open main menu</span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="block h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path></svg></button></nav></astro-island>
-  </div>
-</nav>
-      </header>
-      <main class="relative pt-16">
-        <div class="h-full top-0 overflow-auto min-w-[300px] flex xl:justify-center pr-4 pl-4 md:pl-[300px] xl:pl-0">
-          <aside title="Site Navigation" class="w-[300px] px-6 left-0 hidden md:block fixed h-full">
-            <nav aria-labelledby="grid-left" class="max-h-full overflow-auto pb-20 text-foreground">
-  <ul>
-    <li>
-          <div class="nav-group pb-4">
-            <h2>Workshop</h2>
-            <ul>
-              <li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/workshop/getting-started">
-                      Getting Started
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/workshop/first-sounds">
-                      First Sounds
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/workshop/first-notes">
-                      First Notes
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/workshop/first-effects">
-                      First Effects
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/workshop/pattern-effects">
-                      Pattern Effects
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/workshop/recap">
-                      Recap
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/de/workshop/getting-started">
-                      Workshop in German
-                    </a>
-                  </li>
-            </ul>
-          </div>
-        </li><li>
-          <div class="nav-group pb-4">
-            <h2>Making Sound</h2>
-            <ul>
-              <li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block bg-lineHighlight" href="/learn/samples" aria-current="page">
-                      Samples
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/synths">
-                      Synths
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/effects">
-                      Audio Effects
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/input-output">
-                      MIDI &amp; OSC
-                    </a>
-                  </li>
-            </ul>
-          </div>
-        </li><li>
-          <div class="nav-group pb-4">
-            <h2>More</h2>
-            <ul>
-              <li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/mini-notation">
-                      Mini-Notation
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/code">
-                      Coding syntax
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/pwa">
-                      Offline
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/technical-manual/patterns">
-                      Patterns
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/technical-manual/alignment">
-                      Pattern Alignment
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/strudel-vs-tidal">
-                      Strudel vs Tidal
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/metadata">
-                      Music metadata
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/csound">
-                      CSound
-                    </a>
-                  </li>
-            </ul>
-          </div>
-        </li><li>
-          <div class="nav-group pb-4">
-            <h2>Pattern Functions</h2>
-            <ul>
-              <li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/functions/intro">
-                      Introduction
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/factories">
-                      Creating Patterns
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/time-modifiers">
-                      Time Modifiers
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/functions/value-modifiers">
-                      Control Parameters
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/signals">
-                      Signals
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/conditional-modifiers">
-                      Conditional Modifiers
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/accumulation">
-                      Accumulation
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/tonal">
-                      Tonal Functions
-                    </a>
-                  </li>
-            </ul>
-          </div>
-        </li><li>
-          <div class="nav-group pb-4">
-            <h2>Understand</h2>
-            <ul>
-              <li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/understand/pitch">
-                      Pitch
-                    </a>
-                  </li>
-            </ul>
-          </div>
-        </li><li>
-          <div class="nav-group pb-4">
-            <h2>Development</h2>
-            <ul>
-              <li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/technical-manual/repl">
-                      REPL
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/technical-manual/sounds">
-                      Sounds
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/technical-manual/packages">
-                      Packages
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/technical-manual/docs">
-                      Docs
-                    </a>
-                  </li><li class="">
-                    <a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/technical-manual/testing">
-                      Testing
-                    </a>
-                  </li>
-            </ul>
-          </div>
-        </li>
-  </ul>
-</nav>
-
-<script>
+    </title><link rel="stylesheet" href="/_astro/first-effects.0470bb27.css" />
+<style>@font-face{font-family:PressStart;src:url(/fonts/PressStart2P/PressStart2P-Regular.ttf)}@font-face{font-family:BigBlueTerminal;src:url(/fonts/BigBlueTerminal/BigBlue_TerminalPlus.TTF)}@font-face{font-family:x3270;src:url(/fonts/3270/3270-Regular.ttf)}@font-face{font-family:galactico;src:url(/fonts/galactico/Galactico-Basic.otf)}@font-face{font-family:we-come-in-peace;src:url(/fonts/we-come-in-peace/we-come-in-peace-bb.regular.ttf)}@font-face{font-family:FiraCode;src:url(/fonts/FiraCode/FiraCode-Regular.ttf)}@font-face{font-family:FiraCode-SemiBold;src:url(/fonts/FiraCode/FiraCode-SemiBold.ttf)}@font-face{font-family:teletext;src:url(/fonts/teletext/EuropeanTeletext.ttf)}@font-face{font-family:mode7;src:url(/fonts/mode7/MODE7GX3.TTF)}.prose>h1:not(:first-child){margin-top:30px}:root{--app-height: 100vh}#console-tab{font-family:BigBlueTerminal,monospace}:root{--background: #222;--lineBackground: #22222299;--foreground: #fff;--caret: #ffcc00;--selection: rgba(128, 203, 196, .5);--selectionMatch: #036dd626;--lineHighlight: #00000050;--gutterBackground: transparent;--gutterForeground: #8a919966}
+</style>
+<link rel="stylesheet" href="/_astro/first-effects.761c7af7.css" />
+<style>:root{--background: #222;--lineBackground: #22222299;--foreground: #fff;--caret: #ffcc00;--selection: rgba(128, 203, 196, .5);--selectionMatch: #036dd626;--lineHighlight: #00000050;--gutterBackground: transparent;--gutterForeground: #8a919966}.darken:before{content:" ";position:fixed;top:0;left:0;width:100vw;height:100vh;display:block;background:black;opacity:.5}#code .cm-scroller{padding-top:10px!important;padding-bottom:50vh;font-family:inherit}#code .cm-line>*{background:var(--lineBackground)}#code .cm-editor{background-color:transparent!important;height:100%;z-index:11}#code .cm-theme{width:100%;height:100%}#code .cm-theme-light{width:100%}#code .cm-cursorLayer{animation-name:inherit!important}#code .cm-cursor{border-left:2px solid currentcolor!important}#code .cm-foldGutter{display:none!important}#code .cm-focused{outline:none}
+</style><script type="module" src="/_astro/hoisted.268ab3a5.js"></script></head><body class="h-app-height text-gray-50 bg-background"><div class="w-full h-full space-y-4 flex flex-col"><header class="max-w-full fixed top-0 w-full z-[100]"><nav class="flex justify-between py-2 px-4 items-center h-14 max-h-14 bg-lineHighlight text-foreground" title="Top Navigation" data-astro-cid-2w66rqv5><div class="flex overflow-visible items-center grow" style="overflow:visible" data-astro-cid-2w66rqv5><a href="/" class="flex items-center text-2xl space-x-2" data-astro-cid-2w66rqv5><h1 class="font-bold flex space-x-2 items-baseline text-xl" data-astro-cid-2w66rqv5><span data-astro-cid-2w66rqv5>🌀</span><div class="flex space-x-1 items-baseline" data-astro-cid-2w66rqv5><span class="" data-astro-cid-2w66rqv5>strudel</span><span class="text-sm" data-astro-cid-2w66rqv5>DOCS</span></div></h1></a></div><div class="search-item h-10" data-astro-cid-2w66rqv5><style>astro-island,astro-slot,astro-static-slot{display:contents}</style><script>(()=>{var i=t=>{let e=async()=>{await(await t())()};"requestIdleCallback"in window?window.requestIdleCallback(e):setTimeout(e,200)};(self.Astro||(self.Astro={})).idle=i;window.dispatchEvent(new Event("astro:idle"));})();;(()=>{var b=Object.defineProperty;var f=(c,o,i)=>o in c?b(c,o,{enumerable:!0,configurable:!0,writable:!0,value:i}):c[o]=i;var l=(c,o,i)=>(f(c,typeof o!="symbol"?o+"":o,i),i);var p;{let c={0:t=>m(t),1:t=>i(t),2:t=>new RegExp(t),3:t=>new Date(t),4:t=>new Map(i(t)),5:t=>new Set(i(t)),6:t=>BigInt(t),7:t=>new URL(t),8:t=>new Uint8Array(t),9:t=>new Uint16Array(t),10:t=>new Uint32Array(t)},o=t=>{let[e,r]=t;return e in c?c[e](r):void 0},i=t=>t.map(o),m=t=>typeof t!="object"||t===null?t:Object.fromEntries(Object.entries(t).map(([e,r])=>[e,o(r)]));customElements.get("astro-island")||customElements.define("astro-island",(p=class extends HTMLElement{constructor(){super(...arguments);l(this,"Component");l(this,"hydrator");l(this,"hydrate",async()=>{var d;if(!this.hydrator||!this.isConnected)return;let e=(d=this.parentElement)==null?void 0:d.closest("astro-island[ssr]");if(e){e.addEventListener("astro:hydrate",this.hydrate,{once:!0});return}let r=this.querySelectorAll("astro-slot"),a={},h=this.querySelectorAll("template[data-astro-template]");for(let n of h){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("data-astro-template")||"default"]=n.innerHTML,n.remove())}for(let n of r){let s=n.closest(this.tagName);s!=null&&s.isSameNode(this)&&(a[n.getAttribute("name")||"default"]=n.innerHTML)}let u;try{u=this.hasAttribute("props")?m(JSON.parse(this.getAttribute("props"))):{}}catch(n){let s=this.getAttribute("component-url")||"<unknown>",y=this.getAttribute("component-export");throw y&&(s+=` (export ${y})`),console.error(`[hydrate] Error parsing props for component ${s}`,this.getAttribute("props"),n),n}await this.hydrator(this)(this.Component,u,a,{client:this.getAttribute("client")}),this.removeAttribute("ssr"),this.dispatchEvent(new CustomEvent("astro:hydrate"))});l(this,"unmount",()=>{this.isConnected||this.dispatchEvent(new CustomEvent("astro:unmount"))})}disconnectedCallback(){document.removeEventListener("astro:after-swap",this.unmount),document.addEventListener("astro:after-swap",this.unmount,{once:!0})}connectedCallback(){if(!this.hasAttribute("await-children")||document.readyState==="interactive"||document.readyState==="complete")this.childrenConnectedCallback();else{let e=()=>{document.removeEventListener("DOMContentLoaded",e),r.disconnect(),this.childrenConnectedCallback()},r=new MutationObserver(()=>{var a;((a=this.lastChild)==null?void 0:a.nodeType)===Node.COMMENT_NODE&&this.lastChild.nodeValue==="astro:end"&&(this.lastChild.remove(),e())});r.observe(this,{childList:!0}),document.addEventListener("DOMContentLoaded",e)}}async childrenConnectedCallback(){let e=this.getAttribute("before-hydration-url");e&&await import(e),this.start()}start(){let e=JSON.parse(this.getAttribute("opts")),r=this.getAttribute("client");if(Astro[r]===void 0){window.addEventListener(`astro:${r}`,()=>this.start(),{once:!0});return}Astro[r](async()=>{let a=this.getAttribute("renderer-url"),[h,{default:u}]=await Promise.all([import(this.getAttribute("component-url")),a?import(a):()=>()=>{}]),d=this.getAttribute("component-export")||"default";if(!d.includes("."))this.Component=h[d];else{this.Component=h;for(let n of d.split("."))this.Component=this.Component[n]}return this.hydrator=u,this.hydrate},e,this)}attributeChangedCallback(){this.hydrate()}},l(p,"observedAttributes",["props"]),p))}})();</script><astro-island uid="kjVBH" prefix="r1" component-url="/_astro/Search.950abaf4.js" component-export="default" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;data-astro-cid-2w66rqv5&quot;:[0,true]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;Search&quot;,&quot;value&quot;:true}" await-children=""><button type="button" class="rounded-md bg-slate-900 w-full px-2 search-button"><svg width="24" height="24" fill="none"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg><span class="search-hint"><span class="sr-only">Press </span><kbd>/</kbd><span class="sr-only"> to search</span></span></button><!--astro:end--></astro-island></div><a href="/" class="hidden md:flex cursor-pointer items-center space-x-1" data-astro-cid-2w66rqv5><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" class="w-5 h-5" data-astro-cid-2w66rqv5="true"><path fill-rule="evenodd" d="M3.25 3A2.25 2.25 0 001 5.25v9.5A2.25 2.25 0 003.25 17h13.5A2.25 2.25 0 0019 14.75v-9.5A2.25 2.25 0 0016.75 3H3.25zm.943 8.752a.75.75 0 01.055-1.06L6.128 9l-1.88-1.693a.75.75 0 111.004-1.114l2.5 2.25a.75.75 0 010 1.114l-2.5 2.25a.75.75 0 01-1.06-.055zM9.75 10.25a.75.75 0 000 1.5h2.5a.75.75 0 000-1.5h-2.5z" clip-rule="evenodd"></path></svg><span data-astro-cid-2w66rqv5>go to REPL</span></a><div class="md:hidden" data-astro-cid-2w66rqv5><astro-island uid="1NvKyU" prefix="r2" component-url="/_astro/MobileNav.6d1612cc.js" component-export="default" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;sidebar&quot;:[0,{&quot;Workshop&quot;:[1,[[0,{&quot;text&quot;:[0,&quot;Getting Started&quot;],&quot;link&quot;:[0,&quot;workshop/getting-started&quot;]}],[0,{&quot;text&quot;:[0,&quot;First Sounds&quot;],&quot;link&quot;:[0,&quot;workshop/first-sounds&quot;]}],[0,{&quot;text&quot;:[0,&quot;First Notes&quot;],&quot;link&quot;:[0,&quot;workshop/first-notes&quot;]}],[0,{&quot;text&quot;:[0,&quot;First Effects&quot;],&quot;link&quot;:[0,&quot;workshop/first-effects&quot;]}],[0,{&quot;text&quot;:[0,&quot;Pattern Effects&quot;],&quot;link&quot;:[0,&quot;workshop/pattern-effects&quot;]}],[0,{&quot;text&quot;:[0,&quot;Recap&quot;],&quot;link&quot;:[0,&quot;workshop/recap&quot;]}],[0,{&quot;text&quot;:[0,&quot;Workshop in German&quot;],&quot;link&quot;:[0,&quot;de/workshop/getting-started&quot;]}]]],&quot;Making Sound&quot;:[1,[[0,{&quot;text&quot;:[0,&quot;Samples&quot;],&quot;link&quot;:[0,&quot;learn/samples&quot;]}],[0,{&quot;text&quot;:[0,&quot;Synths&quot;],&quot;link&quot;:[0,&quot;learn/synths&quot;]}],[0,{&quot;text&quot;:[0,&quot;Audio Effects&quot;],&quot;link&quot;:[0,&quot;learn/effects&quot;]}],[0,{&quot;text&quot;:[0,&quot;MIDI &amp; OSC&quot;],&quot;link&quot;:[0,&quot;learn/input-output&quot;]}]]],&quot;More&quot;:[1,[[0,{&quot;text&quot;:[0,&quot;Recipes&quot;],&quot;link&quot;:[0,&quot;recipes/recipes&quot;]}],[0,{&quot;text&quot;:[0,&quot;Mini-Notation&quot;],&quot;link&quot;:[0,&quot;learn/mini-notation&quot;]}],[0,{&quot;text&quot;:[0,&quot;Offline&quot;],&quot;link&quot;:[0,&quot;learn/pwa&quot;]}],[0,{&quot;text&quot;:[0,&quot;Patterns&quot;],&quot;link&quot;:[0,&quot;technical-manual/patterns&quot;]}],[0,{&quot;text&quot;:[0,&quot;Music metadata&quot;],&quot;link&quot;:[0,&quot;learn/metadata&quot;]}],[0,{&quot;text&quot;:[0,&quot;CSound&quot;],&quot;link&quot;:[0,&quot;learn/csound&quot;]}],[0,{&quot;text&quot;:[0,&quot;Hydra&quot;],&quot;link&quot;:[0,&quot;learn/hydra&quot;]}]]],&quot;Pattern Functions&quot;:[1,[[0,{&quot;text&quot;:[0,&quot;Introduction&quot;],&quot;link&quot;:[0,&quot;functions/intro&quot;]}],[0,{&quot;text&quot;:[0,&quot;Creating Patterns&quot;],&quot;link&quot;:[0,&quot;learn/factories&quot;]}],[0,{&quot;text&quot;:[0,&quot;Time Modifiers&quot;],&quot;link&quot;:[0,&quot;learn/time-modifiers&quot;]}],[0,{&quot;text&quot;:[0,&quot;Control Parameters&quot;],&quot;link&quot;:[0,&quot;functions/value-modifiers&quot;]}],[0,{&quot;text&quot;:[0,&quot;Signals&quot;],&quot;link&quot;:[0,&quot;learn/signals&quot;]}],[0,{&quot;text&quot;:[0,&quot;Conditional Modifiers&quot;],&quot;link&quot;:[0,&quot;learn/conditional-modifiers&quot;]}],[0,{&quot;text&quot;:[0,&quot;Accumulation&quot;],&quot;link&quot;:[0,&quot;learn/accumulation&quot;]}],[0,{&quot;text&quot;:[0,&quot;Tonal Functions&quot;],&quot;link&quot;:[0,&quot;learn/tonal&quot;]}]]],&quot;Understand&quot;:[1,[[0,{&quot;text&quot;:[0,&quot;Coding syntax&quot;],&quot;link&quot;:[0,&quot;learn/code&quot;]}],[0,{&quot;text&quot;:[0,&quot;Pitch&quot;],&quot;link&quot;:[0,&quot;understand/pitch&quot;]}],[0,{&quot;text&quot;:[0,&quot;Cycles&quot;],&quot;link&quot;:[0,&quot;understand/cycles&quot;]}],[0,{&quot;text&quot;:[0,&quot;Pattern Alignment&quot;],&quot;link&quot;:[0,&quot;technical-manual/alignment&quot;]}],[0,{&quot;text&quot;:[0,&quot;Strudel vs Tidal&quot;],&quot;link&quot;:[0,&quot;learn/strudel-vs-tidal&quot;]}]]],&quot;Development&quot;:[1,[[0,{&quot;text&quot;:[0,&quot;REPL&quot;],&quot;link&quot;:[0,&quot;technical-manual/repl&quot;]}],[0,{&quot;text&quot;:[0,&quot;Sounds&quot;],&quot;link&quot;:[0,&quot;technical-manual/sounds&quot;]}],[0,{&quot;text&quot;:[0,&quot;Packages&quot;],&quot;link&quot;:[0,&quot;technical-manual/packages&quot;]}],[0,{&quot;text&quot;:[0,&quot;Docs&quot;],&quot;link&quot;:[0,&quot;technical-manual/docs&quot;]}],[0,{&quot;text&quot;:[0,&quot;Testing&quot;],&quot;link&quot;:[0,&quot;technical-manual/testing&quot;]}]]]}],&quot;data-astro-cid-2w66rqv5&quot;:[0,true]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MobileNav&quot;,&quot;value&quot;:true}" await-children=""><nav data-headlessui-state=""><button class="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white" id="headlessui-disclosure-button-:r2R1:" type="button" aria-expanded="false" data-headlessui-state=""><span class="sr-only">Open main menu</span><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" class="block h-6 w-6"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5"></path></svg></button></nav><!--astro:end--></astro-island></div></nav></header><main class="relative pt-16"><div class="h-full top-0 overflow-auto min-w-[300px] flex xl:justify-center pr-4 pl-4 md:pl-[300px] xl:pl-0"><aside title="Site Navigation" class="w-[300px] px-6 left-0 hidden md:block fixed h-full"><nav aria-labelledby="grid-left" class="max-h-full overflow-auto pb-20 text-foreground"><ul><li><div class="nav-group pb-4"><h2>Workshop</h2><ul><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/workshop/getting-started/">Getting Started</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/workshop/first-sounds/">First Sounds</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/workshop/first-notes/">First Notes</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/workshop/first-effects/">First Effects</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/workshop/pattern-effects/">Pattern Effects</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/workshop/recap/">Recap</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/de/workshop/getting-started/">Workshop in German</a></li></ul></div></li><li><div class="nav-group pb-4"><h2>Making Sound</h2><ul><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block bg-lineHighlight" href="/learn/samples/" aria-current="page">Samples</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/synths/">Synths</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/effects/">Audio Effects</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/input-output/">MIDI &amp; OSC</a></li></ul></div></li><li><div class="nav-group pb-4"><h2>More</h2><ul><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/recipes/recipes/">Recipes</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/mini-notation/">Mini-Notation</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/pwa/">Offline</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/technical-manual/patterns/">Patterns</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/metadata/">Music metadata</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/csound/">CSound</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/hydra/">Hydra</a></li></ul></div></li><li><div class="nav-group pb-4"><h2>Pattern Functions</h2><ul><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/functions/intro/">Introduction</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/factories/">Creating Patterns</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/time-modifiers/">Time Modifiers</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/functions/value-modifiers/">Control Parameters</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/signals/">Signals</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/conditional-modifiers/">Conditional Modifiers</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/accumulation/">Accumulation</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/tonal/">Tonal Functions</a></li></ul></div></li><li><div class="nav-group pb-4"><h2>Understand</h2><ul><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/code/">Coding syntax</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/understand/pitch/">Pitch</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/understand/cycles/">Cycles</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/technical-manual/alignment/">Pattern Alignment</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/learn/strudel-vs-tidal/">Strudel vs Tidal</a></li></ul></div></li><li><div class="nav-group pb-4"><h2>Development</h2><ul><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/technical-manual/repl/">REPL</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/technical-manual/sounds/">Sounds</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/technical-manual/packages/">Packages</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/technical-manual/docs/">Docs</a></li><li class=""><a class="pl-4 py-0.5 w-full hover:bg-lineHighlight block" href="/technical-manual/testing/">Testing</a></li></ul></div></li></ul></nav><script>
 window.addEventListener('DOMContentLoaded', () => {
   var target = document.querySelector('[aria-current="page"]');
   const nav = document.querySelector('.nav-groups');
@@ -269,21 +13,14 @@ window.addEventListener('DOMContentLoaded', () => {
     nav.scrollTop = target.offsetTop;
   }
 });
-</script>
-          </aside>
-          <article id="article" class="content astro-J75B3YUS">
-  <section class="main-section astro-J75B3YUS">
-    <!-- TODO: add dropdown toc on mobile -->
-    <div class="prose dark:prose-invert max-w-full pb-8 astro-J75B3YUS">
-      
-            <h1 id="samples">Samples<a aria-hidden="true" tabIndex="-1" href="/learn/samples#samples"><span class="icon icon-link"></span></a></h1>
+</script></aside><article id="article" class="content" data-astro-cid-j75b3yus><section class="main-section" data-astro-cid-j75b3yus><!-- TODO: add dropdown toc on mobile --><div class="prose dark:prose-invert max-w-full pb-8" data-astro-cid-j75b3yus><h1 id="samples">Samples<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#samples"><span class="icon icon-link"></span></a></h1>
 <p>Samples are the most common way to make sound with tidal and strudel.
 A sample is a (commonly short) piece of audio that is used as a basis for sound generation, undergoing various transformations.
 Music that is based on samples can be thought of as a collage of sound. <a href="https://en.wikipedia.org/wiki/Sampling_(music)">Read more about Sampling</a></p>
 <p>Strudel allows loading samples in the form of audio files of various formats (wav, mp3, ogg) from any publicly available URL.</p>
-<h1 id="default-samples">Default Samples<a aria-hidden="true" tabIndex="-1" href="/learn/samples#default-samples"><span class="icon icon-link"></span></a></h1>
+<h1 id="default-samples">Default Samples<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#default-samples"><span class="icon icon-link"></span></a></h1>
 <p>By default, strudel comes with a built-in “sample map”, providing a solid base to play with.</p>
-<astro-island uid="vQYah" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;bd sd,hh*8, misc/2\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;bd sd,hh*8, misc/2&quot;)</pre></astro-island>
+<astro-island uid="vQYah" prefix="r4" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;bd sd,hh*8, misc/2\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;bd sd,hh*8, misc/2&quot;)</pre><!--astro:end--></astro-island>
 <p>Here, we are using the <code>s</code> function to play back different default samples (<code>bd</code>, <code>sd</code>, <code>hh</code> and <code>misc</code>) to get a drum beat.</p>
 <p>For drum sounds, strudel uses the comprehensive <a href="https://github.com/ritchse/tidal-drum-machines">tidal-drum-machines</a> library, with the following naming convention:</p>
 
@@ -365,51 +102,51 @@ Music that is based on samples can be thought of as a collage of sound. <a href=
 
 <table><thead><tr><th>Drum</th><th>Abbreviation</th></tr></thead><tbody><tr><td>Bass drum, Kick drum</td><td>bd</td></tr><tr><td>Snare drum</td><td>sd</td></tr><tr><td>Rimshot</td><td>rim</td></tr><tr><td>Clap</td><td>cp</td></tr><tr><td>Closed hi-hat</td><td>hh</td></tr><tr><td>Open hi-hat</td><td>oh</td></tr><tr><td>Crash</td><td>cr</td></tr><tr><td>Ride</td><td>rd</td></tr><tr><td>Shakers (and maracas, cabasas, etc)</td><td>sh</td></tr><tr><td>High tom</td><td>ht</td></tr><tr><td>Medium tom</td><td>mt</td></tr><tr><td>Low tom</td><td>lt</td></tr><tr><td>Cowbell</td><td>cb</td></tr><tr><td>Tambourine</td><td>tb</td></tr><tr><td>Other percussions</td><td>perc</td></tr><tr><td>Miscellaneous samples</td><td>misc</td></tr><tr><td>Effects</td><td>fx</td></tr></tbody></table>
 <p>Furthermore, strudel also loads instrument samples from <a href="https://github.com/sgossner/VCSL">VCSL</a> by default.</p>
-<p>To see which sample names are available, open the <code>sounds</code> tab in the <a href="https://strudel.tidalcycles.org/">REPL</a>.</p>
+<p>To see which sample names are available, open the <code>sounds</code> tab in the <a href="https://strudel.cc/">REPL</a>.</p>
 <p>Note that only the sample maps (mapping names to URLs) are loaded initially, while the audio samples themselves are not loaded until they are actually played.
 This behaviour of loading things only when they are needed is also called <code>lazy loading</code>.
 While it saves resources, it can also lead to sounds not being audible the first time they are triggered, because the sound is still loading.
 <a href="https://github.com/tidalcycles/strudel/issues/187">This might be fixed in the future</a></p>
-<h1 id="sound-banks">Sound Banks<a aria-hidden="true" tabIndex="-1" href="/learn/samples#sound-banks"><span class="icon icon-link"></span></a></h1>
+<h1 id="sound-banks">Sound Banks<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#sound-banks"><span class="icon icon-link"></span></a></h1>
 <p>If we open the <code>sounds</code> tab and then <code>drum machines</code>, we can see that the drum samples are all prefixed with drum machine names: <code>RolandTR808_bd</code>, <code>RolandTR808_sd</code>, <code>RolandTR808_hh</code> etc..</p>
 <p>We <em>could</em> use them like this:</p>
-<astro-island uid="Z1xsCeA" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;RolandTR808_bd RolandTR808_sd,RolandTR808_hh*8\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;RolandTR808_bd RolandTR808_sd,RolandTR808_hh*8&quot;)</pre></astro-island>
+<astro-island uid="Z1xsCeA" prefix="r5" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;RolandTR808_bd RolandTR808_sd,RolandTR808_hh*8\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;RolandTR808_bd RolandTR808_sd,RolandTR808_hh*8&quot;)</pre><!--astro:end--></astro-island>
 <p>… but thats obviously a bit much to write. Using the <code>bank</code> function, we can shorten this to:</p>
-<astro-island uid="ZtXzvI" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;bd sd,hh*8\&quot;).bank(\&quot;RolandTR808\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;bd sd,hh*8&quot;).bank(&quot;RolandTR808&quot;)</pre></astro-island>
+<astro-island uid="ZtXzvI" prefix="r6" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;bd sd,hh*8\&quot;).bank(\&quot;RolandTR808\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;bd sd,hh*8&quot;).bank(&quot;RolandTR808&quot;)</pre><!--astro:end--></astro-island>
 <p>You could even pattern the bank to switch between different drum machines:</p>
-<astro-island uid="Z1UPp7J" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;bd sd,hh*8\&quot;).bank(\&quot;&lt;RolandTR808 RolandTR909&gt;\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;bd sd,hh*8&quot;).bank(&quot;&lt;RolandTR808 RolandTR909&gt;&quot;)</pre></astro-island>
+<astro-island uid="Z1UPp7J" prefix="r7" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;bd sd,hh*8\&quot;).bank(\&quot;&lt;RolandTR808 RolandTR909&gt;\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;bd sd,hh*8&quot;).bank(&quot;&lt;RolandTR808 RolandTR909&gt;&quot;)</pre><!--astro:end--></astro-island>
 <p>Behind the scenes, <code>bank</code> will just prepend the drum machine name to the sample name with <code>_</code> to get the full name.
 This of course only works because the name after <code>_</code> (<code>bd</code>, <code>sd</code> etc..) is standardized.
 Also note that some banks won’t have samples for all sounds!</p>
-<h1 id="selecting-sounds">Selecting Sounds<a aria-hidden="true" tabIndex="-1" href="/learn/samples#selecting-sounds"><span class="icon icon-link"></span></a></h1>
+<h1 id="selecting-sounds">Selecting Sounds<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#selecting-sounds"><span class="icon icon-link"></span></a></h1>
 <p>If we open the <code>sounds</code> tab again, followed by tab <code>drum machines</code>, there is also a number behind each name, indicating how many individual samples are available.
 For example <code>RolandTR909_hh(4)</code> means there are 4 samples of a TR909 hihat available.
 By default, <code>s</code> will play the first sample, but we can select the other ones using <code>n</code>, starting from 0:</p>
-<astro-island uid="TQYTH" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;hh*4\&quot;).bank(\&quot;RolandTR909\&quot;).n(\&quot;&lt;0 1 2 3&gt;\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;hh*4&quot;).bank(&quot;RolandTR909&quot;).n(&quot;&lt;0 1 2 3&gt;&quot;)</pre></astro-island>
+<astro-island uid="TQYTH" prefix="r8" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;hh*4\&quot;).bank(\&quot;RolandTR909\&quot;).n(\&quot;&lt;0 1 2 3&gt;\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;hh*4&quot;).bank(&quot;RolandTR909&quot;).n(&quot;&lt;0 1 2 3&gt;&quot;)</pre><!--astro:end--></astro-island>
 <p>Numbers that are too high will just wrap around to the beginning</p>
-<astro-island uid="Z2ceR8K" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;hh*4\&quot;).bank(\&quot;RolandTR909\&quot;).n(\&quot;&lt;0 1 2 3 4 5 6 7&gt;\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;hh*4&quot;).bank(&quot;RolandTR909&quot;).n(&quot;&lt;0 1 2 3 4 5 6 7&gt;&quot;)</pre></astro-island>
+<astro-island uid="Z2ceR8K" prefix="r9" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;hh*4\&quot;).bank(\&quot;RolandTR909\&quot;).n(\&quot;&lt;0 1 2 3 4 5 6 7&gt;\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;hh*4&quot;).bank(&quot;RolandTR909&quot;).n(&quot;&lt;0 1 2 3 4 5 6 7&gt;&quot;)</pre><!--astro:end--></astro-island>
 <p>Here, 0-3 will play the same sounds as 4-7, because <code>RolandTR909_hh</code> only has 4 sounds.</p>
 <p>Selecting sounds also works inside the mini notation, using ”<code>:</code>” like this:</p>
-<astro-island uid="B74HP" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;bd:1 bd:2,hh:0 hh:1 hh:2 hh:3\&quot;).bank(\&quot;RolandTR909\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;bd:1 bd:2,hh:0 hh:1 hh:2 hh:3&quot;).bank(&quot;RolandTR909&quot;)</pre></astro-island>
-<h1 id="loading-custom-samples">Loading Custom Samples<a aria-hidden="true" tabIndex="-1" href="/learn/samples#loading-custom-samples"><span class="icon icon-link"></span></a></h1>
+<astro-island uid="B74HP" prefix="r10" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;s(\&quot;bd:1 bd:2,hh:0 hh:1 hh:2 hh:3\&quot;).bank(\&quot;RolandTR909\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>s(&quot;bd:1 bd:2,hh:0 hh:1 hh:2 hh:3&quot;).bank(&quot;RolandTR909&quot;)</pre><!--astro:end--></astro-island>
+<h1 id="loading-custom-samples">Loading Custom Samples<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#loading-custom-samples"><span class="icon icon-link"></span></a></h1>
 <p>You can load your own sample map using the <code>samples</code> function.
 In this example we create a map using sounds from the default sample map:</p>
-<astro-island uid="1Qucwl" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  bd: &#39;bd/BT0AADA.wav&#39;,\n  sd: &#39;sd/rytm-01-classic.wav&#39;,\n  hh: &#39;hh27/000_hh27closedhh.wav&#39;,\n}, &#39;https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/&#39;);\ns(\&quot;bd sd,hh*8\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
+<astro-island uid="1Qucwl" prefix="r11" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  bd: &#39;bd/BT0AADA.wav&#39;,\n  sd: &#39;sd/rytm-01-classic.wav&#39;,\n  hh: &#39;hh27/000_hh27closedhh.wav&#39;,\n}, &#39;https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/&#39;);\ns(\&quot;bd sd,hh*8\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
   bd: &#x27;bd/BT0AADA.wav&#x27;,
   sd: &#x27;sd/rytm-01-classic.wav&#x27;,
   hh: &#x27;hh27/000_hh27closedhh.wav&#x27;,
 }, &#x27;https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/&#x27;);
-s(&quot;bd sd,hh*8&quot;)</pre></astro-island>
+s(&quot;bd sd,hh*8&quot;)</pre><!--astro:end--></astro-island>
 <p>When you load your own samples, you can choose the names that you will then refer to in your pattern string inside the <code>s</code> function.
 Compare with this example which uses the same samples, but with different names.</p>
-<astro-island uid="kASum" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  bassdrum: &#39;bd/BT0AADA.wav&#39;,\n  snaredrum: &#39;sd/rytm-01-classic.wav&#39;,\n  hihat: &#39;hh27/000_hh27closedhh.wav&#39;,\n}, &#39;https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/&#39;);\ns(\&quot;bassdrum snaredrum, hihat*8\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
+<astro-island uid="kASum" prefix="r12" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  bassdrum: &#39;bd/BT0AADA.wav&#39;,\n  snaredrum: &#39;sd/rytm-01-classic.wav&#39;,\n  hihat: &#39;hh27/000_hh27closedhh.wav&#39;,\n}, &#39;https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/&#39;);\ns(\&quot;bassdrum snaredrum, hihat*8\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
   bassdrum: &#x27;bd/BT0AADA.wav&#x27;,
   snaredrum: &#x27;sd/rytm-01-classic.wav&#x27;,
   hihat: &#x27;hh27/000_hh27closedhh.wav&#x27;,
 }, &#x27;https://raw.githubusercontent.com/tidalcycles/Dirt-Samples/master/&#x27;);
-s(&quot;bassdrum snaredrum, hihat*8&quot;)</pre></astro-island>
+s(&quot;bassdrum snaredrum, hihat*8&quot;)</pre><!--astro:end--></astro-island>
 <p>Here we have changed the “map” to include longer sample names.</p>
-<h2 id="the-samples-function">The <code>samples</code> function<a aria-hidden="true" tabIndex="-1" href="/learn/samples#the-samples-function"><span class="icon icon-link"></span></a></h2>
+<h2 id="the-samples-function">The <code>samples</code> function<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#the-samples-function"><span class="icon icon-link"></span></a></h2>
 <p>The <code>samples</code> function has two arguments:</p>
 <ul>
 <li>A <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object">JavaScript object</a> that maps sound names to audio file paths.</li>
@@ -421,41 +158,41 @@ s(&quot;bassdrum snaredrum, hihat*8&quot;)</pre></astro-island>
 </ul>
 <p>To see how this looks in practice, compare the <a href="https://github.com/tidalcycles/Dirt-Samples">DirtSamples GitHub repo</a> with the previous sample map example.</p>
 <p>Because GitHub is a popular place for uploading open source samples, it has its own shortcut:</p>
-<astro-island uid="h2vnV" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  bd: &#39;bd/BT0AADA.wav&#39;,\n  sd: &#39;sd/rytm-01-classic.wav&#39;,\n  hh: &#39;hh27/000_hh27closedhh.wav&#39;,\n}, &#39;github:tidalcycles/Dirt-Samples/master/&#39;);\ns(\&quot;bd sd,hh*8\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
+<astro-island uid="h2vnV" prefix="r13" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  bd: &#39;bd/BT0AADA.wav&#39;,\n  sd: &#39;sd/rytm-01-classic.wav&#39;,\n  hh: &#39;hh27/000_hh27closedhh.wav&#39;,\n}, &#39;github:tidalcycles/Dirt-Samples/master/&#39;);\ns(\&quot;bd sd,hh*8\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
   bd: &#x27;bd/BT0AADA.wav&#x27;,
   sd: &#x27;sd/rytm-01-classic.wav&#x27;,
   hh: &#x27;hh27/000_hh27closedhh.wav&#x27;,
 }, &#x27;github:tidalcycles/Dirt-Samples/master/&#x27;);
-s(&quot;bd sd,hh*8&quot;)</pre></astro-island>
+s(&quot;bd sd,hh*8&quot;)</pre><!--astro:end--></astro-island>
 <p>The format is <code>github:user/repo/branch/</code>.</p>
 <p>Let’s see another example, this time based on the following GitHub repo: <a href="https://github.com/jarmitage/jarmitage.github.io">https://github.com/jarmitage/jarmitage.github.io</a>.
 We can see there are some guitar samples inside the <code>/samples</code> folder, so let’s try to load them:</p>
-<astro-island uid="1wOUGD" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  g0: &#39;samples/guitar/guitar_0.wav&#39;,\n  g1: &#39;samples/guitar/guitar_1.wav&#39;,\n  g2: &#39;samples/guitar/guitar_2.wav&#39;,\n  g3: &#39;samples/guitar/guitar_3.wav&#39;,\n  g4: &#39;samples/guitar/guitar_4.wav&#39;\n}, &#39;github:jarmitage/jarmitage.github.io/master/&#39;);\ns(\&quot;[g0 g1 g2 g3 g4]/5\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
+<astro-island uid="1wOUGD" prefix="r14" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  g0: &#39;samples/guitar/guitar_0.wav&#39;,\n  g1: &#39;samples/guitar/guitar_1.wav&#39;,\n  g2: &#39;samples/guitar/guitar_2.wav&#39;,\n  g3: &#39;samples/guitar/guitar_3.wav&#39;,\n  g4: &#39;samples/guitar/guitar_4.wav&#39;\n}, &#39;github:jarmitage/jarmitage.github.io/master/&#39;);\ns(\&quot;[g0 g1 g2 g3 g4]/5\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
   g0: &#x27;samples/guitar/guitar_0.wav&#x27;,
   g1: &#x27;samples/guitar/guitar_1.wav&#x27;,
   g2: &#x27;samples/guitar/guitar_2.wav&#x27;,
   g3: &#x27;samples/guitar/guitar_3.wav&#x27;,
   g4: &#x27;samples/guitar/guitar_4.wav&#x27;
 }, &#x27;github:jarmitage/jarmitage.github.io/master/&#x27;);
-s(&quot;[g0 g1 g2 g3 g4]/5&quot;)</pre></astro-island>
-<h2 id="multiple-samples-per-sound">Multiple Samples per Sound<a aria-hidden="true" tabIndex="-1" href="/learn/samples#multiple-samples-per-sound"><span class="icon icon-link"></span></a></h2>
+s(&quot;[g0 g1 g2 g3 g4]/5&quot;)</pre><!--astro:end--></astro-island>
+<h2 id="multiple-samples-per-sound">Multiple Samples per Sound<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#multiple-samples-per-sound"><span class="icon icon-link"></span></a></h2>
 <p>It is also possible, to declare multiple files for one sound, using the array notation:</p>
-<astro-island uid="Z15qdBS" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  bd: [&#39;bd/BT0AADA.wav&#39;,&#39;bd/BT0AAD0.wav&#39;],\n  sd: [&#39;sd/rytm-01-classic.wav&#39;,&#39;sd/rytm-00-hard.wav&#39;],\n  hh: [&#39;hh27/000_hh27closedhh.wav&#39;,&#39;hh/000_hh3closedhh.wav&#39;],\n}, &#39;github:tidalcycles/Dirt-Samples/master/&#39;);\ns(\&quot;&lt;bd:0 bd:1&gt;,~ &lt;sd:0 sd:1&gt;,[hh:0 hh:1]*2\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
+<astro-island uid="Z15qdBS" prefix="r15" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  bd: [&#39;bd/BT0AADA.wav&#39;,&#39;bd/BT0AAD0.wav&#39;],\n  sd: [&#39;sd/rytm-01-classic.wav&#39;,&#39;sd/rytm-00-hard.wav&#39;],\n  hh: [&#39;hh27/000_hh27closedhh.wav&#39;,&#39;hh/000_hh3closedhh.wav&#39;],\n}, &#39;github:tidalcycles/Dirt-Samples/master/&#39;);\ns(\&quot;&lt;bd:0 bd:1&gt;,~ &lt;sd:0 sd:1&gt;,[hh:0 hh:1]*2\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
   bd: [&#x27;bd/BT0AADA.wav&#x27;,&#x27;bd/BT0AAD0.wav&#x27;],
   sd: [&#x27;sd/rytm-01-classic.wav&#x27;,&#x27;sd/rytm-00-hard.wav&#x27;],
   hh: [&#x27;hh27/000_hh27closedhh.wav&#x27;,&#x27;hh/000_hh3closedhh.wav&#x27;],
 }, &#x27;github:tidalcycles/Dirt-Samples/master/&#x27;);
-s(&quot;&lt;bd:0 bd:1&gt;,~ &lt;sd:0 sd:1&gt;,[hh:0 hh:1]*2&quot;)</pre></astro-island>
+s(&quot;&lt;bd:0 bd:1&gt;,~ &lt;sd:0 sd:1&gt;,[hh:0 hh:1]*2&quot;)</pre><!--astro:end--></astro-island>
 <p>The <code>:0</code> <code>:1</code> etc. are the indices of the array.
 The sample number can also be set using <code>n</code>:</p>
-<astro-island uid="Z161fY8" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  bd: [&#39;bd/BT0AADA.wav&#39;,&#39;bd/BT0AAD0.wav&#39;],\n  sd: [&#39;sd/rytm-01-classic.wav&#39;,&#39;sd/rytm-00-hard.wav&#39;],\n  hh: [&#39;hh27/000_hh27closedhh.wav&#39;,&#39;hh/000_hh3closedhh.wav&#39;],\n}, &#39;github:tidalcycles/Dirt-Samples/master/&#39;);\ns(\&quot;bd,~ sd,hh*4\&quot;).n(\&quot;&lt;0 1&gt;\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
+<astro-island uid="Z161fY8" prefix="r16" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  bd: [&#39;bd/BT0AADA.wav&#39;,&#39;bd/BT0AAD0.wav&#39;],\n  sd: [&#39;sd/rytm-01-classic.wav&#39;,&#39;sd/rytm-00-hard.wav&#39;],\n  hh: [&#39;hh27/000_hh27closedhh.wav&#39;,&#39;hh/000_hh3closedhh.wav&#39;],\n}, &#39;github:tidalcycles/Dirt-Samples/master/&#39;);\ns(\&quot;bd,~ sd,hh*4\&quot;).n(\&quot;&lt;0 1&gt;\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
   bd: [&#x27;bd/BT0AADA.wav&#x27;,&#x27;bd/BT0AAD0.wav&#x27;],
   sd: [&#x27;sd/rytm-01-classic.wav&#x27;,&#x27;sd/rytm-00-hard.wav&#x27;],
   hh: [&#x27;hh27/000_hh27closedhh.wav&#x27;,&#x27;hh/000_hh3closedhh.wav&#x27;],
 }, &#x27;github:tidalcycles/Dirt-Samples/master/&#x27;);
-s(&quot;bd,~ sd,hh*4&quot;).n(&quot;&lt;0 1&gt;&quot;)</pre></astro-island>
+s(&quot;bd,~ sd,hh*4&quot;).n(&quot;&lt;0 1&gt;&quot;)</pre><!--astro:end--></astro-island>
 <p>In that case, we might load our guitar sample map a different way:</p>
-<astro-island uid="ZNXpRS" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  guitar: [\n    &#39;samples/guitar/guitar_0.wav&#39;, \n    &#39;samples/guitar/guitar_1.wav&#39;, \n    &#39;samples/guitar/guitar_2.wav&#39;, \n    &#39;samples/guitar/guitar_3.wav&#39;, \n    &#39;samples/guitar/guitar_4.wav&#39;\n  ]\n}, &#39;github:jarmitage/jarmitage.github.io/master/&#39;);\ns(\&quot;[guitar:0 guitar:1 guitar:2 guitar:3 guitar:4]/5\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
+<astro-island uid="ZNXpRS" prefix="r17" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  guitar: [\n    &#39;samples/guitar/guitar_0.wav&#39;, \n    &#39;samples/guitar/guitar_1.wav&#39;, \n    &#39;samples/guitar/guitar_2.wav&#39;, \n    &#39;samples/guitar/guitar_3.wav&#39;, \n    &#39;samples/guitar/guitar_4.wav&#39;\n  ]\n}, &#39;github:jarmitage/jarmitage.github.io/master/&#39;);\ns(\&quot;[guitar:0 guitar:1 guitar:2 guitar:3 guitar:4]/5\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
   guitar: [
     &#x27;samples/guitar/guitar_0.wav&#x27;, 
     &#x27;samples/guitar/guitar_1.wav&#x27;, 
@@ -464,9 +201,9 @@ s(&quot;bd,~ sd,hh*4&quot;).n(&quot;&lt;0 1&gt;&quot;)</pre></astro-island>
     &#x27;samples/guitar/guitar_4.wav&#x27;
   ]
 }, &#x27;github:jarmitage/jarmitage.github.io/master/&#x27;);
-s(&quot;[guitar:0 guitar:1 guitar:2 guitar:3 guitar:4]/5&quot;)</pre></astro-island>
+s(&quot;[guitar:0 guitar:1 guitar:2 guitar:3 guitar:4]/5&quot;)</pre><!--astro:end--></astro-island>
 <p>And as above, we can choose the sample number using <code>n</code> for even more flexibility:</p>
-<astro-island uid="24RLvS" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  guitar: [\n    &#39;samples/guitar/guitar_0.wav&#39;, \n    &#39;samples/guitar/guitar_1.wav&#39;, \n    &#39;samples/guitar/guitar_2.wav&#39;, \n    &#39;samples/guitar/guitar_3.wav&#39;, \n    &#39;samples/guitar/guitar_4.wav&#39;\n  ]\n}, &#39;github:jarmitage/jarmitage.github.io/master/&#39;);\nn(\&quot;&lt;0 1 2 3 4&gt;\&quot;).s(\&quot;guitar\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
+<astro-island uid="24RLvS" prefix="r18" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  guitar: [\n    &#39;samples/guitar/guitar_0.wav&#39;, \n    &#39;samples/guitar/guitar_1.wav&#39;, \n    &#39;samples/guitar/guitar_2.wav&#39;, \n    &#39;samples/guitar/guitar_3.wav&#39;, \n    &#39;samples/guitar/guitar_4.wav&#39;\n  ]\n}, &#39;github:jarmitage/jarmitage.github.io/master/&#39;);\nn(\&quot;&lt;0 1 2 3 4&gt;\&quot;).s(\&quot;guitar\&quot;)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
   guitar: [
     &#x27;samples/guitar/guitar_0.wav&#x27;, 
     &#x27;samples/guitar/guitar_1.wav&#x27;, 
@@ -475,31 +212,31 @@ s(&quot;[guitar:0 guitar:1 guitar:2 guitar:3 guitar:4]/5&quot;)</pre></astro-isl
     &#x27;samples/guitar/guitar_4.wav&#x27;
   ]
 }, &#x27;github:jarmitage/jarmitage.github.io/master/&#x27;);
-n(&quot;&lt;0 1 2 3 4&gt;&quot;).s(&quot;guitar&quot;)</pre></astro-island>
-<h2 id="pitched-sounds">Pitched Sounds<a aria-hidden="true" tabIndex="-1" href="/learn/samples#pitched-sounds"><span class="icon icon-link"></span></a></h2>
+n(&quot;&lt;0 1 2 3 4&gt;&quot;).s(&quot;guitar&quot;)</pre><!--astro:end--></astro-island>
+<h2 id="pitched-sounds">Pitched Sounds<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#pitched-sounds"><span class="icon icon-link"></span></a></h2>
 <p>For pitched sounds, you can use <code>note</code>, just like with synths:</p>
-<astro-island uid="1MUoWc" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  &#39;gtr&#39;: &#39;gtr/0001_cleanC.wav&#39;,\n}, &#39;github:tidalcycles/Dirt-Samples/master/&#39;);\nnote(\&quot;g3 [bb3 c4] &lt;g4 f4 eb4 f3&gt;@2\&quot;).s(&#39;gtr&#39;).gain(.5)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
+<astro-island uid="1MUoWc" prefix="r19" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  &#39;gtr&#39;: &#39;gtr/0001_cleanC.wav&#39;,\n}, &#39;github:tidalcycles/Dirt-Samples/master/&#39;);\nnote(\&quot;g3 [bb3 c4] &lt;g4 f4 eb4 f3&gt;@2\&quot;).s(&#39;gtr&#39;).gain(.5)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
   &#x27;gtr&#x27;: &#x27;gtr/0001_cleanC.wav&#x27;,
 }, &#x27;github:tidalcycles/Dirt-Samples/master/&#x27;);
-note(&quot;g3 [bb3 c4] &lt;g4 f4 eb4 f3&gt;@2&quot;).s(&#x27;gtr&#x27;).gain(.5)</pre></astro-island>
+note(&quot;g3 [bb3 c4] &lt;g4 f4 eb4 f3&gt;@2&quot;).s(&#x27;gtr&#x27;).gain(.5)</pre><!--astro:end--></astro-island>
 <p>Here, the guitar samples will overlap, because they always play till the end.
 If we want them to behave more like a synth, we can add <code>clip(1)</code>:</p>
-<astro-island uid="ZT8uLt" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  &#39;gtr&#39;: &#39;gtr/0001_cleanC.wav&#39;,\n}, &#39;github:tidalcycles/Dirt-Samples/master/&#39;);\nnote(\&quot;g3 [bb3 c4] &lt;g4 f4 eb4 f3&gt;@2\&quot;).s(&#39;gtr&#39;).clip(1)\n  .gain(.5)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
+<astro-island uid="ZT8uLt" prefix="r20" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  &#39;gtr&#39;: &#39;gtr/0001_cleanC.wav&#39;,\n}, &#39;github:tidalcycles/Dirt-Samples/master/&#39;);\nnote(\&quot;g3 [bb3 c4] &lt;g4 f4 eb4 f3&gt;@2\&quot;).s(&#39;gtr&#39;).clip(1)\n  .gain(.5)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
   &#x27;gtr&#x27;: &#x27;gtr/0001_cleanC.wav&#x27;,
 }, &#x27;github:tidalcycles/Dirt-Samples/master/&#x27;);
 note(&quot;g3 [bb3 c4] &lt;g4 f4 eb4 f3&gt;@2&quot;).s(&#x27;gtr&#x27;).clip(1)
-  .gain(.5)</pre></astro-island>
-<h2 id="base-pitch">Base Pitch<a aria-hidden="true" tabIndex="-1" href="/learn/samples#base-pitch"><span class="icon icon-link"></span></a></h2>
+  .gain(.5)</pre><!--astro:end--></astro-island>
+<h2 id="base-pitch">Base Pitch<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#base-pitch"><span class="icon icon-link"></span></a></h2>
 <p>If we have 2 samples with different base pitches, we can make them in tune by specifying the pitch like this:</p>
-<astro-island uid="hWRV" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  &#39;gtr&#39;: &#39;gtr/0001_cleanC.wav&#39;,\n  &#39;moog&#39;: { &#39;g3&#39;: &#39;moog/005_Mighty%20Moog%20G3.wav&#39; },\n}, &#39;github:tidalcycles/Dirt-Samples/master/&#39;);\nnote(\&quot;g3 [bb3 c4] &lt;g4 f4 eb4 f3&gt;@2\&quot;).s(\&quot;gtr,moog\&quot;).clip(1)\n  .gain(.5)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
+<astro-island uid="hWRV" prefix="r21" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  &#39;gtr&#39;: &#39;gtr/0001_cleanC.wav&#39;,\n  &#39;moog&#39;: { &#39;g3&#39;: &#39;moog/005_Mighty%20Moog%20G3.wav&#39; },\n}, &#39;github:tidalcycles/Dirt-Samples/master/&#39;);\nnote(\&quot;g3 [bb3 c4] &lt;g4 f4 eb4 f3&gt;@2\&quot;).s(\&quot;gtr,moog\&quot;).clip(1)\n  .gain(.5)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
   &#x27;gtr&#x27;: &#x27;gtr/0001_cleanC.wav&#x27;,
   &#x27;moog&#x27;: { &#x27;g3&#x27;: &#x27;moog/005_Mighty%20Moog%20G3.wav&#x27; },
 }, &#x27;github:tidalcycles/Dirt-Samples/master/&#x27;);
 note(&quot;g3 [bb3 c4] &lt;g4 f4 eb4 f3&gt;@2&quot;).s(&quot;gtr,moog&quot;).clip(1)
-  .gain(.5)</pre></astro-island>
+  .gain(.5)</pre><!--astro:end--></astro-island>
 <p>If a sample has no pitch set, <code>c3</code> is the default.</p>
 <p>We can also declare different samples for different regions of the keyboard:</p>
-<astro-island uid="17fNA7" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  &#39;moog&#39;: {\n    &#39;g2&#39;: &#39;moog/004_Mighty%20Moog%20G2.wav&#39;,\n    &#39;g3&#39;: &#39;moog/005_Mighty%20Moog%20G3.wav&#39;,\n    &#39;g4&#39;: &#39;moog/006_Mighty%20Moog%20G4.wav&#39;,\n  }}, &#39;github:tidalcycles/Dirt-Samples/master/&#39;);\nnote(\&quot;g2!2 &lt;bb2 c3&gt;!2, &lt;c4@3 [&lt;eb4 bb3&gt; g4 f4]&gt;\&quot;)\n  .s(&#39;moog&#39;).clip(1)\n  .gain(.5)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
+<astro-island uid="17fNA7" prefix="r22" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;samples({\n  &#39;moog&#39;: {\n    &#39;g2&#39;: &#39;moog/004_Mighty%20Moog%20G2.wav&#39;,\n    &#39;g3&#39;: &#39;moog/005_Mighty%20Moog%20G3.wav&#39;,\n    &#39;g4&#39;: &#39;moog/006_Mighty%20Moog%20G4.wav&#39;,\n  }}, &#39;github:tidalcycles/Dirt-Samples/master/&#39;);\nnote(\&quot;g2!2 &lt;bb2 c3&gt;!2, &lt;c4@3 [&lt;eb4 bb3&gt; g4 f4]&gt;\&quot;)\n  .s(&#39;moog&#39;).clip(1)\n  .gain(.5)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>samples({
   &#x27;moog&#x27;: {
     &#x27;g2&#x27;: &#x27;moog/004_Mighty%20Moog%20G2.wav&#x27;,
     &#x27;g3&#x27;: &#x27;moog/005_Mighty%20Moog%20G3.wav&#x27;,
@@ -507,121 +244,79 @@ note(&quot;g3 [bb3 c4] &lt;g4 f4 eb4 f3&gt;@2&quot;).s(&quot;gtr,moog&quot;).cli
   }}, &#x27;github:tidalcycles/Dirt-Samples/master/&#x27;);
 note(&quot;g2!2 &lt;bb2 c3&gt;!2, &lt;c4@3 [&lt;eb4 bb3&gt; g4 f4]&gt;&quot;)
   .s(&#x27;moog&#x27;).clip(1)
-  .gain(.5)</pre></astro-island>
+  .gain(.5)</pre><!--astro:end--></astro-island>
 <p>The sampler will always pick the closest matching sample for the current note!</p>
-<h2 id="shabda">Shabda<a aria-hidden="true" tabIndex="-1" href="/learn/samples#shabda"><span class="icon icon-link"></span></a></h2>
+<h2 id="shabda">Shabda<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#shabda"><span class="icon icon-link"></span></a></h2>
 <p>If you don’t want to select samples by hand, there is also the wonderful tool called <a href="https://shabda.ndre.gr/">shabda</a>.
 With it, you can enter any sample name(s) to query from <a href="https://freesound.org/">freesound.org</a>. Example:</p>
-<astro-island uid="1wMeD2" component-url="/_astro/MiniRepl.9e8e7ef8.js" component-export="MiniRepl" renderer-url="/_astro/client.0daade25.js" props="{&quot;tune&quot;:[0,&quot;await samples(&#39;https://shabda.ndre.gr/bass:4,hihat:4,rimshot:2.json?strudel=1&#39;)\nstack(\n  n(\&quot;0 1 2 3\&quot;).s(&#39;bass&#39;).slow(2),\n  n(\&quot;0 1*2 2 3*2\&quot;).s(&#39;hihat&#39;),\n  n(\&quot;~ 0 ~ 1\&quot;).s(&#39;rimshot&#39;)\n).clip(1)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>await samples(&#x27;https://shabda.ndre.gr/bass:4,hihat:4,rimshot:2.json?strudel=1&#x27;)
+<astro-island uid="1qYURE" prefix="r23" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;await samples(&#39;shabda:bass:4,hihat:4,rimshot:2&#39;)\nstack(\n  n(\&quot;0 1 2 3\&quot;).s(&#39;bass&#39;).slow(2),\n  n(\&quot;0 1*2 2 3*2\&quot;).s(&#39;hihat&#39;),\n  n(\&quot;~ 0 ~ 1\&quot;).s(&#39;rimshot&#39;)\n).clip(1)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>await samples(&#x27;shabda:bass:4,hihat:4,rimshot:2&#x27;)
 stack(
   n(&quot;0 1 2 3&quot;).s(&#x27;bass&#x27;).slow(2),
   n(&quot;0 1*2 2 3*2&quot;).s(&#x27;hihat&#x27;),
   n(&quot;~ 0 ~ 1&quot;).s(&#x27;rimshot&#x27;)
-).clip(1)</pre></astro-island>
-<h1 id="sampler-effects">Sampler Effects<a aria-hidden="true" tabIndex="-1" href="/learn/samples#sampler-effects"><span class="icon icon-link"></span></a></h1>
+).clip(1)</pre><!--astro:end--></astro-island>
+<p>You can also generate artificial voice samples with any text, in multiple languages.
+Note that the language code and the gender parameters are optional and default to <code>en-GB</code> and <code>f</code></p>
+<astro-island uid="Z17NBYG" prefix="r24" component-url="/_astro/MiniRepl.04503782.js" component-export="MiniRepl" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;tune&quot;:[0,&quot;await samples(&#39;shabda/speech:the_drum,forever&#39;)\nawait samples(&#39;shabda/speech/fr-FR/m:magnifique&#39;)\nstack(\n  s(\&quot;the_drum\&quot;).chop(16).speed(rand.range(0.85,1.1)),\n  s(\&quot;forever magnifique\&quot;).slow(8).late(0.25)\n)&quot;]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;MiniRepl&quot;,&quot;value&quot;:true}" await-children=""><pre>await samples(&#x27;shabda/speech:the_drum,forever&#x27;)
+await samples(&#x27;shabda/speech/fr-FR/m:magnifique&#x27;)
+stack(
+  s(&quot;the_drum&quot;).chop(16).speed(rand.range(0.85,1.1)),
+  s(&quot;forever magnifique&quot;).slow(8).late(0.25)
+)</pre><!--astro:end--></astro-island>
+<h1 id="sampler-effects">Sampler Effects<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#sampler-effects"><span class="icon icon-link"></span></a></h1>
 <p>Sampler effects are functions that can be used to change the behaviour of sample playback.</p>
-<h3 id="begin">begin<a aria-hidden="true" tabIndex="-1" href="/learn/samples#begin"><span class="icon icon-link"></span></a></h3>
-<astro-island uid="2oj5sq" component-url="/_astro/JsDoc.6488bf77.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;Pattern.begin&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>a pattern of numbers from 0 to 1. Skips the beginning of each sample, e.g. <code>0.25</code> to cut off the first quarter from each sample.</p></div><ul><li>amount<!-- --> (<!-- -->number|Pattern<!-- -->): <!-- -->between 0 and 1, where 1 is the length of the sample</li></ul><div class="space-y-2"><pre>samples({ rave: &#x27;rave/AREUREADY.wav&#x27; }, &#x27;github:tidalcycles/Dirt-Samples/master/&#x27;)
-s(&quot;rave&quot;).begin(&quot;&lt;0 .25 .5 .75&gt;&quot;)</pre></div></astro-island>
-<h3 id="end">end<a aria-hidden="true" tabIndex="-1" href="/learn/samples#end"><span class="icon icon-link"></span></a></h3>
-<astro-island uid="X47KF" component-url="/_astro/JsDoc.6488bf77.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;Pattern.end&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>The same as .begin, but cuts off the end off each sample.</p></div><ul><li>length<!-- --> (<!-- -->number|Pattern<!-- -->): <!-- -->1 = whole sample, .5 = half sample, .25 = quarter sample etc..</li></ul><div class="space-y-2"><pre>s(&quot;bd*2,oh*4&quot;).end(&quot;&lt;.1 .2 .5 1&gt;&quot;)</pre></div></astro-island>
-<h3 id="loop">loop<a aria-hidden="true" tabIndex="-1" href="/learn/samples#loop"><span class="icon icon-link"></span></a></h3>
-<astro-island uid="Z21PBsX" component-url="/_astro/JsDoc.6488bf77.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;loop&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Loops the sample.
+<h3 id="begin">begin<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#begin"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="2oj5sq" prefix="r25" component-url="/_astro/JsDoc.06f9fc91.js" component-export="JsDoc" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;name&quot;:[0,&quot;Pattern.begin&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>a pattern of numbers from 0 to 1. Skips the beginning of each sample, e.g. <code>0.25</code> to cut off the first quarter from each sample.</p></div><ul><li>amount<!-- --> (<!-- -->number|Pattern<!-- -->): <!-- -->between 0 and 1, where 1 is the length of the sample</li></ul><div class="space-y-2"><pre>samples({ rave: &#x27;rave/AREUREADY.wav&#x27; }, &#x27;github:tidalcycles/Dirt-Samples/master/&#x27;)
+s(&quot;rave&quot;).begin(&quot;&lt;0 .25 .5 .75&gt;&quot;)</pre></div><!--astro:end--></astro-island>
+<h3 id="end">end<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#end"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="X47KF" prefix="r26" component-url="/_astro/JsDoc.06f9fc91.js" component-export="JsDoc" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;name&quot;:[0,&quot;Pattern.end&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>The same as .begin, but cuts off the end off each sample.</p></div><ul><li>length<!-- --> (<!-- -->number|Pattern<!-- -->): <!-- -->1 = whole sample, .5 = half sample, .25 = quarter sample etc..</li></ul><div class="space-y-2"><pre>s(&quot;bd*2,oh*4&quot;).end(&quot;&lt;.1 .2 .5 1&gt;&quot;)</pre></div><!--astro:end--></astro-island>
+<h3 id="loop">loop<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#loop"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="Z21PBsX" prefix="r27" component-url="/_astro/JsDoc.06f9fc91.js" component-export="JsDoc" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;name&quot;:[0,&quot;loop&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Loops the sample.
 Note that the tempo of the loop is not synced with the cycle tempo.
-To change the loop region, use loopBegin / loopEnd.</p></div><ul><li>on<!-- --> (<!-- -->number|Pattern<!-- -->): <!-- -->If 1, the sample is looped</li></ul><div class="space-y-2"><pre>s(&quot;casio&quot;).loop(1)</pre></div></astro-island>
-<h3 id="loopbegin">loopBegin<a aria-hidden="true" tabIndex="-1" href="/learn/samples#loopbegin"><span class="icon icon-link"></span></a></h3>
-<astro-island uid="Z1WIs1d" component-url="/_astro/JsDoc.6488bf77.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;loopBegin&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><span>Synonyms: <code>loopb</code></span><div><p>Begin to loop at a specific point in the sample (inbetween <code>begin</code> and <code>end</code>).
+To change the loop region, use loopBegin / loopEnd.</p></div><ul><li>on<!-- --> (<!-- -->number|Pattern<!-- -->): <!-- -->If 1, the sample is looped</li></ul><div class="space-y-2"><pre>s(&quot;casio&quot;).loop(1)</pre></div><!--astro:end--></astro-island>
+<h3 id="loopbegin">loopBegin<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#loopbegin"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="Z1WIs1d" prefix="r28" component-url="/_astro/JsDoc.06f9fc91.js" component-export="JsDoc" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;name&quot;:[0,&quot;loopBegin&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><span>Synonyms: <code>loopb</code></span><div><p>Begin to loop at a specific point in the sample (inbetween <code>begin</code> and <code>end</code>).
 Note that the loop point must be inbetween <code>begin</code> and <code>end</code>, and before <code>loopEnd</code>!
 Note: Samples starting with wt_ will automatically loop! (wt = wavetable)</p></div><ul><li>time<!-- --> (<!-- -->number|Pattern<!-- -->): <!-- -->between 0 and 1, where 1 is the length of the sample</li></ul><div class="space-y-2"><pre>s(&quot;space&quot;).loop(1)
-.loopBegin(&quot;&lt;0 .125 .25&gt;&quot;).scope()</pre></div></astro-island>
-<h3 id="loopend">loopEnd<a aria-hidden="true" tabIndex="-1" href="/learn/samples#loopend"><span class="icon icon-link"></span></a></h3>
-<astro-island uid="2qtlDQ" component-url="/_astro/JsDoc.6488bf77.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;loopEnd&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><span>Synonyms: <code>loope</code></span><div><p>End the looping section at a specific point in the sample (inbetween <code>begin</code> and <code>end</code>).
+.loopBegin(&quot;&lt;0 .125 .25&gt;&quot;).scope()</pre></div><!--astro:end--></astro-island>
+<h3 id="loopend">loopEnd<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#loopend"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="2qtlDQ" prefix="r29" component-url="/_astro/JsDoc.06f9fc91.js" component-export="JsDoc" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;name&quot;:[0,&quot;loopEnd&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><span>Synonyms: <code>loope</code></span><div><p>End the looping section at a specific point in the sample (inbetween <code>begin</code> and <code>end</code>).
 Note that the loop point must be inbetween <code>begin</code> and <code>end</code>, and after <code>loopBegin</code>!</p></div><ul><li>time<!-- --> (<!-- -->number|Pattern<!-- -->): <!-- -->between 0 and 1, where 1 is the length of the sample</li></ul><div class="space-y-2"><pre>s(&quot;space&quot;).loop(1)
-.loopEnd(&quot;&lt;1 .75 .5 .25&gt;&quot;).scope()</pre></div></astro-island>
-<h3 id="cut">cut<a aria-hidden="true" tabIndex="-1" href="/learn/samples#cut"><span class="icon icon-link"></span></a></h3>
-<astro-island uid="2wvEeo" component-url="/_astro/JsDoc.6488bf77.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;cut&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>In the style of classic drum-machines, <code>cut</code> will stop a playing sample as soon as another samples with in same cutgroup is to be played. An example would be an open hi-hat followed by a closed one, essentially muting the open.</p></div><ul><li>group<!-- --> (<!-- -->number|Pattern<!-- -->): <!-- -->cut group number</li></ul><div class="space-y-2"><pre>s(&quot;rd*4&quot;).cut(1)</pre></div></astro-island>
-<h3 id="clip">clip<a aria-hidden="true" tabIndex="-1" href="/learn/samples#clip"><span class="icon icon-link"></span></a></h3>
-<astro-island uid="Z1iKjCI" component-url="/_astro/JsDoc.6488bf77.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;clip&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Multiplies the duration with the given number. Also cuts samples off at the end if they exceed the duration.
+.loopEnd(&quot;&lt;1 .75 .5 .25&gt;&quot;).scope()</pre></div><!--astro:end--></astro-island>
+<h3 id="cut">cut<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#cut"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="2wvEeo" prefix="r30" component-url="/_astro/JsDoc.06f9fc91.js" component-export="JsDoc" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;name&quot;:[0,&quot;cut&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>In the style of classic drum-machines, <code>cut</code> will stop a playing sample as soon as another samples with in same cutgroup is to be played. An example would be an open hi-hat followed by a closed one, essentially muting the open.</p></div><ul><li>group<!-- --> (<!-- -->number|Pattern<!-- -->): <!-- -->cut group number</li></ul><div class="space-y-2"><pre>s(&quot;rd*4&quot;).cut(1)</pre></div><!--astro:end--></astro-island>
+<h3 id="clip">clip<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#clip"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="Z1iKjCI" prefix="r31" component-url="/_astro/JsDoc.06f9fc91.js" component-export="JsDoc" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;name&quot;:[0,&quot;clip&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Multiplies the duration with the given number. Also cuts samples off at the end if they exceed the duration.
 In tidal, this would be done with legato, <a href="https://github.com/tidalcycles/strudel/issues/111">which has a complicated history in strudel</a>.
 For now, if you're coming from tidal, just think clip = legato.</p></div><ul><li>factor<!-- --> (<!-- -->number|Pattern<!-- -->): <!-- -->
 = 0
-</li></ul><div class="space-y-2"><pre>note(&quot;c a f e&quot;).s(&quot;piano&quot;).clip(&quot;&lt;.5 1 2&gt;&quot;)</pre></div></astro-island>
-<h3 id="loopat">loopAt<a aria-hidden="true" tabIndex="-1" href="/learn/samples#loopat"><span class="icon icon-link"></span></a></h3>
-<astro-island uid="1wUd16" component-url="/_astro/JsDoc.6488bf77.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;Pattern.loopAt&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Makes the sample fit the given number of cycles by changing the speed.</p></div><ul></ul><div class="space-y-2"><pre>samples({ rhodes: &#x27;https://cdn.freesound.org/previews/132/132051_316502-lq.mp3&#x27; })
-s(&quot;rhodes&quot;).loopAt(4)</pre></div></astro-island>
-<h3 id="fit">fit<a aria-hidden="true" tabIndex="-1" href="/learn/samples#fit"><span class="icon icon-link"></span></a></h3>
-<astro-island uid="BU9GR" component-url="/_astro/JsDoc.6488bf77.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;fit&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Makes the sample fit its event duration. Good for rhythmical loops like drum breaks.
+</li></ul><div class="space-y-2"><pre>note(&quot;c a f e&quot;).s(&quot;piano&quot;).clip(&quot;&lt;.5 1 2&gt;&quot;)</pre></div><!--astro:end--></astro-island>
+<h3 id="loopat">loopAt<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#loopat"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="1wUd16" prefix="r32" component-url="/_astro/JsDoc.06f9fc91.js" component-export="JsDoc" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;name&quot;:[0,&quot;Pattern.loopAt&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Makes the sample fit the given number of cycles by changing the speed.</p></div><ul></ul><div class="space-y-2"><pre>samples({ rhodes: &#x27;https://cdn.freesound.org/previews/132/132051_316502-lq.mp3&#x27; })
+s(&quot;rhodes&quot;).loopAt(4)</pre></div><!--astro:end--></astro-island>
+<h3 id="fit">fit<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#fit"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="BU9GR" prefix="r33" component-url="/_astro/JsDoc.06f9fc91.js" component-export="JsDoc" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;name&quot;:[0,&quot;fit&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Makes the sample fit its event duration. Good for rhythmical loops like drum breaks.
 Similar to loopAt.</p></div><ul></ul><div class="space-y-2"><pre>samples({ rhodes: &#x27;https://cdn.freesound.org/previews/132/132051_316502-lq.mp3&#x27; })
-s(&quot;rhodes/4&quot;).fit()</pre></div></astro-island>
-<h3 id="chop">chop<a aria-hidden="true" tabIndex="-1" href="/learn/samples#chop"><span class="icon icon-link"></span></a></h3>
-<astro-island uid="1kHK0X" component-url="/_astro/JsDoc.6488bf77.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;Pattern.chop&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Cuts each sample into the given number of parts, allowing you to explore a technique known as 'granular synthesis'.
+s(&quot;rhodes/4&quot;).fit()</pre></div><!--astro:end--></astro-island>
+<h3 id="chop">chop<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#chop"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="1kHK0X" prefix="r34" component-url="/_astro/JsDoc.06f9fc91.js" component-export="JsDoc" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;name&quot;:[0,&quot;Pattern.chop&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Cuts each sample into the given number of parts, allowing you to explore a technique known as 'granular synthesis'.
 It turns a pattern of samples into a pattern of parts of samples.</p></div><ul></ul><div class="space-y-2"><pre>samples({ rhodes: &#x27;https://cdn.freesound.org/previews/132/132051_316502-lq.mp3&#x27; })
 s(&quot;rhodes&quot;)
  .chop(4)
  .rev() // reverse order of chops
- .loopAt(4) // fit sample into 4 cycles</pre></div></astro-island>
-<h3 id="slice">slice<a aria-hidden="true" tabIndex="-1" href="/learn/samples#slice"><span class="icon icon-link"></span></a></h3>
-<astro-island uid="Z1mCxVk" component-url="/_astro/JsDoc.6488bf77.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;Pattern.slice&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Chops samples into the given number of slices, triggering those slices with a given pattern of slice numbers.
+ .loopAt(4) // fit sample into 4 cycles</pre></div><!--astro:end--></astro-island>
+<h3 id="striate">striate<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#striate"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="9GlEk" prefix="r35" component-url="/_astro/JsDoc.06f9fc91.js" component-export="JsDoc" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;name&quot;:[0,&quot;Pattern.striate&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Cuts each sample into the given number of parts, triggering progressive portions of each sample at each loop.</p></div><ul></ul><div class="space-y-2"><pre>s(&quot;numbers:0 numbers:1 numbers:2&quot;).striate(6).slow(6)</pre></div><!--astro:end--></astro-island>
+<h3 id="slice">slice<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#slice"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="Z1mCxVk" prefix="r36" component-url="/_astro/JsDoc.06f9fc91.js" component-export="JsDoc" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;name&quot;:[0,&quot;Pattern.slice&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Chops samples into the given number of slices, triggering those slices with a given pattern of slice numbers.
 Instead of a number, it also accepts a list of numbers from 0 to 1 to slice at specific points.</p></div><ul></ul><div class="space-y-2"><pre>await samples(&#x27;github:tidalcycles/Dirt-Samples/master&#x27;)
 s(&quot;breaks165&quot;).slice(8, &quot;0 1 &lt;2 2*2&gt; 3 [4 0] 5 6 7&quot;.every(3, rev)).slow(1.5)</pre><pre>await samples(&#x27;github:tidalcycles/Dirt-Samples/master&#x27;)
-s(&quot;breaks125/2&quot;).fit().slice([0,.25,.5,.75], &quot;0 1 1 &lt;2 3&gt;&quot;)</pre></div></astro-island>
-<h3 id="splice">splice<a aria-hidden="true" tabIndex="-1" href="/learn/samples#splice"><span class="icon icon-link"></span></a></h3>
-<astro-island uid="1So89r" component-url="/_astro/JsDoc.6488bf77.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;splice&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Works the same as slice, but changes the playback speed of each slice to match the duration of its step.</p></div><ul></ul><div class="space-y-2"><pre>await samples(&#x27;github:tidalcycles/Dirt-Samples/master&#x27;)
+s(&quot;breaks125/2&quot;).fit().slice([0,.25,.5,.75], &quot;0 1 1 &lt;2 3&gt;&quot;)</pre></div><!--astro:end--></astro-island>
+<h3 id="splice">splice<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#splice"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="1So89r" prefix="r37" component-url="/_astro/JsDoc.06f9fc91.js" component-export="JsDoc" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;name&quot;:[0,&quot;splice&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Works the same as slice, but changes the playback speed of each slice to match the duration of its step.</p></div><ul></ul><div class="space-y-2"><pre>await samples(&#x27;github:tidalcycles/Dirt-Samples/master&#x27;)
 s(&quot;breaks165&quot;)
 .splice(8,  &quot;0 1 [2 3 0]@2 3 0@2 7&quot;)
-.hurry(0.65)</pre></div></astro-island>
-<h3 id="speed">speed<a aria-hidden="true" tabIndex="-1" href="/learn/samples#speed"><span class="icon icon-link"></span></a></h3>
-<astro-island uid="eha44" component-url="/_astro/JsDoc.6488bf77.js" component-export="JsDoc" renderer-url="/_astro/client.0daade25.js" props="{&quot;name&quot;:[0,&quot;speed&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Changes the speed of sample playback, i.e. a cheap way of changing pitch.</p></div><ul><li>speed<!-- --> (<!-- -->number|Pattern<!-- -->): <!-- -->inf to inf, negative numbers play the sample backwards.</li></ul><div class="space-y-2"><pre>s(&quot;bd&quot;).speed(&quot;&lt;1 2 4 1 -2 -4&gt;&quot;)</pre><pre>speed(&quot;1 1.5*2 [2 1.1]&quot;).s(&quot;piano&quot;).clip(1)</pre></div></astro-island>
-<p>After samples, let’s see what <a href="/learn/synths">Synths</a> afford us.</p>
-          
-    </div>
-  </section>
-  <nav class="block sm:hidden astro-J75B3YUS">
-    <ul class="px-4 py-4">
-  <li>
-        <a class="flex items-center space-x-2" href="https://github.com/tidalcycles/strudel/tree/main/website/src/pages/learn/samples.mdx" target="_blank">
-          <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pen" class="svg-inline--fa fa-pen fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="1em" width="1em">
-            <path fill="currentColor" d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"></path>
-          </svg>
-          <span>Edit this page</span>
-        </a>
-      </li>
-  <li class="header-link depth-2">
-        <a href="https://discord.com/invite/HGEdXmRkzT" target="_blank" class="flex items-center space-x-2">
-          <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="comment-alt" class="svg-inline--fa fa-comment-alt fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="1em" width="1em">
-            <path fill="currentColor" d="M448 0H64C28.7 0 0 28.7 0 64v288c0 35.3 28.7 64 64 64h96v84c0 9.8 11.2 15.5 19.1 9.7L304 416h144c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64z"></path>
-          </svg>
-          <span>Join our community</span>
-        </a>
-      </li>
-</ul>
-  </nav>
-</article>
-          <aside class="fixed right-0 h-full overflow-auto pr-4 pl-0 pb-16 hidden xl:block" title="Table of Contents">
-            <nav aria-labelledby="grid-right" class="w-64 text-foreground">
-  <script>(self.Astro=self.Astro||{}).media=(s,a)=>{const t=async()=>{await(await s())()};if(a.value){const e=matchMedia(a.value);e.matches?t():e.addEventListener("change",t,{once:!0})}},window.dispatchEvent(new Event("astro:media"));</script><astro-island uid="Z2iAY13" component-url="/_astro/TableOfContents.9aa9dd9d.js" component-export="default" renderer-url="/_astro/client.0daade25.js" props="{&quot;headings&quot;:[1,&quot;[[0,{\&quot;depth\&quot;:[0,1],\&quot;slug\&quot;:[0,\&quot;samples\&quot;],\&quot;text\&quot;:[0,\&quot;Samples\&quot;]}],[0,{\&quot;depth\&quot;:[0,1],\&quot;slug\&quot;:[0,\&quot;default-samples\&quot;],\&quot;text\&quot;:[0,\&quot;Default Samples\&quot;]}],[0,{\&quot;depth\&quot;:[0,1],\&quot;slug\&quot;:[0,\&quot;sound-banks\&quot;],\&quot;text\&quot;:[0,\&quot;Sound Banks\&quot;]}],[0,{\&quot;depth\&quot;:[0,1],\&quot;slug\&quot;:[0,\&quot;selecting-sounds\&quot;],\&quot;text\&quot;:[0,\&quot;Selecting Sounds\&quot;]}],[0,{\&quot;depth\&quot;:[0,1],\&quot;slug\&quot;:[0,\&quot;loading-custom-samples\&quot;],\&quot;text\&quot;:[0,\&quot;Loading Custom Samples\&quot;]}],[0,{\&quot;depth\&quot;:[0,2],\&quot;slug\&quot;:[0,\&quot;the-samples-function\&quot;],\&quot;text\&quot;:[0,\&quot;The samples function\&quot;]}],[0,{\&quot;depth\&quot;:[0,2],\&quot;slug\&quot;:[0,\&quot;multiple-samples-per-sound\&quot;],\&quot;text\&quot;:[0,\&quot;Multiple Samples per Sound\&quot;]}],[0,{\&quot;depth\&quot;:[0,2],\&quot;slug\&quot;:[0,\&quot;pitched-sounds\&quot;],\&quot;text\&quot;:[0,\&quot;Pitched Sounds\&quot;]}],[0,{\&quot;depth\&quot;:[0,2],\&quot;slug\&quot;:[0,\&quot;base-pitch\&quot;],\&quot;text\&quot;:[0,\&quot;Base Pitch\&quot;]}],[0,{\&quot;depth\&quot;:[0,2],\&quot;slug\&quot;:[0,\&quot;shabda\&quot;],\&quot;text\&quot;:[0,\&quot;Shabda\&quot;]}],[0,{\&quot;depth\&quot;:[0,1],\&quot;slug\&quot;:[0,\&quot;sampler-effects\&quot;],\&quot;text\&quot;:[0,\&quot;Sampler Effects\&quot;]}],[0,{\&quot;depth\&quot;:[0,3],\&quot;slug\&quot;:[0,\&quot;begin\&quot;],\&quot;text\&quot;:[0,\&quot;begin\&quot;]}],[0,{\&quot;depth\&quot;:[0,3],\&quot;slug\&quot;:[0,\&quot;end\&quot;],\&quot;text\&quot;:[0,\&quot;end\&quot;]}],[0,{\&quot;depth\&quot;:[0,3],\&quot;slug\&quot;:[0,\&quot;loop\&quot;],\&quot;text\&quot;:[0,\&quot;loop\&quot;]}],[0,{\&quot;depth\&quot;:[0,3],\&quot;slug\&quot;:[0,\&quot;loopbegin\&quot;],\&quot;text\&quot;:[0,\&quot;loopBegin\&quot;]}],[0,{\&quot;depth\&quot;:[0,3],\&quot;slug\&quot;:[0,\&quot;loopend\&quot;],\&quot;text\&quot;:[0,\&quot;loopEnd\&quot;]}],[0,{\&quot;depth\&quot;:[0,3],\&quot;slug\&quot;:[0,\&quot;cut\&quot;],\&quot;text\&quot;:[0,\&quot;cut\&quot;]}],[0,{\&quot;depth\&quot;:[0,3],\&quot;slug\&quot;:[0,\&quot;clip\&quot;],\&quot;text\&quot;:[0,\&quot;clip\&quot;]}],[0,{\&quot;depth\&quot;:[0,3],\&quot;slug\&quot;:[0,\&quot;loopat\&quot;],\&quot;text\&quot;:[0,\&quot;loopAt\&quot;]}],[0,{\&quot;depth\&quot;:[0,3],\&quot;slug\&quot;:[0,\&quot;fit\&quot;],\&quot;text\&quot;:[0,\&quot;fit\&quot;]}],[0,{\&quot;depth\&quot;:[0,3],\&quot;slug\&quot;:[0,\&quot;chop\&quot;],\&quot;text\&quot;:[0,\&quot;chop\&quot;]}],[0,{\&quot;depth\&quot;:[0,3],\&quot;slug\&quot;:[0,\&quot;slice\&quot;],\&quot;text\&quot;:[0,\&quot;slice\&quot;]}],[0,{\&quot;depth\&quot;:[0,3],\&quot;slug\&quot;:[0,\&quot;splice\&quot;],\&quot;text\&quot;:[0,\&quot;splice\&quot;]}],[0,{\&quot;depth\&quot;:[0,3],\&quot;slug\&quot;:[0,\&quot;speed\&quot;],\&quot;text\&quot;:[0,\&quot;speed\&quot;]}]]&quot;],&quot;currentPage&quot;:[0,&quot;/learn/samples&quot;]}" ssr="" client="media" opts="{&quot;name&quot;:&quot;TableOfContents&quot;,&quot;value&quot;:&quot;(min-width: 50em)&quot;}" await-children=""><ul><li class="w-full"><a href="/learn/samples#samples" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-4">Samples</a></li><li class="w-full"><a href="/learn/samples#default-samples" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-4">Default Samples</a></li><li class="w-full"><a href="/learn/samples#sound-banks" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-4">Sound Banks</a></li><li class="w-full"><a href="/learn/samples#selecting-sounds" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-4">Selecting Sounds</a></li><li class="w-full"><a href="/learn/samples#loading-custom-samples" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-4">Loading Custom Samples</a></li><li class="w-full"><a href="/learn/samples#the-samples-function" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-9">The samples function</a></li><li class="w-full"><a href="/learn/samples#multiple-samples-per-sound" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-9">Multiple Samples per Sound</a></li><li class="w-full"><a href="/learn/samples#pitched-sounds" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-9">Pitched Sounds</a></li><li class="w-full"><a href="/learn/samples#base-pitch" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-9">Base Pitch</a></li><li class="w-full"><a href="/learn/samples#shabda" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-9">Shabda</a></li><li class="w-full"><a href="/learn/samples#sampler-effects" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-4">Sampler Effects</a></li><li class="w-full"><a href="/learn/samples#begin" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">begin</a></li><li class="w-full"><a href="/learn/samples#end" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">end</a></li><li class="w-full"><a href="/learn/samples#loop" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">loop</a></li><li class="w-full"><a href="/learn/samples#loopbegin" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">loopBegin</a></li><li class="w-full"><a href="/learn/samples#loopend" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">loopEnd</a></li><li class="w-full"><a href="/learn/samples#cut" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">cut</a></li><li class="w-full"><a href="/learn/samples#clip" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">clip</a></li><li class="w-full"><a href="/learn/samples#loopat" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">loopAt</a></li><li class="w-full"><a href="/learn/samples#fit" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">fit</a></li><li class="w-full"><a href="/learn/samples#chop" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">chop</a></li><li class="w-full"><a href="/learn/samples#slice" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">slice</a></li><li class="w-full"><a href="/learn/samples#splice" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">splice</a></li><li class="w-full"><a href="/learn/samples#speed" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">speed</a></li></ul></astro-island>
-  <ul class="px-4 py-4">
-  <li>
-        <a class="flex items-center space-x-2" href="https://github.com/tidalcycles/strudel/tree/main/website/src/pages/learn/samples.mdx" target="_blank">
-          <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pen" class="svg-inline--fa fa-pen fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="1em" width="1em">
-            <path fill="currentColor" d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"></path>
-          </svg>
-          <span>Edit this page</span>
-        </a>
-      </li>
-  <li class="header-link depth-2">
-        <a href="https://discord.com/invite/HGEdXmRkzT" target="_blank" class="flex items-center space-x-2">
-          <svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="comment-alt" class="svg-inline--fa fa-comment-alt fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="1em" width="1em">
-            <path fill="currentColor" d="M448 0H64C28.7 0 0 28.7 0 64v288c0 35.3 28.7 64 64 64h96v84c0 9.8 11.2 15.5 19.1 9.7L304 416h144c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64z"></path>
-          </svg>
-          <span>Join our community</span>
-        </a>
-      </li>
-</ul>
-  <!-- <AvatarList path={currentPage} /> -->
-</nav>
-          </aside>
-        </div>
-      </main>
-    </div>
-  </body></html>
+.hurry(0.65)</pre></div><!--astro:end--></astro-island>
+<h3 id="speed">speed<a aria-hidden="true" tabIndex="-1" href="/learn/samples/#speed"><span class="icon icon-link"></span></a></h3>
+<astro-island uid="eha44" prefix="r38" component-url="/_astro/JsDoc.06f9fc91.js" component-export="JsDoc" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;name&quot;:[0,&quot;speed&quot;],&quot;h&quot;:[0,0]}" ssr="" client="idle" opts="{&quot;name&quot;:&quot;JsDoc&quot;,&quot;value&quot;:true}" await-children=""><div><p>Changes the speed of sample playback, i.e. a cheap way of changing pitch.</p></div><ul><li>speed<!-- --> (<!-- -->number|Pattern<!-- -->): <!-- -->inf to inf, negative numbers play the sample backwards.</li></ul><div class="space-y-2"><pre>s(&quot;bd&quot;).speed(&quot;&lt;1 2 4 1 -2 -4&gt;&quot;)</pre><pre>speed(&quot;1 1.5*2 [2 1.1]&quot;).s(&quot;piano&quot;).clip(1)</pre></div><!--astro:end--></astro-island>
+<p>After samples, let’s see what <a href="/learn/synths/">Synths</a> afford us.</p></div></section><nav class="block sm:hidden" data-astro-cid-j75b3yus><ul class="px-4 py-4"><li><a class="flex items-center space-x-2" href="https://github.com/tidalcycles/strudel/tree/main/website/src/pages/learn/samples.mdx" target="_blank"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pen" class="svg-inline--fa fa-pen fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="1em" width="1em"><path fill="currentColor" d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"></path></svg><span>Edit this page</span></a></li><li class="header-link depth-2"><a href="https://discord.com/invite/HGEdXmRkzT" target="_blank" class="flex items-center space-x-2"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="comment-alt" class="svg-inline--fa fa-comment-alt fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="1em" width="1em"><path fill="currentColor" d="M448 0H64C28.7 0 0 28.7 0 64v288c0 35.3 28.7 64 64 64h96v84c0 9.8 11.2 15.5 19.1 9.7L304 416h144c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64z"></path></svg><span>Join our community</span></a></li></ul></nav></article><aside class="fixed right-0 h-full overflow-auto pr-4 pl-0 pb-16 hidden xl:block" title="Table of Contents"><nav aria-labelledby="grid-right" class="w-64 text-foreground"><script>(()=>{var s=(i,t)=>{let a=async()=>{await(await i())()};if(t.value){let e=matchMedia(t.value);e.matches?a():e.addEventListener("change",a,{once:!0})}};(self.Astro||(self.Astro={})).media=s;window.dispatchEvent(new Event("astro:media"));})();</script><astro-island uid="20IEea" prefix="r3" component-url="/_astro/TableOfContents.befe8b04.js" component-export="default" renderer-url="/_astro/client.b48cbe4d.js" props="{&quot;headings&quot;:[1,[[0,{&quot;depth&quot;:[0,1],&quot;slug&quot;:[0,&quot;samples&quot;],&quot;text&quot;:[0,&quot;Samples&quot;]}],[0,{&quot;depth&quot;:[0,1],&quot;slug&quot;:[0,&quot;default-samples&quot;],&quot;text&quot;:[0,&quot;Default Samples&quot;]}],[0,{&quot;depth&quot;:[0,1],&quot;slug&quot;:[0,&quot;sound-banks&quot;],&quot;text&quot;:[0,&quot;Sound Banks&quot;]}],[0,{&quot;depth&quot;:[0,1],&quot;slug&quot;:[0,&quot;selecting-sounds&quot;],&quot;text&quot;:[0,&quot;Selecting Sounds&quot;]}],[0,{&quot;depth&quot;:[0,1],&quot;slug&quot;:[0,&quot;loading-custom-samples&quot;],&quot;text&quot;:[0,&quot;Loading Custom Samples&quot;]}],[0,{&quot;depth&quot;:[0,2],&quot;slug&quot;:[0,&quot;the-samples-function&quot;],&quot;text&quot;:[0,&quot;The samples function&quot;]}],[0,{&quot;depth&quot;:[0,2],&quot;slug&quot;:[0,&quot;multiple-samples-per-sound&quot;],&quot;text&quot;:[0,&quot;Multiple Samples per Sound&quot;]}],[0,{&quot;depth&quot;:[0,2],&quot;slug&quot;:[0,&quot;pitched-sounds&quot;],&quot;text&quot;:[0,&quot;Pitched Sounds&quot;]}],[0,{&quot;depth&quot;:[0,2],&quot;slug&quot;:[0,&quot;base-pitch&quot;],&quot;text&quot;:[0,&quot;Base Pitch&quot;]}],[0,{&quot;depth&quot;:[0,2],&quot;slug&quot;:[0,&quot;shabda&quot;],&quot;text&quot;:[0,&quot;Shabda&quot;]}],[0,{&quot;depth&quot;:[0,1],&quot;slug&quot;:[0,&quot;sampler-effects&quot;],&quot;text&quot;:[0,&quot;Sampler Effects&quot;]}],[0,{&quot;depth&quot;:[0,3],&quot;slug&quot;:[0,&quot;begin&quot;],&quot;text&quot;:[0,&quot;begin&quot;]}],[0,{&quot;depth&quot;:[0,3],&quot;slug&quot;:[0,&quot;end&quot;],&quot;text&quot;:[0,&quot;end&quot;]}],[0,{&quot;depth&quot;:[0,3],&quot;slug&quot;:[0,&quot;loop&quot;],&quot;text&quot;:[0,&quot;loop&quot;]}],[0,{&quot;depth&quot;:[0,3],&quot;slug&quot;:[0,&quot;loopbegin&quot;],&quot;text&quot;:[0,&quot;loopBegin&quot;]}],[0,{&quot;depth&quot;:[0,3],&quot;slug&quot;:[0,&quot;loopend&quot;],&quot;text&quot;:[0,&quot;loopEnd&quot;]}],[0,{&quot;depth&quot;:[0,3],&quot;slug&quot;:[0,&quot;cut&quot;],&quot;text&quot;:[0,&quot;cut&quot;]}],[0,{&quot;depth&quot;:[0,3],&quot;slug&quot;:[0,&quot;clip&quot;],&quot;text&quot;:[0,&quot;clip&quot;]}],[0,{&quot;depth&quot;:[0,3],&quot;slug&quot;:[0,&quot;loopat&quot;],&quot;text&quot;:[0,&quot;loopAt&quot;]}],[0,{&quot;depth&quot;:[0,3],&quot;slug&quot;:[0,&quot;fit&quot;],&quot;text&quot;:[0,&quot;fit&quot;]}],[0,{&quot;depth&quot;:[0,3],&quot;slug&quot;:[0,&quot;chop&quot;],&quot;text&quot;:[0,&quot;chop&quot;]}],[0,{&quot;depth&quot;:[0,3],&quot;slug&quot;:[0,&quot;striate&quot;],&quot;text&quot;:[0,&quot;striate&quot;]}],[0,{&quot;depth&quot;:[0,3],&quot;slug&quot;:[0,&quot;slice&quot;],&quot;text&quot;:[0,&quot;slice&quot;]}],[0,{&quot;depth&quot;:[0,3],&quot;slug&quot;:[0,&quot;splice&quot;],&quot;text&quot;:[0,&quot;splice&quot;]}],[0,{&quot;depth&quot;:[0,3],&quot;slug&quot;:[0,&quot;speed&quot;],&quot;text&quot;:[0,&quot;speed&quot;]}]]],&quot;currentPage&quot;:[0,&quot;/learn/samples&quot;]}" ssr="" client="media" opts="{&quot;name&quot;:&quot;TableOfContents&quot;,&quot;value&quot;:&quot;(min-width: 50em)&quot;}" await-children=""><ul><li class="w-full"><a href="/learn/samples/#samples" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-4">Samples</a></li><li class="w-full"><a href="/learn/samples/#default-samples" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-4">Default Samples</a></li><li class="w-full"><a href="/learn/samples/#sound-banks" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-4">Sound Banks</a></li><li class="w-full"><a href="/learn/samples/#selecting-sounds" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-4">Selecting Sounds</a></li><li class="w-full"><a href="/learn/samples/#loading-custom-samples" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-4">Loading Custom Samples</a></li><li class="w-full"><a href="/learn/samples/#the-samples-function" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-9">The samples function</a></li><li class="w-full"><a href="/learn/samples/#multiple-samples-per-sound" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-9">Multiple Samples per Sound</a></li><li class="w-full"><a href="/learn/samples/#pitched-sounds" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-9">Pitched Sounds</a></li><li class="w-full"><a href="/learn/samples/#base-pitch" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-9">Base Pitch</a></li><li class="w-full"><a href="/learn/samples/#shabda" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-9">Shabda</a></li><li class="w-full"><a href="/learn/samples/#sampler-effects" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-4">Sampler Effects</a></li><li class="w-full"><a href="/learn/samples/#begin" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">begin</a></li><li class="w-full"><a href="/learn/samples/#end" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">end</a></li><li class="w-full"><a href="/learn/samples/#loop" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">loop</a></li><li class="w-full"><a href="/learn/samples/#loopbegin" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">loopBegin</a></li><li class="w-full"><a href="/learn/samples/#loopend" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">loopEnd</a></li><li class="w-full"><a href="/learn/samples/#cut" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">cut</a></li><li class="w-full"><a href="/learn/samples/#clip" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">clip</a></li><li class="w-full"><a href="/learn/samples/#loopat" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">loopAt</a></li><li class="w-full"><a href="/learn/samples/#fit" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">fit</a></li><li class="w-full"><a href="/learn/samples/#chop" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">chop</a></li><li class="w-full"><a href="/learn/samples/#striate" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">striate</a></li><li class="w-full"><a href="/learn/samples/#slice" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">slice</a></li><li class="w-full"><a href="/learn/samples/#splice" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">splice</a></li><li class="w-full"><a href="/learn/samples/#speed" class="py-0.5 block cursor-pointer w-full border-l-4 border-lineHighlight hover:bg-lineHighlight pl-12">speed</a></li></ul><!--astro:end--></astro-island><ul class="px-4 py-4"><li><a class="flex items-center space-x-2" href="https://github.com/tidalcycles/strudel/tree/main/website/src/pages/learn/samples.mdx" target="_blank"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="pen" class="svg-inline--fa fa-pen fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="1em" width="1em"><path fill="currentColor" d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"></path></svg><span>Edit this page</span></a></li><li class="header-link depth-2"><a href="https://discord.com/invite/HGEdXmRkzT" target="_blank" class="flex items-center space-x-2"><svg aria-hidden="true" focusable="false" data-prefix="fas" data-icon="comment-alt" class="svg-inline--fa fa-comment-alt fa-w-16" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" height="1em" width="1em"><path fill="currentColor" d="M448 0H64C28.7 0 0 28.7 0 64v288c0 35.3 28.7 64 64 64h96v84c0 9.8 11.2 15.5 19.1 9.7L304 416h144c35.3 0 64-28.7 64-64V64c0-35.3-28.7-64-64-64z"></path></svg><span>Join our community</span></a></li></ul><!-- <AvatarList path={currentPage} /> --></nav></aside></div></main></div></body></html>
