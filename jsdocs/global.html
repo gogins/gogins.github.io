@@ -1,0 +1,1416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Global</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Global</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        <h2></h2>
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+
+        
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+        <h3 class="subsection-title">Members</h3>
+
+        
+            
+<h4 class="name" id="csound"><span class="type-signature"></span>csound<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>C S O U N D A C   M O D U L E   F O R   S T R U D E L</p>
+<p>Author: Michael Gogins</p>
+<p><a href="https://github.com/gogins/csound-ac">csound-ac</a>, or CsoundAC, is a C++
+algorithmic composition library designed for use with Csound.</p>
+<p><a href="https://github.com/gogins/csound-wasm">csound-wasm</a> is a WebAssembly
+library containing both Csound and CsoundAC, with a JavaScript API,
+designed for use in Web browsers and npm applications.</p>
+<p>This module brings chords and scales, and operations upon them,
+from the CsoundAC library for algorithmic composition into the
+Strudel (Tidal Cycles-based) JavaScript pattern language. This is
+done by deriving from the StatefulPatterns class new classes whose
+member functions become Patterns.</p>
+<p>Another use of StatefulPatterns is to define algorithmic note generators,
+often driven by a <code>pure</code> pattern that acts as a clock.</p>
+<p>Please note, however, that this module, although it defines a number of
+Patterns, is not built into Strudel and is designed to be dynamically
+imported in patches created by users in the Strudel REPL. Therefore, code
+in this module, as with all other modules directly imported in code
+run by the Strudel REPL, must not use template strings.</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line28">line 28</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="csound"><span class="type-signature"></span>csound<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>S T A T E F U L P A T T E R N S   M O D U L E   F O R   S T R U D E L</p>
+<p>Author: Michael Gogins</p>
+<p>This module implements &quot;stateful Patterns&quot; by defining a base class,
+<code>StatefulPatterns</code>, that knows how to register class methods as Patterns.</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="statefulpatterns.mjs.html">statefulpatterns.mjs</a>, <a href="statefulpatterns.mjs.html#line9">line 9</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="csoundn"><span class="type-signature">(constant) </span>csoundn<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>Sends notes to Csound for rendering with MIDI semantics. The Hap value is
+translated to Csound pfields as follows:</p>
+<p>p1 -- Csound instrument either as a number (1-based, can be a fraction),
+or as a string name.
+p2 -- time in beats (usually seconds) from start of performance.
+p3 -- duration in beats (usually seconds).
+p4 -- MIDI key number from Strudel's Hap value (as a real number, not an
+integer, in [0, 127].
+p5 -- MIDI velocity from Strudel's <code>gain</code> control (as a real number, not
+an integer, in [0, 127].
+p6 -- Spatial depth dimension, from a <code>depth</code> control, defaulting to 0.
+p7 -- Spatial pan dimension, from Strudel's <code>pan</code> control, in [0, 1],
+defaulting to 0.5.
+p8 -- Spatial height dimension, from a <code>height</code> control, defaulting to 0.</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line204">line 204</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="diagnostic_level_"><span class="type-signature"></span>diagnostic_level_<span class="type-signature"></span></h4>
+
+
+
+
+<div class="description">
+    <p>Sets the level of diagnostic messages in this module.</p>
+</div>
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="statefulpatterns.mjs.html">statefulpatterns.mjs</a>, <a href="statefulpatterns.mjs.html#line16">line 16</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+    
+
+    
+        <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="Chord"><span class="type-signature"></span>Chord<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Creates and initializes a CsoundAC Chord object. This function should be
+called from module scope in Strudel code before creating any Patterns. The
+Chord class is based on Dmitri Tymoczko's model of chord space, and
+represents an equally tempered chord of the specified number of voices as
+a single point in chord space, where each dimension of the space
+corresponds to one voice of the Chord. Chords are equipped with numerous
+operations from pragmatic music theory, atonal music theory, and
+neo-Riemannian music theory.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line301">line 301</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="Clone"><span class="type-signature"></span>Clone<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>A utility for making a <em>value</em> copy of a Chord (or a Scale, which
+is derived from Chord). Object b is resized to the size of a, and a's
+pitches are copied to b. Currently, only pitches are copied.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line123">line 123</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="Pitv"><span class="type-signature"></span>Pitv<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Creates and initializes a CsoundAC PITV object. This function should be
+called from module scope in Strudel code before creating any Patterns. The
+PITV object is a 4 dimensional cyclic group whose dimensions are TI set
+class (P), chord inversion (I), pitch-class transposition (T), and index
+of octavewise revoicing within the specified range (V). The elements of
+the group are chords in 12 tone equal temperament with the specified
+number of voices. There is a one-to-one mapping between PITV indices and
+chords, such that each voiced chord corresponds to a PITV index, and each
+PITV index corresponds to a voiced chord. This enables algorithmically
+generating harmonies and voicings by independently varying P, I, T, and V.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line338">line 338</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="Scale"><span class="type-signature"></span>Scale<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Creates and initializes a CsoundAC Scale object. This function can be
+called from module scope in Strudel code before creating any Patterns. The
+Scale class is derived from the CsoundAC Chord class, but has been
+equipped with additional methods based on Dimitri Tymoczko's model of
+functional harmony. This enables algorithmically generating Chords from
+scale degrees, transposing Chords by scale degrees, generating all
+possible modulations given a pivot chord, and implementing secondary
+dominants and tonicizations based on scale degree.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line318">line 318</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="diagnostic"><span class="type-signature"></span>diagnostic<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Prints a diagnostic message to both the Strudel logger and the Csound
+log. Messages are printed only for the specifed diagnostic level or less.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="statefulpatterns.mjs.html">statefulpatterns.mjs</a>, <a href="statefulpatterns.mjs.html#line40">line 40</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="diagnostic_level"><span class="type-signature"></span>diagnostic_level<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Gets and/or sets the level of diagnostic messages.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="statefulpatterns.mjs.html">statefulpatterns.mjs</a>, <a href="statefulpatterns.mjs.html#line21">line 21</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="frequencyToMidiInteger"><span class="type-signature"></span>frequencyToMidiInteger<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>A utility that returns the MIDI key number for a frequency in Hz,
+as the nearest integer.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line113">line 113</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="frequencyToMidiReal"><span class="type-signature"></span>frequencyToMidiReal<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>A utility that returns the MIDI key number for a frequency in Hz,
+as a real number allowing fractions for microtones.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line102">line 102</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="getFrequency"><span class="type-signature"></span>getFrequency<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Returns the frequency corresponding to any of various ways that pitch
+is represented in Strudel events.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line54">line 54</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="setPitch"><span class="type-signature"></span>setPitch<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>A utility that assigns a pitch represented as a MIDI key number to the Hap,
+using the existing pitch property if it exists.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line80">line 80</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="track"><span class="type-signature"></span>track<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Similar to <code>arrange,</code> but permits a section to be silenced by setting its
+number of cycles to 0; <code>sections</code> is an array of arrays, in the format
+<code>[[cycles, Pattern],...]</code>. Useful for assembling Patterns into longer-form
+compositions.</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line41">line 41</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ChordPatterns.html">ChordPatterns</a></li><li><a href="PitvPatterns.html">PitvPatterns</a></li><li><a href="ScalePatterns.html">ScalePatterns</a></li><li><a href="StatefulPatterns.html">StatefulPatterns</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Chord">Chord</a></li><li><a href="global.html#Clone">Clone</a></li><li><a href="global.html#Pitv">Pitv</a></li><li><a href="global.html#Scale">Scale</a></li><li><a href="global.html#csound">csound</a></li><li><a href="global.html#csoundn">csoundn</a></li><li><a href="global.html#diagnostic">diagnostic</a></li><li><a href="global.html#diagnostic_level">diagnostic_level</a></li><li><a href="global.html#diagnostic_level_">diagnostic_level_</a></li><li><a href="global.html#frequencyToMidiInteger">frequencyToMidiInteger</a></li><li><a href="global.html#frequencyToMidiReal">frequencyToMidiReal</a></li><li><a href="global.html#getFrequency">getFrequency</a></li><li><a href="global.html#setPitch">setPitch</a></li><li><a href="global.html#track">track</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Dec 29 2023 11:23:49 GMT-0500 (Eastern Standard Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
