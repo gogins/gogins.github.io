@@ -1,129 +1,124 @@
-# cloud-music
+<script>
+if ('caches' in window) {
+    caches.keys().then(function(names) {
+    for (let name of names)
+        caches.delete(name);
+        console.log(`deleted ${name} from caches.`);
+    });
+}
+</script>
+# cloud-music 
 
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" 
-style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" />
-</a><br />This work is licensed under a 
+## Computer music in the cloud by Michael Gogins. 
+
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">
-Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
+<img alt="Creative Commons License" style="border-width:0" 
+src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a><br />This 
+work is licensed under a <a rel="license" 
+href="http://creativecommons.org/licenses/by-nc-sa/4.0/">Creative Commons 
+Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
 
-Music in the cloud by Michael Gogins. 
+This is real music. But it is not a streaming recording. It is not performed 
+in a concert. These pieces are Web pages that are loaded from my Web server 
+and run in your browser -- in _any_ standard Web browser, including mobile 
+devices (at least, if they are powerful enough).
 
-This is real music. Each piece will play indefinitely in any standard Web 
-browser. There may or may not be animated visuals along with the music. The 
-listener may or may not be able to customize the piece -- perhaps quite a bit, 
-amounting to a new piece, co-composed with me.
+Each piece will play indefinitely. There may or may not be animated visuals 
+along with the music. The listener may or may not be able to customize the 
+piece -- perhaps quite a bit, amounting to a new piece, co-composed with me.
 
-All source code for these pieces is available in the GitHub repository.
+The underlying technology is my WebAssembly build of Csound with CsoundAC. 
+Some pieces use third party libraries, especially [Strudel](https://github.com/tidalcycles/strudel),
+a JavaScript port of the live coding system [Tidal Cycles](https://tidalcycles.org/).
 
-The underlying technology is my [WebAssembly builds of Csound and CsoundAC]
-(https://github.com/gogins/csound-wasm). 
-Some pieces may use third party libraries.
+- [Cloud Music No. 1](cloud_music_no_1.html).
 
-# Installation
+- [Cloud Music No. 2](cloud_music_no_2.html).
 
-This repository is a bit of a hack, but I have tried to make it as 
-maintainable as possible.
+- [Cloud Music No. 3](cloud_music_no_3.html).
 
-The basic idea is to extend Strudel not only with Csound, but also with 
-CsoundAC, and then to make Strudel into an embeddable component that I can use 
-in my pieces. This is possible because the Strudel Web site serves a REPL page 
-that will run Strudel code from users via an HTTP request, which I can hijack 
-for my own purposes.
+- [Cloud Music No. 4](cloud_music_no_4.html).
 
-To this end, Strudel is included in this repository as a Git submodule. But, 
-before actually building Strudel, this repository makes the following patches 
-to Strudel head:
+<!--
+- [Cloud Music No. 5](cloud_music_no_5.html).
+-->
 
- 1. Make some minor patches to the Strudel source code. There is a Python 
-    script that npm will use to make these patches. If this quits working, 
-    change the `patch-strudel.py` script as required.
- 2. Patch the generated `strudel/website/dist/index.html` file to use relative 
-    rather than absolute pathnames for imported assets. This is needed in 
-    order to run the Strudel REPL from GitHub pages, which are not necessarily 
-    at the root of their Web server. There is a Python script that npm will 
-    use to make this patch. If this quits working, change the `patch-dist.py` 
-    script as required.
-    
-I have done my best to keep these patches as few and simple as possible.
+- [Cloud Music No. 6](cloud_music_no_6.html).
 
-## Building
+<!--
+- [Cloud Music No. 7](cloud_music_no_7.html).
+-->
 
-Install [pnpm](https://www.npmjs.com/package/pnpm), which cloud-music and 
-Strudel use rather than npm. On macOS (I don't know about other platforms), 
-you may need to specifically install node@18.
+- [Cloud Music No. 8](cloud_music_no_8.html).
 
-To initialize the local repository, obtain dependencies, build a static Web 
-site, and run it locally, execute the following commands:
+- [Cancycle](cancycle.html), a piece for live coding.
 
-```
-pnpm install
-pnpm run setup
-pnpm run build
-pnpm run debug
-```
-These commands will patch Strudel with my addons; build everything; make a 
-distributable copy of the cloud-music Web site in the `dist` directory, with 
-all resources statically available; and run a local Web site, which is source 
-level debuggable, in that directory. Examine `package.json` for details. 
+### Experiments
 
-This may fail due to failure to build `canvas.node` (not actually used here). 
-If that happens, execute `ccd loud-music/strudel/packages/canvas` and 
-`node-gyp rebuild`, and try again from `pnpm run build`.
+I am working on supporting the use of CsoundAC in the Strudel REPL. The most 
+important thing is to import the `csoundac.mjs` module in your Strudel patch. 
+To see how this is done, look at the following pieces. At the present time, 
+these are also the unit tests fr `csoundac.mjs`. Comments and suggestions are 
+wecome.
 
-Before updating strudel from GitHub, make a branch to contain the updates if 
-they break cloud-music.
+- [CsoundAC Example 1](ac_example_1.html).
 
-If you see warnings or errors, don't panic unless browsing localhost does not 
-open a working Web site with playable pieces! 
+## cloud-music as a Studio and/or Development Environment
 
-It may be necessary to clear the browser cache and application site data to 
-see updated pieces.
+I have designed this repository not only to present some of my compositions, 
+but also to serve as a development environment/computer music studio for 
+working with Csound, algorithmic composition, and live coding in a 
+_completely platform-independent way_.
 
-## Debugging Hints
+All software used here is JavaScript, WebAssembly, or HTML. All third party 
+dependencies are contained in this repository as static files.
 
-The JavaScript `debugging;` command will break in the debugger at that line.
+To use cloud-music, fork cloud-music on GitHub and clone your fork on your 
+own computer. You can also just download the latest cloud-music release as a zip 
+file and unzip it on your computer.
 
-Be sure to enable JavaScript source maps in the debugger settings. That won't 
-necessarily work for Strudel sources; load their source maps manually e.g. by
-opening a deployed (usually minified) source file in the debugger, then right-
-clicking on the code, and selecting "Add source map..." from the context menu.
-Oops, that should work, but I don't actually _find_ the source maps....
+_This is actually the easiest way to install a usable version of Csound on your 
+computer._
 
-## Deployment
+### Writing New Compositions
 
-Build this project, then copy the entire contents of the `dist` directory 
-to your own Web site's public HTML directory.
+There is no need to build or configure anything. In a terminal, simply change 
+to your cloud-music directory and run `python3 -m http.server`. Then you can 
+use your Web browser to go to `http://localhost:8000`, where you can view and 
+run any of these compositions in your browser.
 
-## Maintenance Notes!
+To create a new composition, simply create a new HTML file. You can copy one 
+of my existing pieces as a template and modify it, or you can create a new HTML 
+file from scratch.
 
-_If at all possible_, never edit _existing_ Strudel files, always add _new_ 
-Strudel files. This is to keep conflicts between Strudel and cloud-music 
-to an absolute minimum.
+**__Important note!__** If you are simply using cloud-music to write pieces, 
+write them in the `dist` directory. However, if you are going to build 
+cloud-music yourself, for example to keep up with new releases of Strudel, 
+then write your pieces in the `public` directory, and build cloud-music.
 
-Track the version of [Csound for WebAssembly]
-(https://github.com/gogins/csound-wasm) and update the files if a new version 
-becomes available.
+Although cloud-music renders audio only in real time, it is easy to use an 
+audio loopback driver to route audio from the system output to an audio 
+recorder and save the recording as a soundfile. On my MacBook Pro, I have been 
+able to use [BlackHole](https://github.com/ExistentialAudio/BlackHole) to 
+route audio from cloud-music pices to [Audacity](https://www.audacityteam.org/).
 
-## Extending Strudel
+### Writing New Software
 
-For cloud-music pieces that use Strudel's REPL, it is possible to add new 
-user-defined Patterns and perhaps other functions to Strudel _without 
-rebuilding Strudel_.
+Because algorithmic compositions are generally also software, the line between 
+compositions and other software can become blurred. However, it is often the 
+case that a composer will write new software as libraries or other resources 
+to support a number of their musical compositions.
 
-1. Write a static `MyModule.mjs` module in the Web root (the `docs` 
-   directory).
-2. Do _not_ import anything that will already have been imported by the 
-   Strudel REPL itself -- which is essentially all of Strudel.
-3. Call Strudel's `register` function to integrate any new Patterns into 
-   Strudel.
-4. Don't forget, any Strudel piece that uses MyModule has to 
-  `import('/MyModule.mjs');` first thing!
-   
-The `csoundac.mjs` module is an example of such a plugin.
+To develop this kind of software in your fork of cloud-music, keep in mind 
+that the cloud-music project uses [pnpm](https://www.npmjs.com/), which of 
+course must first be installed. 
 
+If you just want to work in the context of a Web site created in your fork of 
+cloud-music, then just writing static code in the `public` directory would be 
+fine, and by far the easiest. 
 
-
-
+Otherwise, take a look at [README.md](https://github.com/gogins/cloud-music/blob/main/README.md)
+and at the build system files such as `package.json`.
 
 
 
