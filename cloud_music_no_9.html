@@ -1,12 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Strudel Template</title>
+<title>cloud_music_no_9</title>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script src="dat.gui.js"></script>
 <script src="jquery.js"></script>
-<script src="p5.js"></script>
 <script src="sprintf.js"></script>
 <script src="three.js"></script>
 <script src="ace.js"></script>
@@ -822,6 +821,24 @@ input {
 
     <script>
 
+/*
+instr Droner uses instrument number 1
+instr Blower uses instrument number 2
+instr Phaser uses instrument number 3
+instr Guitar uses instrument number 4
+instr FilteredSines uses instrument number 5
+instr Sweeper uses instrument number 6
+instr Plucked uses instrument number 7
+instr FMWaterBell uses instrument number 8
+instr YiString uses instrument number 9
+instr Harpsichord uses instrument number 10
+instr ZakianFlute uses instrument number 11
+instr Kung4 uses instrument number 12
+instr Kung2 uses instrument number 13
+instr Bower uses instrument number 14
+instr ReverbSC uses instrument number 15
+instr MasterOutput uses instrument number 16
+*/
 
     var parameters = {
         gk_FMWaterBell_level: 30,
@@ -877,7 +894,6 @@ input {
         
     var default_json = {
   "preset": "Default",
-  "closed": false,
   "remembered": {
     "Default": {
       "0": {
@@ -885,17 +901,17 @@ input {
         "gk_overlap": 0.05,
         "gk_Reverb_feedback": 0.975,
         "gk_Reverb2_feedback": 0.7,
-        "gk_Droner_partial1": 0.1,
-        "gk_Droner_partial2": 0.1,
-        "gk_Droner_partial3": 0.1,
-        "gk_Droner_partial4": 0.1,
-        "gk_Droner_partial5": 0.1,
-        "gk_Droner_level": -15,
+        "gk_Droner_level": -26.0583641594739,
+        "gk_Droner_partial1": 0.292026304973284,
+        "gk_Droner_partial2": 0.10789149198520345,
+        "gk_Droner_partial3": 0.22626387176325524,
+        "gk_Droner_partial4": 0.4893136046033703,
+        "gk_Droner_partial5": 0.8773119605425401,
+        "gk_Blower_level": 0.5,
         "gk_Blower_grainDensity": 0.15,
         "gk_Blower_grainDuration": 0.2,
         "gk_Blower_grainAmplitudeRange": 0.1,
         "gk_Blower_grainFrequencyRange": 0.033,
-        "gk_Blower_level": 0.5,
         "gk_Phaser_ratio1": 1,
         "gk_Phaser_ratio2": 0.3333334,
         "gk_Phaser_index1": 1,
@@ -909,6 +925,7 @@ input {
         "gk_Sweeper_britehs": 1.25,
         "gk_Sweeper_level": 0.5,
         "gk_Plucked_level": 0,
+        "gk_FMWaterBell_level": 22.293464858199748,
         "gi_FMWaterBell_attack": 0.002,
         "gi_FMWaterBell_release": 0.01,
         "gi_FMWaterBell_exponent": 15,
@@ -918,17 +935,17 @@ input {
         "gk_FMWaterBell_index": 0.5,
         "gk_FMWaterBell_vibrato_depth": 0.05,
         "gk_FMWaterBell_vibrato_rate": 6,
-        "gk_FMWaterBell_level": 30,
         "gk_YiString_level": 0,
         "gk_Harpsichord_level": 0,
         "gk_ZakianFlute_level": 0,
         "gk_Kung4_level": 0,
         "gk_Kung2_level": 0,
-        "gk_Bower_pressure": 0.25,
-        "gk_Bower_level": 0.5
+        "gk_Bower_level": 0.5,
+        "gk_Bower_pressure": 0.25
       }
     }
   },
+  "closed": false,
   "folders": {
     "Master": {
       "preset": "Default",
@@ -937,7 +954,7 @@ input {
     },
     "Droner": {
       "preset": "Default",
-      "closed": true,
+      "closed": false,
       "folders": {}
     },
     "Blower": {
@@ -972,7 +989,7 @@ input {
     },
     "FMWaterBell": {
       "preset": "Default",
-      "closed": true,
+      "closed": false,
       "folders": {}
     },
     "YiString": {
@@ -1028,42 +1045,43 @@ input {
         dat_gui.appendChild(gui.domElement);
         gui.remember(parameters);
         var Master = gui.addFolder('Master');
-        add_slider(Master, 'gk_MasterOutput_level', -40, 40);
+        add_slider(Master, 'gk_MasterOutput_level', -50, 50);
         add_slider(Master, 'gk_overlap', 0, 20);
         add_slider(Master, 'gk_Reverb_feedback', 0, 1);
         add_slider(Master, 'gk_Reverb2_feedback', 0, 1);
         var Droner = gui.addFolder('Droner');
+        add_slider(Droner, 'gk_Droner_level', -50, 50);
         add_slider(Droner, 'gk_Droner_partial1', 0, 1);
         add_slider(Droner, 'gk_Droner_partial2', 0, 1);
         add_slider(Droner, 'gk_Droner_partial3', 0, 1);
         add_slider(Droner, 'gk_Droner_partial4', 0, 1);
         add_slider(Droner, 'gk_Droner_partial5', 0, 1);
-        add_slider(Droner, 'gk_Droner_level', -40, 40);
         var Blower = gui.addFolder('Blower');
+        add_slider(Blower, 'gk_Blower_level', -50, 50);
         add_slider(Blower, 'gk_Blower_grainDensity', 0, 400);
         add_slider(Blower, 'gk_Blower_grainDuration', 0, .5);
         add_slider(Blower, 'gk_Blower_grainAmplitudeRange', 0, 400);
         add_slider(Blower, 'gk_Blower_grainFrequencyRange', 0, 100);
-        add_slider(Blower, 'gk_Blower_level', -40, 40);
         var Phaser = gui.addFolder('Phaser');
         add_slider(Phaser, 'gk_Phaser_ratio1', 0, 5);
         add_slider(Phaser, 'gk_Phaser_ratio2', 0, 5);
         add_slider(Phaser, 'gk_Phaser_index1', 0, 15);
         add_slider(Phaser, 'gk_Phaser_index2', 0, 15);
-        add_slider(Phaser, 'gk_Phaser_level', -40, 40);
+        add_slider(Phaser, 'gk_Phaser_level', -50, 50);
         var Guitar = gui.addFolder("Guitar");
-        add_slider(Guitar, 'gk_Guitar_level', -40, 40);
+        add_slider(Guitar, 'gk_Guitar_level', -50, 50);
         var FilteredSines = gui.addFolder("FilteredSines");
-        add_slider(FilteredSines, 'gk_FilteredSines_level', -40, 40);
+        add_slider(FilteredSines, 'gk_FilteredSines_level', -50, 50);
        var Sweeper = gui.addFolder('Sweeper');
         add_slider(Sweeper, 'gk_Sweeper_britel', 0, 4);
         add_slider(Sweeper, 'gk_Sweeper_briteh', 0, 4);
         add_slider(Sweeper, 'gk_Sweeper_britels', 0, 4);
         add_slider(Sweeper, 'gk_Sweeper_britehs', 0, 4);
-        add_slider(Sweeper, 'gk_Sweeper_level', -40, 40);
+        add_slider(Sweeper, 'gk_Sweeper_level', -50, 50);
         var Plucked = gui.addFolder("Plucked");
-        add_slider(Plucked, 'gk_Plucked_level', -40, 40);
+        add_slider(Plucked, 'gk_Plucked_level', -50, 50);
         var FMWaterBell = gui.addFolder('FMWaterBell');
+        add_slider(FMWaterBell, 'gk_FMWaterBell_level',-40, 40);
         add_slider(FMWaterBell, 'gi_FMWaterBell_attack', 0, .1);
         add_slider(FMWaterBell, 'gi_FMWaterBell_release', 0, .1);
         add_slider(FMWaterBell, 'gi_FMWaterBell_exponent', -30, 30);
@@ -1073,20 +1091,19 @@ input {
         add_slider(FMWaterBell, 'gk_FMWaterBell_index', 0, 15);
         add_slider(FMWaterBell, 'gk_FMWaterBell_vibrato_depth', 0, 10);
         add_slider(FMWaterBell, 'gk_FMWaterBell_vibrato_rate', 0, 10);
-        add_slider(FMWaterBell, 'gk_FMWaterBell_level',-40, 40);
         var YiString = gui.addFolder("YiString");
-        add_slider(YiString, 'gk_YiString_level',-40, 40);
+        add_slider(YiString, 'gk_YiString_level', -50, 50);
         var Harpsichord = gui.addFolder("Harpsichord");
-        add_slider(Harpsichord, 'gk_Harpsichord_level',-40, 40);
+        add_slider(Harpsichord, 'gk_Harpsichord_level', -50, 50);
         var Flute = gui.addFolder('Zakian Flute');
-        add_slider(Flute, 'gk_ZakianFlute_level', -40, 40);
+        add_slider(Flute, 'gk_ZakianFlute_level', -50, 50);
         var Kung4 = gui.addFolder("Kung4");
-        add_slider(Kung4, 'gk_Kung4_level', -40, 40);
+        add_slider(Kung4, 'gk_Kung4_level', -50, 50);
         var Kung2 = gui.addFolder("Kung2");
-        add_slider(Kung2, 'gk_Kung2_level', -40, 40);
+        add_slider(Kung2, 'gk_Kung2_level', -50, 50);
         var Bower = gui.addFolder('Bower');
+        add_slider(Bower, 'gk_Bower_level', -50, 50); 
         add_slider(Bower, 'gk_Bower_pressure', 0, 5);
-        add_slider(Bower, 'gk_Bower_level', -40, 40); 
         document.addEventListener("keydown", function (e) {
             var e_char = String.fromCharCode(e.keyCode || e.charCode);
             if (e.ctrlKey === true) {
@@ -1325,7 +1342,7 @@ input {
         gk_Blower_grainDuration init 0.2
         gk_Blower_grainAmplitudeRange init 100
         gk_Blower_grainFrequencyRange init 10
-        gk_Blower_level init 0
+        gk_Blower_level init 20
         gk_Blower_midi_dynamic_range init 20
         
         gk_Blower_space_left_to_right chnexport "gk_Blower_space_left_to_right", 3
@@ -1395,7 +1412,7 @@ input {
         i_release = 0.01
         xtratim i_attack + i_release
         a_declicking linsegr 0, i_attack, 1, i_sustain, 1, i_release, 0
-        a_signal = a_signal * i_amplitude * a_declicking * k_gain
+        a_signal = a_signal * i_amplitude * a_declicking * k_gain * 10
         
         prints "%-24s i %9.4f t %9.4f d %9.4f k %9.4f v %9.4f p %9.4f #%3d\n", nstrstr(round(p1)), p1, p2, p3, p4, p5, p7, active(p1)
         #ifdef USE_SPATIALIZATION
@@ -2840,7 +2857,7 @@ input {
 
         (async function() {
         
-             var txt = "\n";
+            var txt = "\n";
             txt += "Browser CodeName: " + navigator.appCodeName + "\n";
             txt += "Browser Name: " + navigator.appName + "\n";
             txt += "Browser Version: " + navigator.appVersion + "\n";
@@ -2864,6 +2881,7 @@ input {
             $("#menu_item_play").click(async function(event) {
                 console.log("menu_item_play click...");     
                 let strudel_view = document.getElementById("strudel_view");
+                csound = undefined;
                 csound = await get_csound(csound_message_callback);
                 let is_playing = await csound.IsPlaying();
                 if (is_playing == false) {
@@ -2874,22 +2892,16 @@ input {
                     csound_message_callback("CompileCsdText returned: " + result + "\n");
                     await csound.Start();
                     // Send _current_ dat.gui control channel values to Csound 
-                    // before actually performing.
-                    for(let channel_name in parameters) {
-                        let channel_value = parseFloat(parameters[channel_name]);
+                    // before actually performing. Default parameters pasted in from a 
+                    // decent rendering are used.
+                    let parameters_ = default_json.remembered.Default[0];
+                    for(let channel_name in parameters_) {
+                        let channel_value = parseFloat(parameters_[channel_name]);
                         await csound.SetControlChannel(channel_name, channel_value);
-                    }
+                    }                
                     csound_message_callback("Csound has started...\n");
-                     await csound.Perform();
+                    await csound.Perform();
                     csound_message_callback("Csound is playing...\n");
-                    // Use control state saved in local storage?
-                    if (localStorage.length > 0) {
-                        $('#restore').trigger('click');
-                    } else {
-                        // Tricky! Otherwise we get _patch_ defaults, probably 
-                        // not correct; we need _html_ defaults.
-                        $('#default').trigger('click');
-                    }
                     console.log("strudel_view:", strudel_view);
                     strudel_view.setCsound(csound);
                     strudel_view.startPlaying();
@@ -2917,16 +2929,16 @@ input {
                     csound_message_callback("CompileCsdText returned: " + result + "\n");
                     await csound.Start();
                     csound_message_callback("Csound has started...\n");
+                    // Send _current_ dat.gui control channel values to Csound 
+                    // before actually performing. Default parameters pasted in from a 
+                    // decent rendering are used.
+                    let parameters_ = default_json.remembered.Default[0];
+                    for(let channel_name in parameters_) {
+                        let channel_value = parseFloat(parameters_[channel_name]);
+                        await csound.SetControlChannel(channel_name, channel_value);
+                    }                
                      await csound.Perform();
                     csound_message_callback("Csound is playing...\n");
-                    // Use control state saved in local storage?
-                    if (localStorage.length > 0) {
-                        $('#restore').trigger('click');
-                    } else {
-                        // Tricky! Otherwise we get _patch_ defaults, probably 
-                        // not correct; we need _html_ defaults.
-                        $('#default').trigger('click');
-                    }
                     console.log("strudel_view:", strudel_view);
                     strudel_view.setCsound(csound);
                     strudel_view.startPlaying();

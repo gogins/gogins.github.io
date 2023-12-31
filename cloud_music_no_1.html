@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>Poustinia-v5h</title>
+    <title>cloud_music_no_1</title>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="dat.gui.js"></script>
@@ -1051,6 +1051,20 @@
 
     <script>
 
+/*
+instr Guitar uses instrument number 1
+instr Plucked uses instrument number 2
+instr FMWaterBell uses instrument number 3
+instr YiString uses instrument number 4
+instr Harpsichord uses instrument number 5
+instr ZakianFlute uses instrument number 6
+instr Kung4 uses instrument number 7
+instr Kung2 uses instrument number 8
+instr Bower uses instrument number 9
+instr ReverbSC uses instrument number 10
+instr MasterOutput uses instrument number 11
+*/        
+
         var parameters = {
             gi_Composition_tempo: 180,
             gi_Composition_density: 50,
@@ -1080,23 +1094,23 @@
             gk_ReverbSC_frequency_cutoff: 9000,
             gk_overlap: 0.05,
         };
-
+        
         var default_json = {
   "preset": "Default",
   "remembered": {
     "Default": {
       "0": {
-        "gk_overlap": 0.05,
-        "gk_MasterOutput_level": -8.746403616933826,
-        "gi_Composition_density": 50,
+        "gk_overlap": 4.26222770242499,
+        "gk_MasterOutput_level": -9.272503082614058,
+        "gi_Composition_density": 75.50575421290587,
         "gi_Composition_tempo": 180,
         "gk_ReverbSC_wet": 0.5,
-        "gk_ReverbSC_feedback": 0.85,
+        "gk_ReverbSC_feedback": 0.9167694204685574,
         "gk_ReverbSC_delay_modulation": 0.0075,
         "gk_ReverbSC_frequency_cutoff": 9000,
-        "gk_Guitar_level": -9.798602548294287,
-        "gk_Plucked_level": 0.7233867653103161,
-        "gk_FMWaterBell_level": 37.02424989724621,
+        "gk_Guitar_level": -9.272503082614058,
+        "gk_Plucked_level": -3.4854089601315223,
+        "gk_FMWaterBell_level": 32.28935470612413,
         "gi_FMWaterBell_attack": 0.002,
         "gi_FMWaterBell_release": 0.01,
         "gi_FMWaterBell_exponent": 15,
@@ -1106,12 +1120,12 @@
         "gk_FMWaterBell_index": 0.5,
         "gk_FMWaterBell_vibrato_depth": 0.05,
         "gk_FMWaterBell_vibrato_rate": 6,
-        "gk_YiString_level": 26.5022605836416,
-        "gk_Harpsichord_level": 13.349773941635839,
-        "gk_ZakianFlute_level": 24.39786272092067,
-        "gk_Kung4_level": 24.923962186600903,
-        "gk_Kung2_level": 13.349773941635839,
-        "gk_Bower_level": 24.923962186600903,
+        "gk_YiString_level": 34.91985203452528,
+        "gk_Harpsichord_level": 28.080558980682284,
+        "gk_ZakianFlute_level": 30.184956843403214,
+        "gk_Kung4_level": 13.349773941635839,
+        "gk_Kung2_level": 32.28935470612413,
+        "gk_Bower_level": 12.823674475955613,
         "gk_Bower_pressure": 0.25
       }
     }
@@ -1150,7 +1164,7 @@
     },
     "Zakian Flute": {
       "preset": "Default",
-      "closed": false,
+      "closed": true,
       "folders": {}
     },
     "Kung4": {
@@ -1169,7 +1183,7 @@
       "folders": {}
     }
   }
-}
+};
 
         function build_dat_gui_menu() {
             csound_message_callback("build_dat_gui_menu...\n");
@@ -1212,20 +1226,20 @@
             gui.remember(parameters);
             var Master = gui.addFolder('Master');
             add_slider(Master, 'gk_overlap', 0, 20);
-            add_slider(Master, 'gk_MasterOutput_level', -40, 40);
+            add_slider(Master, 'gk_MasterOutput_level', -50, 50);
             add_slider(Master, 'gi_Composition_density', 0, 127);
             add_slider(Master, 'gi_Composition_tempo', 2, 480);
-            add_slider(Master, 'gk_MasterOutput_level', -40, 40);
+            add_slider(Master, 'gk_MasterOutput_level', -50, 50);
             add_slider(Master, 'gk_ReverbSC_wet', 0, 1);
             add_slider(Master, 'gk_ReverbSC_feedback', 0, 1);
             add_slider(Master, 'gk_ReverbSC_delay_modulation', 0, .01);
             add_slider(Master, 'gk_ReverbSC_frequency_cutoff', 0, 20000);
             var Guitar = gui.addFolder('Guitar');
-            add_slider(Guitar, 'gk_Guitar_level', -40, 40);
+            add_slider(Guitar, 'gk_Guitar_level', -50, 50);
             var Plucked = gui.addFolder('Plucked');
-            add_slider(Plucked, 'gk_Plucked_level', -40, 40);
+            add_slider(Plucked, 'gk_Plucked_level', -50, 50);
             var FMWaterBell = gui.addFolder('FMWaterBell');
-            add_slider(FMWaterBell, 'gk_FMWaterBell_level', -40, 40);
+            add_slider(FMWaterBell, 'gk_FMWaterBell_level', -50, 50);
             add_slider(FMWaterBell, 'gi_FMWaterBell_attack', 0, .1);
             add_slider(FMWaterBell, 'gi_FMWaterBell_release', 0, .1);
             add_slider(FMWaterBell, 'gi_FMWaterBell_exponent', -30, 30);
@@ -1236,17 +1250,17 @@
             add_slider(FMWaterBell, 'gk_FMWaterBell_vibrato_depth', 0, 10);
             add_slider(FMWaterBell, 'gk_FMWaterBell_vibrato_rate', 0, 10);
             var Bower = gui.addFolder('YiString');
-            add_slider(Bower, 'gk_YiString_level', -40, 40);
+            add_slider(Bower, 'gk_YiString_level', -50, 50);
             var Harpsichord = gui.addFolder('Harpsichord');
-            add_slider(Harpsichord, 'gk_Harpsichord_level', -40, 40);
+            add_slider(Harpsichord, 'gk_Harpsichord_level', -50, 50);
             var Flute = gui.addFolder('Zakian Flute');
-            add_slider(Flute, 'gk_ZakianFlute_level', -40, 40);
+            add_slider(Flute, 'gk_ZakianFlute_level', -50, 50);
             var Kung4 = gui.addFolder('Kung4');
-            add_slider(Kung4, 'gk_Kung4_level', -40, 40);
+            add_slider(Kung4, 'gk_Kung4_level', -50, 50);
             var Kung2 = gui.addFolder('Kung2');
-            add_slider(Kung2, 'gk_Kung2_level', -40, 40);
+            add_slider(Kung2, 'gk_Kung2_level', -50, 50);
             var Bower = gui.addFolder('Bower');
-            add_slider(Bower, 'gk_Bower_level', -40, 40);
+            add_slider(Bower, 'gk_Bower_level', -50, 50);
             add_slider(Bower, 'gk_Bower_pressure', 0, 5);
             document.addEventListener("keydown", function (e) {
                 var e_char = String.fromCharCode(e.keyCode || e.charCode);
@@ -2520,11 +2534,13 @@
                 csound_message_callback("CompileCsdText returned: " + result);
                 await csound.Start();
                 // Send _current_ dat.gui control channel values to Csound 
-                // before actually performing.
-                for(let channel_name in parameters) {
-                    let channel_value = parseFloat(parameters[channel_name]);
+                // before actually performing. Default parameters pasted in from a 
+                // decent rendering are used.
+                let parameters_ = default_json.remembered.Default[0];
+                for(let channel_name in parameters_) {
+                    let channel_value = parseFloat(parameters_[channel_name]);
                     await csound.SetControlChannel(channel_name, channel_value);
-                }
+                }                
                 await csound.Perform();
                 scale = new CsoundAC.Scale("F major");
                 csound_message_callback("Csound is playing...\n");

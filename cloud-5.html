@@ -230,9 +230,15 @@ be better off just using a personal computer.</p>
 pieces, <a href="https://gogins.github.io/">cloud-music</a>.</p>
 <p>For recent changes, see the <em><a href="#release-notes">Release
 Notes</a></em> at the end of this document.</p>
+<p>It also is possible to run cloud-5 pieces locally in <a
+href="https://nwjs.io/">NW.js</a> using <a
+href="https://github.com/gogins/csound-extended-node">csound.node</a>.
+In this case, csound.node provides a native code build of Csound, and
+such pieces can load native code plugins and read and write to the local
+filesystem.</p>
 <h3 id="components">Components</h3>
 <ul>
-<li><p><a href="https://csound.com/">Csound</a> version 6.18, one of the
+<li><p><a href="https://csound.com/">Csound</a> version 6.19, one of the
 oldest and most powerful sound programming languages, compiled for
 WebAssembly to run in Web browers in <a
 href="https://github.com/gogins/csound-wasm">csound-wasm</a>.</p></li>
@@ -291,9 +297,10 @@ browser.</p></li>
 every standards-compliant Web browser, see <a
 href="https://html5test.com/">HTML5 Test</a>.</p></li>
 </ul>
+<h2 id="running-in-the-browser">Running in the Browser</h2>
 <h3 id="limitations">Limitations</h3>
-<p>The major limitation of cloud-5 is that, because it runs only in Web
-browsers, it is sandboxed and cannot write to the file system. In other
+<p>The major limitation of running in the browser is that csound-5
+pieces are sandboxed, and cannot write to the file system. In other
 words, cloud-5 cannot write soundfiles, or any other kind of files. That
 means all audio is streaming audio.</p>
 <p>However, it <em>is</em> possible to use an audio loopback driver such
@@ -349,6 +356,31 @@ experience this, try the Chrome browser.</p></li>
 href="cloud_music_no_1.html">cloud_music_no_1.html</a> and verify that
 you see animated graphics, and can play and hear the piece.</p></li>
 </ol>
+<h2 id="running-in-nw.js">Running in NW.js</h2>
+<p>It also is possible to run cloud-5 pieces locally in <a
+href="https://nwjs.io/">NW.js</a> using <a
+href="https://github.com/gogins/csound-extended-node">csound.node</a>.</p>
+<p>This involves installing a number of pre-requisites, but the
+advantages include somewhat higher performance from native code Csound,
+the ability to use native plugins (both Csound plugin opcodes and VST3
+plugins), and the ability to read and write in the local filesystem.</p>
+<h3 id="installation-1">Installation</h3>
+<ol type="1">
+<li>Install regular <a href="https://csound.com/download.html">Csound
+for desktop computers</a>.</li>
+<li>Install <a href="https://pnpm.io/installation">pnpm</a>.</li>
+<li>Install <a
+href="https://github.com/gogins/csound-extended-node">csound.node</a>.
+Note that the API for csound.node is virtually the same as the API for
+my WebAssembly build of Csound.</li>
+<li>Install <a href="https://nwjs.io/">NW.js</a>.</li>
+</ol>
+<h3 id="configuration-and-running">Configuration and Running</h3>
+<p>Read about <a
+href="https://github.com/gogins/csound-extended-node">csound.node</a>
+and make sure that the application directory for your
+<code>csound.node</code> pieces is the <code>cloud-5</code> directory,
+which includes necessary resources.</p>
 <h2 id="making-music">Making Music</h2>
 <p>In cloud-5, musical compositions are written as Web pages, i.e.&#xA0;as
 .html files.</p>
@@ -478,11 +510,11 @@ does not open a working Web site with playable pieces!</p>
 data to see updated pieces.</p>
 <p><em><strong>NOTE WELL</strong></em>: The
 <code>gogins.github.io</code> repository is maintained using
-<code>pnpm run deploy</code> in this <code>cloud-5</code> repository.
-<em>DO NOT</em> delete any files from <code>gogins.github.io</code>,
-although pieces may be added there. In other words,
-<code>gogins.github.io</code> can be a superset of
-<code>cloud-5</code>.</p>
+<code>pnpm run deploy</code> in <em>this</em> <code>cloud-5</code>
+repository. <em>DO NOT</em> delete any files from
+<code>gogins.github.io</code>, although pieces may be added there. In
+other words, <code>gogins.github.io</code> can be the same as, or a
+superset of, <code>cloud-5</code>.</p>
 <h2 id="release-notes">Release Notes</h2>
 <h3 id="v0.1"><a
 href="https://github.com/gogins/cloud-5/commits/v0.1">v0.1</a></h3>
@@ -493,6 +525,9 @@ making them more usable as templates for newer pieces.</p></li>
 <li><p>Updated Csound, <a
 href="https://github.com/gogins/csound-wasm">csound-wasm</a>, and
 Strudel to current versions.</p></li>
+<li><p>Pieces in cloud-5 can now also run locally in <a
+href="https://nwjs.io/">NW.js</a> using <a
+href="https://github.com/gogins/csound-extended-node">csound.node</a>.</p></li>
 </ul>
 <h3 id="v0.1beta7"><a
 href="https://github.com/gogins/cloud-5/commits/v0.1beta7">v0.1beta7</a></h3>
