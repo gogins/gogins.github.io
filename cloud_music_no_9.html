@@ -1062,7 +1062,8 @@ instr MasterOutput uses instrument number 16
             }
             // This updates the dat.gui GUI from the parameters, which are 
             // in global scope, so used by `add_slider` etc.
-            gui.remember(parameters); var Master = gui.addFolder('Master');
+            gui.remember(parameters); 
+            var Master = gui.addFolder('Master');
             add_slider(Master, 'gk_MasterOutput_level', -50, 50);
             add_slider(Master, 'gk_overlap', 0, 20);
             add_slider(Master, 'gk_Reverb_feedback', 0, 1);
