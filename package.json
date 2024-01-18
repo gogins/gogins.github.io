@@ -1,12 +1,12 @@
 {
-  "main": "cloud_music_no_13.html",
-  "name": "cloud_music_no_13",
+  "main": "cloud_music_no_14.html",
+  "name": "cloud_music_no_14",
   "description": "HTML5 with Csound",
   "version": "0.1.0",
   "keywords": [ "Csound", "node-webkit" ],
   "nodejs": true,
   "window": {
-    "title": "cloud_music_no_13",
+    "title": "cloud_music_no_14",
     "icon": "link.png",
     "toolbar": true,
     "frame": true,
