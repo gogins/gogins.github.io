@@ -1,4 +1,4 @@
-import{_ as S}from"./preload-helper.p054LDAL.js";import{a as v,l as r,b as w}from"./index.diuTzW_X.js";import{g as l}from"./scope.Uhlw_W3-.js";const b=`<CsoundSynthesizer>
+import{_ as S}from"./preload-helper.wNpzlumS.js";import{a as v,l as r,b as w}from"./index.diuTzW_X.js";import{g as l}from"./scope.aVbKgaVu.js";const b=`<CsoundSynthesizer>
 <CsInstruments>
 
 sr=48000

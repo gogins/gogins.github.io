@@ -268,10 +268,10 @@ can also optionally supply the 'bpq' parameter separated by ':'.</p>`,name:"bpf"
    * @name begin
    * @param {number | Pattern} amount between 0 and 1, where 1 is the length of the sample
    * @example
-   * samples({ rave: 'rave/AREUREADY.wav' }, 'github:tidalcycles/Dirt-Samples/master/')
+   * samples({ rave: 'rave/AREUREADY.wav' }, 'github:tidalcycles/dirt-samples')
    * s("rave").begin("<0 .25 .5 .75>").fast(2)
    *
-   */`,meta:{filename:"controls.mjs",lineno:288,columnno:2,path:"/Users/michaelgogins/cloud-5/strudel/packages/core",code:{}},description:"<p>a pattern of numbers from 0 to 1. Skips the beginning of each sample, e.g. <code>0.25</code> to cut off the first quarter from each sample.</p>",memberof:"Pattern",name:"begin",params:[{type:{names:["number","Pattern"]},description:"<p>between 0 and 1, where 1 is the length of the sample</p>",name:"amount"}],examples:[`samples({ rave: 'rave/AREUREADY.wav' }, 'github:tidalcycles/Dirt-Samples/master/')
+   */`,meta:{filename:"controls.mjs",lineno:288,columnno:2,path:"/Users/michaelgogins/cloud-5/strudel/packages/core",code:{}},description:"<p>a pattern of numbers from 0 to 1. Skips the beginning of each sample, e.g. <code>0.25</code> to cut off the first quarter from each sample.</p>",memberof:"Pattern",name:"begin",params:[{type:{names:["number","Pattern"]},description:"<p>between 0 and 1, where 1 is the length of the sample</p>",name:"amount"}],examples:[`samples({ rave: 'rave/AREUREADY.wav' }, 'github:tidalcycles/dirt-samples')
 s("rave").begin("<0 .25 .5 .75>").fast(2)`],scope:"static",longname:"Pattern.begin",kind:"member"},{comment:`/**
    * The same as .begin, but cuts off the end off each sample.
    *
@@ -2170,22 +2170,22 @@ s("rhodes").loopAt(2)`],scope:"static",longname:"Pattern.loopAt",kind:"member"},
  * @memberof Pattern
  * @returns Pattern
  * @example
- * await samples('github:tidalcycles/Dirt-Samples/master')
+ * samples('github:tidalcycles/dirt-samples')
  * s("breaks165").slice(8, "0 1 <2 2*2> 3 [4 0] 5 6 7".every(3, rev)).slow(0.75)
  * @example
- * await samples('github:tidalcycles/Dirt-Samples/master')
+ * samples('github:tidalcycles/dirt-samples')
  * s("breaks125").fit().slice([0,.25,.5,.75], "0 1 1 <2 3>")
  */`,meta:{filename:"pattern.mjs",lineno:2318,columnno:0,path:"/Users/michaelgogins/cloud-5/strudel/packages/core",code:{}},description:`<p>Chops samples into the given number of slices, triggering those slices with a given pattern of slice numbers.
-Instead of a number, it also accepts a list of numbers from 0 to 1 to slice at specific points.</p>`,name:"slice",memberof:"Pattern",returns:[{description:"<p>Pattern</p>"}],examples:[`await samples('github:tidalcycles/Dirt-Samples/master')
-s("breaks165").slice(8, "0 1 <2 2*2> 3 [4 0] 5 6 7".every(3, rev)).slow(0.75)`,`await samples('github:tidalcycles/Dirt-Samples/master')
+Instead of a number, it also accepts a list of numbers from 0 to 1 to slice at specific points.</p>`,name:"slice",memberof:"Pattern",returns:[{description:"<p>Pattern</p>"}],examples:[`samples('github:tidalcycles/dirt-samples')
+s("breaks165").slice(8, "0 1 <2 2*2> 3 [4 0] 5 6 7".every(3, rev)).slow(0.75)`,`samples('github:tidalcycles/dirt-samples')
 s("breaks125").fit().slice([0,.25,.5,.75], "0 1 1 <2 3>")`],scope:"static",longname:"Pattern.slice",kind:"member"},{comment:`/**
  * Works the same as slice, but changes the playback speed of each slice to match the duration of its step.
  * @name splice
  * @example
- * await samples('github:tidalcycles/Dirt-Samples/master')
+ * samples('github:tidalcycles/dirt-samples')
  * s("breaks165")
  * .splice(8,  "0 1 [2 3 0]@2 3 0@2 7")
- */`,meta:{filename:"pattern.mjs",lineno:2350,columnno:0,path:"/Users/michaelgogins/cloud-5/strudel/packages/core",code:{}},description:"<p>Works the same as slice, but changes the playback speed of each slice to match the duration of its step.</p>",name:"splice",examples:[`await samples('github:tidalcycles/Dirt-Samples/master')
+ */`,meta:{filename:"pattern.mjs",lineno:2350,columnno:0,path:"/Users/michaelgogins/cloud-5/strudel/packages/core",code:{}},description:"<p>Works the same as slice, but changes the playback speed of each slice to match the duration of its step.</p>",name:"splice",examples:[`samples('github:tidalcycles/dirt-samples')
 s("breaks165")
 .splice(8,  "0 1 [2 3 0]@2 3 0@2 7")`],longname:"splice",kind:"member",scope:"global"},{comment:`/**
  * Makes the sample fit its event duration. Good for rhythmical loops like drum breaks.
@@ -2211,7 +2211,7 @@ s("rhodes/2").fit()`],longname:"fit",kind:"member",scope:"global"},{comment:`/**
 changing the speed. Please note that at some point cps will be
 given by a global clock and this function will be
 deprecated/removed.</p>`,name:"loopAtCps",memberof:"Pattern",returns:[{description:"<p>Pattern</p>"}],examples:[`samples({ rhodes: 'https://cdn.freesound.org/previews/132/132051_316502-lq.mp3' })
-s("rhodes").loopAtCps(4,1.5).cps(1.5)`],scope:"static",longname:"Pattern.loopAtCps",kind:"member"},{comment:"/** exposes a custom value at query time. basically allows mutating state without evaluation */",meta:{range:[74532,74632],filename:"pattern.mjs",lineno:2423,columnno:0,path:"/Users/michaelgogins/cloud-5/strudel/packages/core",code:{id:"astnode100018234",name:"exports.ref",type:"VariableDeclaration"}},description:"<p>exposes a custom value at query time. basically allows mutating state without evaluation</p>",name:"ref",longname:"ref",kind:"constant",scope:"global"},{comment:`/**
+s("rhodes").loopAtCps(4,1.5).cps(1.5)`],scope:"static",longname:"Pattern.loopAtCps",kind:"member"},{comment:"/** exposes a custom value at query time. basically allows mutating state without evaluation */",meta:{range:[74493,74593],filename:"pattern.mjs",lineno:2423,columnno:0,path:"/Users/michaelgogins/cloud-5/strudel/packages/core",code:{id:"astnode100018234",name:"exports.ref",type:"VariableDeclaration"}},description:"<p>exposes a custom value at query time. basically allows mutating state without evaluation</p>",name:"ref",longname:"ref",kind:"constant",scope:"global"},{comment:`/**
  * Cross-fades between left and right from 0 to 1:
  * - 0 = (full left, no right)
  * - .5 = (both equal)
@@ -2643,7 +2643,7 @@ For more info, read <a href="https://strudel.cc/learn/input-output/">MIDI &amp; 
  @param {!function(!AudioBuffer)} callback Function to call when
   the impulse response has been generated. The impulse response
   is passed to this function as its parameter. May be called
-  immediately within the current execution context, or later. */`,meta:{range:[969,2138],filename:"reverbGen.mjs",lineno:24,columnno:0,path:"/Users/michaelgogins/cloud-5/strudel/packages/superdough",code:{id:"astnode100058798",name:"reverbGen.generateReverb",type:"FunctionExpression",paramnames:["params","callback"]},vars:{audioContext:"reverbGen.generateReverb~audioContext",sampleRate:"reverbGen.generateReverb~sampleRate",numChannels:"reverbGen.generateReverb~numChannels",totalTime:"reverbGen.generateReverb~totalTime",decaySampleFrames:"reverbGen.generateReverb~decaySampleFrames",numSampleFrames:"reverbGen.generateReverb~numSampleFrames",fadeInSampleFrames:"reverbGen.generateReverb~fadeInSampleFrames",decayBase:"reverbGen.generateReverb~decayBase",reverbIR:"reverbGen.generateReverb~reverbIR",i:"reverbGen.generateReverb~i",chan:"reverbGen.generateReverb~chan",j:"reverbGen.generateReverb~j","chan[undefined]":"reverbGen.generateReverb~chan.undefined]"}},description:"<p>Generates a reverb impulse response.</p>",params:[{type:{names:["Object"]},nullable:!1,description:"<p>TODO: Document the properties.</p>",name:"params"},{type:{names:["function"]},nullable:!1,description:`<p>Function to call when
+  immediately within the current execution context, or later. */`,meta:{range:[969,2138],filename:"reverbGen.mjs",lineno:24,columnno:0,path:"/Users/michaelgogins/cloud-5/strudel/packages/superdough",code:{id:"astnode100058803",name:"reverbGen.generateReverb",type:"FunctionExpression",paramnames:["params","callback"]},vars:{audioContext:"reverbGen.generateReverb~audioContext",sampleRate:"reverbGen.generateReverb~sampleRate",numChannels:"reverbGen.generateReverb~numChannels",totalTime:"reverbGen.generateReverb~totalTime",decaySampleFrames:"reverbGen.generateReverb~decaySampleFrames",numSampleFrames:"reverbGen.generateReverb~numSampleFrames",fadeInSampleFrames:"reverbGen.generateReverb~fadeInSampleFrames",decayBase:"reverbGen.generateReverb~decayBase",reverbIR:"reverbGen.generateReverb~reverbIR",i:"reverbGen.generateReverb~i",chan:"reverbGen.generateReverb~chan",j:"reverbGen.generateReverb~j","chan[undefined]":"reverbGen.generateReverb~chan.undefined]"}},description:"<p>Generates a reverb impulse response.</p>",params:[{type:{names:["Object"]},nullable:!1,description:"<p>TODO: Document the properties.</p>",name:"params"},{type:{names:["function"]},nullable:!1,description:`<p>Function to call when
 the impulse response has been generated. The impulse response
 is passed to this function as its parameter. May be called
 immediately within the current execution context, or later.</p>`,name:"callback"}],name:"generateReverb",longname:"reverbGen.generateReverb",kind:"function",memberof:"reverbGen",scope:"static"},{comment:`/** Creates a canvas element showing a graph of the given data.
@@ -2654,7 +2654,7 @@ immediately within the current execution context, or later.</p>`,name:"callback"
  @param {number} height Height in pixels of the canvas.
  @param {number} min Minimum value of data for the graph (lower edge).
  @param {number} max Maximum value of data in the graph (upper edge).
- @return {!CanvasElement} The generated canvas element. */`,meta:{range:[2586,3097],filename:"reverbGen.mjs",lineno:58,columnno:0,path:"/Users/michaelgogins/cloud-5/strudel/packages/superdough",code:{id:"astnode100058978",name:"reverbGen.generateGraph",type:"FunctionExpression",paramnames:["data","width","height","min","max"]},vars:{canvas:"reverbGen.generateGraph~canvas","canvas.width":"reverbGen.generateGraph~canvas.width","canvas.height":"reverbGen.generateGraph~canvas.height",gc:"reverbGen.generateGraph~gc","gc.fillStyle":"reverbGen.generateGraph~gc.fillStyle",xscale:"reverbGen.generateGraph~xscale",yscale:"reverbGen.generateGraph~yscale",i:"reverbGen.generateGraph~i"}},description:"<p>Creates a canvas element showing a graph of the given data.</p>",params:[{type:{names:["Float32Array"]},nullable:!1,description:"<p>An array of numbers, or a Float32Array.</p>",name:"data"},{type:{names:["number"]},description:"<p>Width in pixels of the canvas.</p>",name:"width"},{type:{names:["number"]},description:"<p>Height in pixels of the canvas.</p>",name:"height"},{type:{names:["number"]},description:"<p>Minimum value of data for the graph (lower edge).</p>",name:"min"},{type:{names:["number"]},description:"<p>Maximum value of data in the graph (upper edge).</p>",name:"max"}],returns:[{type:{names:["CanvasElement"]},nullable:!1,description:"<p>The generated canvas element.</p>"}],name:"generateGraph",longname:"reverbGen.generateGraph",kind:"function",memberof:"reverbGen",scope:"static"},{comment:`/** Applies a constantly changing lowpass filter to the given sound.
+ @return {!CanvasElement} The generated canvas element. */`,meta:{range:[2586,3097],filename:"reverbGen.mjs",lineno:58,columnno:0,path:"/Users/michaelgogins/cloud-5/strudel/packages/superdough",code:{id:"astnode100058983",name:"reverbGen.generateGraph",type:"FunctionExpression",paramnames:["data","width","height","min","max"]},vars:{canvas:"reverbGen.generateGraph~canvas","canvas.width":"reverbGen.generateGraph~canvas.width","canvas.height":"reverbGen.generateGraph~canvas.height",gc:"reverbGen.generateGraph~gc","gc.fillStyle":"reverbGen.generateGraph~gc.fillStyle",xscale:"reverbGen.generateGraph~xscale",yscale:"reverbGen.generateGraph~yscale",i:"reverbGen.generateGraph~i"}},description:"<p>Creates a canvas element showing a graph of the given data.</p>",params:[{type:{names:["Float32Array"]},nullable:!1,description:"<p>An array of numbers, or a Float32Array.</p>",name:"data"},{type:{names:["number"]},description:"<p>Width in pixels of the canvas.</p>",name:"width"},{type:{names:["number"]},description:"<p>Height in pixels of the canvas.</p>",name:"height"},{type:{names:["number"]},description:"<p>Minimum value of data for the graph (lower edge).</p>",name:"min"},{type:{names:["number"]},description:"<p>Maximum value of data in the graph (upper edge).</p>",name:"max"}],returns:[{type:{names:["CanvasElement"]},nullable:!1,description:"<p>The generated canvas element.</p>"}],name:"generateGraph",longname:"reverbGen.generateGraph",kind:"function",memberof:"reverbGen",scope:"static"},{comment:`/** Applies a constantly changing lowpass filter to the given sound.
 
  @private
  @param {!AudioBuffer} input
@@ -2662,14 +2662,14 @@ immediately within the current execution context, or later.</p>`,name:"callback"
  @param {number} lpFreqEnd
  @param {number} lpFreqEndAt
  @param {!function(!AudioBuffer)} callback May be called
-  immediately within the current execution context, or later.*/`,meta:{range:[3419,4357],filename:"reverbGen.mjs",lineno:83,columnno:4,path:"/Users/michaelgogins/cloud-5/strudel/packages/superdough",code:{id:"astnode100059093",name:"applyGradualLowpass",type:"FunctionExpression"},vars:{channelData:"applyGradualLowpass~channelData",context:"applyGradualLowpass~context",player:"applyGradualLowpass~player","player.buffer":"applyGradualLowpass~player.buffer",filter:"applyGradualLowpass~filter",lpFreqStart:"applyGradualLowpass~lpFreqStart",lpFreqEnd:"applyGradualLowpass~lpFreqEnd","filter.type":"applyGradualLowpass~filter.type","filter.Q.value":"applyGradualLowpass~filter.Q.value","context.oncomplete":"applyGradualLowpass~context.oncomplete","":null,"window.filterNode":"window.filterNode"}},description:"<p>Applies a constantly changing lowpass filter to the given sound.</p>",access:"private",params:[{type:{names:["AudioBuffer"]},nullable:!1,name:"input"},{type:{names:["number"]},name:"lpFreqStart"},{type:{names:["number"]},name:"lpFreqEnd"},{type:{names:["number"]},name:"lpFreqEndAt"},{type:{names:["function"]},nullable:!1,description:`<p>May be called
+  immediately within the current execution context, or later.*/`,meta:{range:[3419,4357],filename:"reverbGen.mjs",lineno:83,columnno:4,path:"/Users/michaelgogins/cloud-5/strudel/packages/superdough",code:{id:"astnode100059098",name:"applyGradualLowpass",type:"FunctionExpression"},vars:{channelData:"applyGradualLowpass~channelData",context:"applyGradualLowpass~context",player:"applyGradualLowpass~player","player.buffer":"applyGradualLowpass~player.buffer",filter:"applyGradualLowpass~filter",lpFreqStart:"applyGradualLowpass~lpFreqStart",lpFreqEnd:"applyGradualLowpass~lpFreqEnd","filter.type":"applyGradualLowpass~filter.type","filter.Q.value":"applyGradualLowpass~filter.Q.value","context.oncomplete":"applyGradualLowpass~context.oncomplete","":null,"window.filterNode":"window.filterNode"}},description:"<p>Applies a constantly changing lowpass filter to the given sound.</p>",access:"private",params:[{type:{names:["AudioBuffer"]},nullable:!1,name:"input"},{type:{names:["number"]},name:"lpFreqStart"},{type:{names:["number"]},name:"lpFreqEnd"},{type:{names:["number"]},name:"lpFreqEndAt"},{type:{names:["function"]},nullable:!1,description:`<p>May be called
 immediately within the current execution context, or later.</p>`,name:"callback"}],name:"applyGradualLowpass",longname:"applyGradualLowpass",kind:"function",scope:"global"},{comment:`/** @private
  @param {!AudioBuffer} buffer
- @return {!Array.<!Float32Array>} An array containing the Float32Array of each channel's samples. */`,meta:{range:[4508,4691],filename:"reverbGen.mjs",lineno:116,columnno:4,path:"/Users/michaelgogins/cloud-5/strudel/packages/superdough",code:{id:"astnode100059257",name:"getAllChannelData",type:"FunctionExpression"},vars:{channels:"getAllChannelData~channels",i:"getAllChannelData~i","channels[undefined]":"getAllChannelData~channels.undefined]"}},access:"private",params:[{type:{names:["AudioBuffer"]},nullable:!1,name:"buffer"}],returns:[{type:{names:["Array.<!Float32Array>"]},nullable:!1,description:"<p>An array containing the Float32Array of each channel's samples.</p>"}],name:"getAllChannelData",longname:"getAllChannelData",kind:"function",scope:"global"},{comment:`/** @private
- @return {number} A random number from -1 to 1. */`,meta:{range:[4762,4824],filename:"reverbGen.mjs",lineno:126,columnno:4,path:"/Users/michaelgogins/cloud-5/strudel/packages/superdough",code:{id:"astnode100059292",name:"randomSample",type:"FunctionExpression"}},access:"private",returns:[{type:{names:["number"]},description:"<p>A random number from -1 to 1.</p>"}],name:"randomSample",longname:"randomSample",kind:"function",scope:"global",params:[]},{comment:`/**
+ @return {!Array.<!Float32Array>} An array containing the Float32Array of each channel's samples. */`,meta:{range:[4508,4691],filename:"reverbGen.mjs",lineno:116,columnno:4,path:"/Users/michaelgogins/cloud-5/strudel/packages/superdough",code:{id:"astnode100059262",name:"getAllChannelData",type:"FunctionExpression"},vars:{channels:"getAllChannelData~channels",i:"getAllChannelData~i","channels[undefined]":"getAllChannelData~channels.undefined]"}},access:"private",params:[{type:{names:["AudioBuffer"]},nullable:!1,name:"buffer"}],returns:[{type:{names:["Array.<!Float32Array>"]},nullable:!1,description:"<p>An array containing the Float32Array of each channel's samples.</p>"}],name:"getAllChannelData",longname:"getAllChannelData",kind:"function",scope:"global"},{comment:`/** @private
+ @return {number} A random number from -1 to 1. */`,meta:{range:[4762,4824],filename:"reverbGen.mjs",lineno:126,columnno:4,path:"/Users/michaelgogins/cloud-5/strudel/packages/superdough",code:{id:"astnode100059297",name:"randomSample",type:"FunctionExpression"}},access:"private",returns:[{type:{names:["number"]},description:"<p>A random number from -1 to 1.</p>"}],name:"randomSample",longname:"randomSample",kind:"function",scope:"global",params:[]},{comment:`/**
  * Loads a collection of samples to use with \`s\`
  * @example
- * samples('github:tidalcycles/Dirt-Samples/master');
+ * samples('github:tidalcycles/dirt-samples');
  * s("[bd ~]*2, [~ hh]*2, ~ sd")
  * @example
  * samples({
@@ -2683,7 +2683,7 @@ immediately within the current execution context, or later.</p>`,name:"callback"
  * @example
  * samples('shabda/speech/fr-FR/f:chocolat')
  * s("chocolat*4")
- */`,meta:{range:[5335,7632],filename:"sampler.mjs",lineno:161,columnno:0,path:"/Users/michaelgogins/cloud-5/strudel/packages/superdough",code:{id:"astnode100060034",name:"exports.samples",type:"VariableDeclaration"}},description:"<p>Loads a collection of samples to use with <code>s</code></p>",examples:[`samples('github:tidalcycles/Dirt-Samples/master');
+ */`,meta:{range:[6005,7898],filename:"sampler.mjs",lineno:186,columnno:0,path:"/Users/michaelgogins/cloud-5/strudel/packages/superdough",code:{id:"astnode100060148",name:"exports.samples",type:"VariableDeclaration"}},description:"<p>Loads a collection of samples to use with <code>s</code></p>",examples:[`samples('github:tidalcycles/dirt-samples');
 s("[bd ~]*2, [~ hh]*2, ~ sd")`,`samples({
  bd: '808bd/BD0000.WAV',
  sd: '808sd/SD0010.WAV'
