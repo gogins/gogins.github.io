@@ -6,7 +6,7 @@ style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.p
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">
 Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
 
-Music in the cloud by Michael Gogins. 
+## Computer music in the cloud by Michael Gogins 
 
 This is real music. Each piece will play indefinitely in any standard Web 
 browser. There may or may not be animated visuals along with the music. The 
@@ -15,11 +15,12 @@ amounting to a new piece, co-composed with me.
 
 All source code for these pieces is available in the GitHub repository.
 
-The underlying technology is my [WebAssembly builds of Csound and CsoundAC]
-(https://github.com/gogins/csound-wasm). 
-Some pieces may use third party libraries.
+The underlying technology is my 
+<a href="https://github.com/gogins/csound-wasm">own WebAssembly builds of Csound and CsoundAC</a>.
+Some pieces may use third party libraries. The home page of Csound itself 
+is <a href="[xx](https://csound.com/)">here</a>.
 
-# Installation
+## Installation
 
 This repository is a bit of a hack, but I have tried to make it as 
 maintainable as possible.
@@ -93,6 +94,11 @@ Oops, that should work, but I don't actually _find_ the source maps....
 
 Build this project, then copy the entire contents of the `dist` directory 
 to your own Web site's public HTML directory.
+
+_**NOTE WELL**_: The `gogins.github.io` repository is maintained using 
+`pnpm run deploy` in the `cloud-5` repository. _DO NOT_ delete any files from  
+`gogins.github.io`, although pieces may be added there. In other words, 
+`gogins.github.io` can be a superset of `cloud-5`.
 
 ## Maintenance Notes!
 

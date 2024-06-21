@@ -1,0 +1,1 @@
+{"version":3,"file":"utils.Cobx6OCq.js","sources":["../../../packages/desktopbridge/utils.mjs"],"sourcesContent":["import { invoke } from '@tauri-apps/api/tauri';\n\nexport const Invoke = invoke;\nexport const isTauri = () => window.__TAURI_IPC__ != null;\n"],"names":["Invoke","invoke"],"mappings":"4CAEY,MAACA,EAASC"}

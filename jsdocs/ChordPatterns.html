@@ -101,7 +101,7 @@ is different from the old input.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line361">line 361</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line416">line 416</a>
     </li></ul></dd>
     
 
@@ -164,7 +164,7 @@ is different from the old input.</li>
     
 
     
-    <h4 class="name" id="acC"><span class="type-signature"></span>acC<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acC"><span class="type-signature"></span>acC<span class="signature">(is_onset, chord_id, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -181,6 +181,101 @@ is different from the old input.</li>
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>chord_id</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Identifies the chord.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -216,7 +311,7 @@ is different from the old input.</li>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line398">line 398</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line458">line 458</a>
     </li></ul></dd>
     
 
@@ -241,6 +336,28 @@ is different from the old input.</li>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -252,7 +369,7 @@ is different from the old input.</li>
     
 
     
-    <h4 class="name" id="acCI"><span class="type-signature"></span>acCI<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acCI"><span class="type-signature"></span>acCI<span class="signature">(is_onset, center, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -273,6 +390,101 @@ input).</p>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether or not this is Hap onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>center</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The center of reflection.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -306,7 +518,7 @@ input).</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line444">line 444</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line514">line 514</a>
     </li></ul></dd>
     
 
@@ -331,6 +543,28 @@ input).</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>The new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -342,7 +576,7 @@ input).</p>
     
 
     
-    <h4 class="name" id="acCK"><span class="type-signature"></span>acCK<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acCK"><span class="type-signature"></span>acCK<span class="signature">(is_onset, flip, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -364,6 +598,101 @@ the value of the flip input).</p>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>flip</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>If this value changes, the transformation is applied.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -397,7 +726,7 @@ the value of the flip input).</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line465">line 465</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line540">line 540</a>
     </li></ul></dd>
     
 
@@ -422,6 +751,28 @@ the value of the flip input).</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -433,7 +784,7 @@ the value of the flip input).</p>
     
 
     
-    <h4 class="name" id="acCO"><span class="type-signature"></span>acCO<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acCO"><span class="type-signature"></span>acCO<span class="signature">(is_onset, revoicings, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -456,6 +807,101 @@ lowest voice. This corresponds to the musician's notion of
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>revoicings</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The number of octavewise revoicings to apply.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -489,7 +935,7 @@ lowest voice. This corresponds to the musician's notion of
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line592">line 592</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line691">line 691</a>
     </li></ul></dd>
     
 
@@ -514,6 +960,28 @@ lowest voice. This corresponds to the musician's notion of
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -525,7 +993,7 @@ lowest voice. This corresponds to the musician's notion of
     
 
     
-    <h4 class="name" id="acCOP"><span class="type-signature"></span>acCOP<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acCOP"><span class="type-signature"></span>acCOP<span class="signature">(is_onset, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -550,6 +1018,78 @@ normal form.</p>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -583,7 +1123,7 @@ normal form.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line506">line 506</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line591">line 591</a>
     </li></ul></dd>
     
 
@@ -608,6 +1148,28 @@ normal form.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -619,7 +1181,7 @@ normal form.</p>
     
 
     
-    <h4 class="name" id="acCQ"><span class="type-signature"></span>acCQ<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acCQ"><span class="type-signature"></span>acCQ<span class="signature">(is_onset, semitones, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -640,6 +1202,102 @@ modality is set in the constructor of this class.</p>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>semitones</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The number of semitones by which this Chord
+is to be tranposed; may be negative.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -673,7 +1331,7 @@ modality is set in the constructor of this class.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line485">line 485</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line566">line 566</a>
     </li></ul></dd>
     
 
@@ -698,6 +1356,28 @@ modality is set in the constructor of this class.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -709,7 +1389,7 @@ modality is set in the constructor of this class.</p>
     
 
     
-    <h4 class="name" id="acCRP"><span class="type-signature"></span>acCRP<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acCRP"><span class="type-signature"></span>acCRP<span class="signature">(is_onset, range, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -734,6 +1414,101 @@ defined range.</p>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>range</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The range of this chord space.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -767,7 +1542,7 @@ defined range.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line527">line 527</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line617">line 617</a>
     </li></ul></dd>
     
 
@@ -792,6 +1567,28 @@ defined range.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -803,7 +1600,7 @@ defined range.</p>
     
 
     
-    <h4 class="name" id="acCT"><span class="type-signature"></span>acCT<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acCT"><span class="type-signature"></span>acCT<span class="signature">(is_onset, semitones, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -822,6 +1619,101 @@ defined range.</p>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether or not this is Hap onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>semitones</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Number of semitones to transpose; may be negative.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -855,7 +1747,7 @@ defined range.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line424">line 424</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line489">line 489</a>
     </li></ul></dd>
     
 
@@ -880,6 +1772,28 @@ defined range.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -891,7 +1805,7 @@ defined range.</p>
     
 
     
-    <h4 class="name" id="acCV"><span class="type-signature"></span>acCV<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acCV"><span class="type-signature"></span>acCV<span class="signature">(is_onset, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -911,6 +1825,78 @@ the <em>pitch-class</em> of the Hap to the nearest <em>pitch-class</em> of the C
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -944,7 +1930,7 @@ the <em>pitch-class</em> of the Hap to the nearest <em>pitch-class</em> of the C
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line543">line 543</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line637">line 637</a>
     </li></ul></dd>
     
 
@@ -969,6 +1955,28 @@ the <em>pitch-class</em> of the Hap to the nearest <em>pitch-class</em> of the C
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -980,7 +1988,7 @@ the <em>pitch-class</em> of the Hap to the nearest <em>pitch-class</em> of the C
     
 
     
-    <h4 class="name" id="acCVV"><span class="type-signature"></span>acCVV<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acCVV"><span class="type-signature"></span>acCVV<span class="signature">(is_onset, bass, voice, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -1000,6 +2008,124 @@ Chord.</p>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>bass</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The MIDI key number of the lowest pitch.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>voice</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The number of the voice of the Chord to use.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -1033,7 +2159,7 @@ Chord.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line610">line 610</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line715">line 715</a>
     </li></ul></dd>
     
 
@@ -1058,6 +2184,28 @@ Chord.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1069,7 +2217,7 @@ Chord.</p>
     
 
     
-    <h4 class="name" id="acCVVL"><span class="type-signature"></span>acCVVL<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acCVVL"><span class="type-signature"></span>acCVVL<span class="signature">(is_onset, bass, range, voice, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -1089,6 +2237,148 @@ Chord, as the closest voice-leading from the prior Chord.</p>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>bass</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The MIDI key of the lowest pitch to use.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>range</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The range in MIDI keys. Pitches are wrapped back up or down
+if the revoicing takes them out of this range.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>voice</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The number of the voice in the Chord to use.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -1122,7 +2412,7 @@ Chord, as the closest voice-leading from the prior Chord.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line621">line 621</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line734">line 734</a>
     </li></ul></dd>
     
 
@@ -1147,6 +2437,28 @@ Chord, as the closest voice-leading from the prior Chord.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -1168,13 +2480,13 @@ Chord, as the closest voice-leading from the prior Chord.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ChordPatterns.html">ChordPatterns</a></li><li><a href="PitvPatterns.html">PitvPatterns</a></li><li><a href="ScalePatterns.html">ScalePatterns</a></li><li><a href="StatefulPatterns.html">StatefulPatterns</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Chord">Chord</a></li><li><a href="global.html#Clone">Clone</a></li><li><a href="global.html#Pitv">Pitv</a></li><li><a href="global.html#Scale">Scale</a></li><li><a href="global.html#csound">csound</a></li><li><a href="global.html#csoundn">csoundn</a></li><li><a href="global.html#diagnostic">diagnostic</a></li><li><a href="global.html#diagnostic_level">diagnostic_level</a></li><li><a href="global.html#diagnostic_level_">diagnostic_level_</a></li><li><a href="global.html#frequencyToMidiInteger">frequencyToMidiInteger</a></li><li><a href="global.html#frequencyToMidiReal">frequencyToMidiReal</a></li><li><a href="global.html#getFrequency">getFrequency</a></li><li><a href="global.html#setPitch">setPitch</a></li><li><a href="global.html#track">track</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="-_anonymous_-ParametricLindenmayer.PLSystem.html">PLSystem</a></li><li><a href="-_anonymous_-ParametricLindenmayer.Turtle.html">Turtle</a></li><li><a href="-_anonymous_-ParametricLindenmayer.Word.html">Word</a></li><li><a href="ChordPatterns.html">ChordPatterns</a></li><li><a href="Cloud5.html">Cloud5</a></li><li><a href="Cloud5About.html">Cloud5About</a></li><li><a href="Cloud5Log.html">Cloud5Log</a></li><li><a href="Cloud5PianoRoll.html">Cloud5PianoRoll</a></li><li><a href="Cloud5Piece.html">Cloud5Piece</a></li><li><a href="Cloud5Shader.html">Cloud5Shader</a></li><li><a href="Cloud5ShaderToy.html">Cloud5ShaderToy</a></li><li><a href="Cloud5Strudel.html">Cloud5Strudel</a></li><li><a href="CsoundAudioNode.html">CsoundAudioNode</a></li><li><a href="PitvPatterns.html">PitvPatterns</a></li><li><a href="ScalePatterns.html">ScalePatterns</a></li><li><a href="StatefulPatterns.html">StatefulPatterns</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Chord">Chord</a></li><li><a href="global.html#Clone">Clone</a></li><li><a href="global.html#Pitv">Pitv</a></li><li><a href="global.html#Scale">Scale</a></li><li><a href="global.html#arrange">arrange</a></li><li><a href="global.html#arrange_silencio">arrange_silencio</a></li><li><a href="global.html#canon">canon</a></li><li><a href="global.html#csound">csound</a></li><li><a href="global.html#csoundac">csoundac</a></li><li><a href="global.html#csoundn">csoundn</a></li><li><a href="global.html#diagnostic">diagnostic</a></li><li><a href="global.html#diagnostic_level">diagnostic_level</a></li><li><a href="global.html#diagnostic_level_">diagnostic_level_</a></li><li><a href="global.html#downsample_lttb">downsample_lttb</a></li><li><a href="global.html#frequencyToMidiInteger">frequencyToMidiInteger</a></li><li><a href="global.html#frequencyToMidiReal">frequencyToMidiReal</a></li><li><a href="global.html#getFrequency">getFrequency</a></li><li><a href="global.html#get_csound">get_csound</a></li><li><a href="global.html#hsvToRgb">hsvToRgb</a></li><li><a href="global.html#load_csound">load_csound</a></li><li><a href="global.html#non_csound">non_csound</a></li><li><a href="global.html#parameters">parameters</a></li><li><a href="global.html#resize">resize</a></li><li><a href="global.html#rgb_to_hsv">rgb_to_hsv</a></li><li><a href="global.html#setPitch">setPitch</a></li><li><a href="global.html#track">track</a></li><li><a href="global.html#url_for_soundfile">url_for_soundfile</a></li><li><a href="global.html#write_file">write_file</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Feb 22 2024 11:17:15 GMT+0000 (Western European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri Jun 21 2024 13:20:59 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

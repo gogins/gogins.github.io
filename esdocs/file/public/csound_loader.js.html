@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">public/csound_loader.js</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/CsoundAudioNode.js~CsoundAudioNode.html">CsoundAudioNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/csoundac.mjs~ChordPatterns.html">ChordPatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/csoundac.mjs~PitvPatterns.html">PitvPatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/csoundac.mjs~ScalePatterns.html">ScalePatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/statefulpatterns.mjs~StatefulPatterns.html">StatefulPatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/strudel_embed.js~StrudelReplComponent.html">StrudelReplComponent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get_csound">get_csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get_operating_system">get_operating_system</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load_csound">load_csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Chord">Chord</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Clone">Clone</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Pitv">Pitv</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Scale">Scale</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-frequencyToMidiInteger">frequencyToMidiInteger</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-frequencyToMidiReal">frequencyToMidiReal</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFrequency">getFrequency</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hsvToRgb">hsvToRgb</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-print_counter">print_counter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setPitch">setPitch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-set_instrument_count">set_instrument_count</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-track">track</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get_csound">get_csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get_operating_system">get_operating_system</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load_csound">load_csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-diagnostic">diagnostic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-diagnostic_level">diagnostic_level</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-audioContext">audioContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-chordn_counter">chordn_counter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csound">csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundac">csoundac</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundn">csoundn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundn_counter">csoundn_counter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-instrument_count">instrument_count</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ALWAYS">ALWAYS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DEBUG">DEBUG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ERROR">ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INFORMATION">INFORMATION</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NEVER">NEVER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WARNING">WARNING</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-audioContext">audioContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csound">csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundac">csoundac</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-diagnostic_level_">diagnostic_level_</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">public/csound_loader.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * This script attempts to load, and to use, in order of decreasing 
+ * preference: 
+ * (1) Injected csound (e.g. Csound for Android or CsoundQt).
+ * (2) csound.node.
+ * (3) Csound for WebAssembly (CsoundAudioNode, based on AudioWorklet).
+ * 
+ * Please note, for WebAudio, code is asynchronous but is wrapped in promises 
+ * using the async keyword to make calls behave synchronously; the calling 
+ * code (e.g. &quot;Play&quot; button handlers) must therefore also be declared async. 
+ * Not only that, but for other platforms handlers should also be declared 
+ * async.
+ *
+ * To use this script, include it at the top of the body of your Web page and 
+ * and then call `let csound_ = async get_csound(csound_message_callback).` 
+ * The result will be a live csound_ object. Call `get_csound` in this way 
+ * in every block of code that will call Csound methods.
+ *
+ * Please note, the Csound performance should (and sometimes must) be 
+ * configured with sr, ksmps, nchnls, nchnls_i, and sample word format 
+ * matching the host platform. 
+ *
+ * On Linux, PulseAudio may cause problems. It is better to disable PulseAudio
+ * and use a low-level ALSA configuration.
+ * 
+ * On Android, csound.SetMessageCallback does not work. Instead, assign the 
+ * message callback function to console.log.
+ */
+ 
+// These are globals:
+
+csound_injected = null;
+csound_node = null;
+csound_audio_node = null;
+csound_is_loaded = false;
+
+var get_operating_system = function() {
+    let operating_system = &quot;unknown&quot;;
+    let platform = navigator.platform;
+    if (platform.startsWith(&apos;Mac&apos;)) {
+        return &apos;Macintosh&apos;;
+    }
+    if (platform.startsWith(&apos;Win&apos;)) {
+        return &apos;Windows&apos;;
+
+    }
+    if (platform.startsWith(&apos;Linux&apos;)) {
+        return &apos;Linux&apos;;
+    }
+
+    let userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    console.log(&quot;userAgent: &quot; + userAgent + &quot;\n&quot;);
+    // Windows Phone must come first because its UA also contains &quot;Android&quot;
+    if (/windows phone/i.test(userAgent)) {
+        operating_system = &quot;Windows Phone&quot;;
+        console.log(&quot;operating_system: &quot; + operating_system + &quot;\n&quot;);
+        return operating_system;
+    }
+    if (/android/i.test(userAgent)) {
+        operating_system = &quot;Android&quot;;
+        console.log(&quot;operating_system: &quot; + operating_system + &quot;\n&quot;);
+        return operating_system;
+    }
+    // iOS detection from: http://stackoverflow.com/a/9039885/177710
+    if (/iPad|iPhone|iPod/.test(userAgent) &amp;&amp; !window.MSStream) {
+        operating_system = &quot;iOS&quot;;
+        console.log(&quot;operating_system: &quot; + operating_system + &quot;\n&quot;);
+        return operating_system;
+    }
+    if (/Macintosh/.test(userAgent)) {
+        operating_system = &quot;Macintosh&quot;;
+        console.log(&quot;operating_system: &quot; + operating_system + &quot;\n&quot;);
+        return operating_system;
+    }
+    console.log(&quot;operating_system: &quot; + operating_system + &quot;\n&quot;);
+    return operating_system;
+}
+
+/**
+ * There is an issue on Android in that csound may be undefined when the page is 
+ * first rendered, and be defined only when the user plays the piece.
+ */
+var load_csound = async function(csound_message_callback_) {
+    let operating_system = get_operating_system();
+    if (operating_system === &quot;Android&quot; &amp;&amp; typeof csound === &apos;undefined&apos;) {
+        csound_message_callback(&quot;Operating system is Android, but Csound is not yet defined.\n&quot;);
+        // On Android, Csound uses only stdout for messages; this becomes 
+        // console.log, so we assign our &quot;csound message callback&quot; to 
+        // console.log.
+        return;
+    }
+    if (typeof csound !== &apos;undefined&apos;) {
+        if (csound != null) {
+            csound_injected = csound;
+            csound_is_loaded = true;
+            console.log = csound_message_callback;
+            csound_message_callback_(&quot;Csound is already defined in this JavaScript context.\n&quot;);
+            return;
+        }
+    }
+    try {
+        csound_message_callback_(&quot;Trying to load csound.node...\n&quot;);
+        csound_node = await require(&apos;csound.node&apos;);
+        var nwgui = await require(&apos;nw.gui&apos;);
+        nw_window = await nwgui.Window.get();
+        nw_window.on(&apos;close&apos;, function() {
+            csound_message_callback_(&apos;Closing down...\n&apos;);
+            this.close(true);
+        });
+        csound_is_loaded = true;
+        csound_message_callback_(&quot;csound.node is available in this JavaScript context.\n&quot;);
+        return;
+    } catch (e) {
+        csound_message_callback_(e + &apos;\n&apos;);
+    }
+    try {
+        csound_message_callback_(&quot;Trying to load CsoundAudioNode...\n&quot;);
+        var AudioContext = window.AudioContext || window.webkitAudioContext;
+        var audioContext = new AudioContext();
+        await audioContext.audioWorklet.addModule(&apos;CsoundAudioProcessor.js&apos;).then(function() {
+            csound_message_callback_(&quot;Creating CsoundAudioNode...\n&quot;);
+            csound_audio_node = new CsoundAudioNode(audioContext, csound_message_callback_);
+            csound_is_loaded = true;
+            csound_message_callback_(&quot;CsoundAudioNode (AudioWorklet) is available in this JavaScript context.\n&quot;);
+        }, function(error) {
+           csound_message_callback_(error + &apos;\n&apos;);
+        });
+    } catch (e) {
+        csound_message_callback_(e + &apos;\n&apos;);
+    }
+}
+
+/**
+ * Returns a singleton instance of Csound, if one is available in the 
+ * JavaScript environment. If Csound has not been loaded, attempts are made 
+ * to load it from various sources. The csound_message_callback parameter is 
+ * required, but console.log can be passed. 
+ */
+var get_csound = async function(csound_message_callback_) {
+    if (csound_is_loaded === false) {
+        await load_csound(csound_message_callback_);
+    }
+    if (csound_injected != null) {
+        csound = csound_injected;
+        return csound_injected;
+    } else if (csound_node != null) {
+        csound = csound_node;
+        csound.SetMessageCallback(csound_message_callback_);
+        return csound_node;
+    } else if (csound_audio_node != null) {
+        csound = csound_audio_node;
+        csound.SetMessageCallback(csound_message_callback_);
+        return csound_audio_node;
+     } else {
+        csound_message_callback_(&quot;Csound is still loading, wait a bit...\n&quot;);
+    }
+}       
+
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

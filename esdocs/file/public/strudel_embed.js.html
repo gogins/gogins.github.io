@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">public/strudel_embed.js</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/CsoundAudioNode.js~CsoundAudioNode.html">CsoundAudioNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/csoundac.mjs~ChordPatterns.html">ChordPatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/csoundac.mjs~PitvPatterns.html">PitvPatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/csoundac.mjs~ScalePatterns.html">ScalePatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/statefulpatterns.mjs~StatefulPatterns.html">StatefulPatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/strudel_embed.js~StrudelReplComponent.html">StrudelReplComponent</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get_csound">get_csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get_operating_system">get_operating_system</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load_csound">load_csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Chord">Chord</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Clone">Clone</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Pitv">Pitv</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Scale">Scale</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-frequencyToMidiInteger">frequencyToMidiInteger</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-frequencyToMidiReal">frequencyToMidiReal</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFrequency">getFrequency</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hsvToRgb">hsvToRgb</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-print_counter">print_counter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setPitch">setPitch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-set_instrument_count">set_instrument_count</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-track">track</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get_csound">get_csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-get_operating_system">get_operating_system</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-load_csound">load_csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-diagnostic">diagnostic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-diagnostic_level">diagnostic_level</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-audioContext">audioContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-chordn_counter">chordn_counter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csound">csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundac">csoundac</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundn">csoundn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundn_counter">csoundn_counter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-instrument_count">instrument_count</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ALWAYS">ALWAYS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DEBUG">DEBUG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ERROR">ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INFORMATION">INFORMATION</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NEVER">NEVER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WARNING">WARNING</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-audioContext">audioContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csound">csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundac">csoundac</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-diagnostic_level_">diagnostic_level_</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">public/strudel_embed.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * This class embeds the Strudel REPL in an IFrame with a (basic) API so that 
+ * the host of the IFrame can programmatically control Strudel.
+ */
+class StrudelReplComponent extends HTMLElement {
+  constructor() {
+    super();
+      this.play_button = null;
+      this.update_button = null;
+      this.i_frame = null;
+      this.content_window = null;
+      this.content_document = null;
+  }
+  connectedCallback() {
+    setTimeout(() =&gt; {
+      const code = (this.innerHTML + &apos;&apos;).replace(&apos;&lt;!--&apos;, &apos;&apos;).replace(&apos;--&gt;&apos;, &apos;&apos;).trim();
+      let iframe = document.createElement(&apos;iframe&apos;);
+      console.log(&quot;location.origin: &quot;, location.origin);
+      // Fix up the &quot;home&quot; part of the URI to work with my version of Strudel&apos;s REPL.
+      // We need to find the part of the pathname in between the origin 
+      // and the file name, and insert that into the request URI.
+      let src;
+      let last_slash = location.href.lastIndexOf(&quot;/&quot;);
+      if (last_slash &gt; origin.length) {
+        let to_insert = location.href.substring(origin.length, last_slash);
+        src = `${location.origin}${to_insert}/strudel_repl.html#${encodeURIComponent(btoa(code))}`;
+      } else {
+        src = `${location.origin}/strudel_repl.html#${encodeURIComponent(btoa(code))}`;
+      }
+      console.log(&quot;src:&quot;, src);
+      iframe.setAttribute(&apos;src&apos;, src);
+      iframe.setAttribute(&apos;allow-same-origin&apos;, &apos;&apos;);
+      iframe.setAttribute(&apos;allowfullscreen&apos;, &apos;true&apos;);
+      this.appendChild(iframe);
+      iframe.setAttribute(&apos;width&apos;, &apos;1200&apos;);
+      iframe.setAttribute(&apos;height&apos;, &apos;800&apos;);
+      iframe.style.display = &quot;visible&quot;;
+      iframe.style.background = &quot;transparent&quot;;
+      this.i_frame = iframe;
+      this.content_window = this.i_frame.contentWindow;
+      this.content_document = this.i_frame.contentDocument;
+    });
+  }
+  startPlaying() {
+    console.log(&quot;StrudelReplComponent.startPlaying:&quot;);
+    this.buttons = this.i_frame.contentDocument.getElementsByTagName(&quot;button&quot;);
+    let play_button = this.buttons[0];
+    // Fragile, depends on the Repl implementation.
+    if (play_button.title === &quot;play&quot;) {
+        play_button.click();
+    }
+  }
+  stopPlaying() {
+    console.log(&quot;StrudelReplComponent.stopPlaying:&quot;);
+    this.buttons = this.i_frame.contentDocument.getElementsByTagName(&quot;button&quot;);
+    let play_button = this.buttons[0];
+    // Fragile, depends on the Repl implementation.
+    if (play_button.title === &quot;stop&quot;) {
+        play_button.click();
+    }
+  }
+  updateRepl() {
+    console.log(&quot;StrudelReplComponent.updateRepl:&quot;);
+    this.buttons = this.i_frame.contentDocument.getElementsByTagName(&quot;BUTTON&quot;);
+    $(this.buttons[1]).click();
+  }
+  setCode(tidal_code) {
+    tidal_code = &apos;&lt;!-- &apos; + tidal_code + &apos; --&gt;&apos;;
+    this.innerHTML = tidal_code;
+    // Fix up the &quot;home&quot; part of the URI to work with Strudel&apos;s REPL.
+    // We need to find the part of the pathname in between the origin 
+    // and the file name, and insert that into the request URI.
+    let src;
+    let last_slash = location.href.lastIndexOf(&quot;/&quot;);
+    if (last_slash &gt; origin.length) {
+      let to_insert = location.href.substring(origin.length, last_slash);
+      src = `${location.origin}/${to_insert}#${encodeURIComponent(btoa(tidal_code))}`;
+    } else {
+      src = `${location.origin}#${encodeURIComponent(btoa(tidal_code))}`;
+    }
+    console.log(&quot;src:&quot;, src);
+    iframe.setAttribute(&apos;src&apos;, src);
+  }
+  getCode() {
+    const code = (this.innerHTML + &apos;&apos;).replace(&apos;&lt;!--&apos;, &apos;&apos;).replace(&apos;--&gt;&apos;, &apos;&apos;).trim();
+    return code;
+  }
+  setCsound(csound_) {
+    this.i_frame.contentWindow.__csound__ = csound_;
+  }
+  setCsoundAC(csoundac_) {
+    this.i_frame.contentWindow.__csoundac__ = csoundac_;
+  }
+}
+
+customElements.define(&apos;strudel-repl-component&apos;, StrudelReplComponent);
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

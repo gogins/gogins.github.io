@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">public/CsoundAudioNode.js</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/CsoundAudioNode.js~CsoundAudioNode.html">CsoundAudioNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/csoundac.mjs~ChordPatterns.html">ChordPatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/csoundac.mjs~PitvPatterns.html">PitvPatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/csoundac.mjs~ScalePatterns.html">ScalePatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/statefulpatterns.mjs~StatefulPatterns.html">StatefulPatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Chord">Chord</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Clone">Clone</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Pitv">Pitv</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Scale">Scale</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-frequencyToMidiInteger">frequencyToMidiInteger</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-frequencyToMidiReal">frequencyToMidiReal</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFrequency">getFrequency</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hsvToRgb">hsvToRgb</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-print_counter">print_counter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setPitch">setPitch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-set_instrument_count">set_instrument_count</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-track">track</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-diagnostic">diagnostic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-diagnostic_level">diagnostic_level</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-audioContext">audioContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-chordn_counter">chordn_counter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csound">csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundac">csoundac</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundn">csoundn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundn_counter">csoundn_counter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-instrument_count">instrument_count</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ALWAYS">ALWAYS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DEBUG">DEBUG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ERROR">ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INFORMATION">INFORMATION</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NEVER">NEVER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WARNING">WARNING</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-audioContext">audioContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csound">csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundac">csoundac</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-diagnostic_level_">diagnostic_level_</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">public/CsoundAudioNode.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * C S O U N D
+ *
+ * L I C E N S E
+ *
+ * This software is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ *
+ * This software is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ *
+ */
+ 
+// import csound_audio_processor_module from &apos;CsoundAudioProcessor.js&apos;;
+
+class CsoundAudioNode extends AudioWorkletNode {
+    resolveCleanup(result) {
+        return result;
+    }
+    resolveCompileCsdText(result) {
+        this.message_callback(&quot;[&quot; + window.performance.now() + &quot; resolveCompileCsdText with: &quot; + result + &quot;, &quot; + this + &quot;]\n&quot;);
+        return result;
+    }
+    resolveCompileOrc(result) {
+        return result;
+    }
+    resolveGetControlChannel(result) {
+        return result;
+    }
+    resolveGetFileData(result) {
+        return result;
+    }
+    resolveReadScore(result) {
+        return result;
+    }
+    resolveReset() {
+        return;
+    }
+    resolveStop() {
+        return;
+    }
+    async onMessage(event) {
+            let data = event.data;
+            switch(data[0]) {
+                case &quot;Message&quot;:
+                    if (this.message_callback != null) {
+                        this.message_callback(data[1]);
+                    } else {
+                        console.log(data[1]);
+                    }
+                    break;
+                // Some Csound API calls should be serializable, i.e. 
+                // synchronous. These cases resolve promises (above) from those calls.
+                case &quot;CleanupResult&quot;:
+                    // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Received CleanupResult with: &quot; + data[1] + &quot;.]\n&quot;);
+                    this.resolveCleanup(data[1]);
+                    break;
+                case &quot;CompileOrcResult&quot;:
+                    // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Received CompileOrcResult with: &quot; + data[1] + &quot;.]\n&quot;);
+                    this.resolveCompileOrc(data[1]);
+                    break;
+                case &quot;CompileCsdTextResult&quot;:
+                    // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Received CompileCsdTextResult with: &quot; + data[1] + &quot;.]\n&quot;);
+                    this.resolveCompileCsdText(data[1]);
+                    break;
+                case &quot;GetControlChannelResult&quot;:
+                     // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Received GetControlChannelResult with: &quot; + data[1] + &quot;.]\n&quot;);
+                    this.resolveGetControlChannel(data[1]);
+                    break;
+                case &quot;GetFileDataResult&quot;:
+                    this.resolveGetFileData(data[1]);
+                    break;
+                case &quot;GetScoreTimeResult&quot;:
+                     // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Received GetScoreTimeResult with: &quot; + data[1] + &quot;.]\n&quot;);
+                    this.resolveGetScoreTime(data[1]);
+                    break;
+                case &quot;IsPlayingResult&quot;:
+                    // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Received IsPlayingResult with: &quot; + data[1] + &quot;.]\n&quot;);
+                    this.resolveIsPlaying(this.is_playing);
+                    break;
+                case &quot;ReadScoreResult&quot;:
+                    // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Received ReadScoreResult with: &quot; + data[1] + &quot;.]\n&quot;);
+                    this.resolveReadScore(data[1]);
+                    break;
+                case &quot;ResetResult&quot;:
+                    // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Received ResetResult.]\n&quot;);
+                    this.resolveReset();
+                    break;
+                case &quot;StopResult&quot;:
+                    // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Received StopResult.]\n&quot;);
+                    this.resolveStop();
+                    break;
+            };
+    };
+    constructor(context, message_callback_, options) {
+        options = options || {};
+        options.numberOfInputs  = 1;
+        options.numberOfOutputs = 1;
+        options.outputChannelCount = [context.destination.channelCount];
+        super(context, &apos;csound-audio-processor&apos;, options);
+        this.message_callback = message_callback_;
+        this.message_callback(&quot;CsoundAudioNode constructor...\n&quot;);
+        this.reset_();
+        this.CompileCsdTextPromise = null;
+        this.CompileOrcPromise = null;
+        this.IsPlayingPromise = null;
+        this.StopPromise = null;
+        this.CleanupPromise = null;
+        this.GetFileDataPromise = null;
+        this.GetScoreTimePromise = null;
+        this.GetGetControlChannelPromise = null;
+        this.ReadScorePromise = null;
+        this.ResetPromise = null;
+        this.port.onmessage = this.onMessage.bind(this);
+        this.port.start();
+    }
+    reset_() {
+        this.is_playing = false;
+        this.is_realtime = false;
+        this.userMediaAudioInputNode = null;
+        this.input = null;
+        this.output = null;
+    }
+    
+    // NOTE: All class member function names, i.e. the actual Csound API, 
+    // are declared and defined both in initial caps (as in C++), and in camel 
+    // case (for compatibility with CsoundObj). If CsoundObj has a member 
+    // function that is needed here and that has a different name, it should 
+    // get an alias or an implementation here.
+
+    async Cleanup() {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Cleanup.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveCleanup = resolve;
+            this.port.postMessage([&quot;Cleanup&quot;]);
+        });
+        let result = await promise;
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Cleanup resolved with: &quot; + result + &quot;.]\n&quot;);
+        return result;
+    };
+    async cleanup() {
+       // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Cleanup.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveCleanup = resolve;
+            this.port.postMessage([&quot;Cleanup&quot;]);
+        });
+        let result = await promise;
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Cleanup resolved with: &quot; + result + &quot;.]\n&quot;);
+        return result;
+    };
+    CompileCsd(filename) {
+        this.port.postMessage([&quot;CompileCsd&quot;, filename]);
+    };
+    compileCsd(filename) {
+        this.compileCsd(filename);
+    };
+    async CompileCsdText(csd) {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; CompileCsdText.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveCompileCsdText = resolve;
+            this.port.postMessage([&quot;CompileCsdText&quot;, csd]);
+        });
+        let result = await promise;
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; CompileCsdText resolved with: &quot; + result + &quot;.]\n&quot;);
+        return result;
+    };
+    async compileCsdText(csd) {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; CompileCsdText.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveCompileCsdText = resolve;
+            this.port.postMessage([&quot;CompileCsdText&quot;, csd]);
+        });
+        let result = await promise;
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; CompileCsdText resolved with: &quot; + result + &quot;.]\n&quot;);
+        return result;
+    };
+    async CompileOrc(orc) {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; CompileOrc.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveCompileOrc = resolve;
+            this.port.postMessage([&quot;CompileOrc&quot;, orc]);
+        });
+        let result = await promise;
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; CompileOrc resolved with: &quot; + result + &quot;.]\n&quot;);
+        return result;
+    };
+    async compileOrc(orc) {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; CompileOrc.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveCompileOrc = resolve;
+            this.port.postMessage([&quot;CompileOrc&quot;, orc]);
+        });
+        let result = await promise;
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; CompileOrc resolved with: &quot; + result + &quot;.]\n&quot;);
+        return result;
+    };
+    Destroy() {
+        this.port.postMessage([&quot;Destroy&quot;]);
+    };
+    destroy() {
+        this.Destroy();
+    };
+    EvalCode(code) {
+        this.port.postMessage([&quot;EvalCode&quot;, code]);
+    };
+    evalCode(code) {
+        this.EvalCode(code);
+    };
+    Get0dBFS() {
+        this.port.postMessage([&quot;Get0dBFS&quot;]);
+    };
+    get0dBFS() {
+        this.Get0dBFS();
+    }
+    GetAPIVersion() {
+        this.port.postMessage([&quot;GetAPIVersion&quot;]);
+    };
+    getAPIVersion() {
+        this.GetAPIVersion();
+    };
+    async GetControlChannel(name) {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; GetControlChannel.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveGetControlChannel = resolve;
+            this.port.postMessage([&quot;GetControlChannel&quot;, name]);
+        });
+        let result = await promise;
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; GetControlChannel resolved with: &quot; + result + &quot;.]\n&quot;);
+        return result;    
+    };
+    async getControlChannel(name) {
+        this.GetControlChannel(name);
+    };
+    async GetFileData(filename) {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; GetControlChannel.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveGetFileData = resolve;
+            this.port.postMessage([&quot;GetFileData&quot;, filename]);
+        });
+        let result = await promise;
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; GetControlChannel resolved with: &quot; + result + &quot;.]\n&quot;);
+        return result;    
+    };
+    async getFileData(name) {
+        this.GetFileData(name);
+    };
+    GetCurrentTimeSamples() {
+        this.port.postMessage([&quot;GetCurrentTimeSamples&quot;]);
+    };
+    getCurrentTimeSamples() {
+        this.GetCurrentTimeSamples();
+    };
+    GetEnv(name) {
+        this.port.postMessage([&quot;GetEnv&quot;, name]);
+    };
+    getEnv(name) {
+        this.GetEnv();
+    };
+    GetInputName() {
+        this.port.postMessage([&quot;GetInputName&quot;]);
+    };
+    getInputName() {
+        this.GetInputName();
+    };
+    GetKsmps() {
+        this.port.postMessage([&quot;GetKsmps&quot;]);
+    };
+    getKsmps() {
+        this.GetKsmps();
+    };
+    GetNchnls() {
+        this.port.postMessage([&quot;GetNchnls&quot;]);
+    };
+    getNchnls() {
+        this.GetNchnls();
+    };
+    GetNchnlsInput() {
+        this.port.postMessage([&quot;GetNchnlsInput&quot;]);
+    };
+    getNchnlsInput() {
+        this.GetNchnlsInput();
+    };
+    GetOutputName() {
+        this.port.postMessage([&quot;GetOutputName&quot;]);
+    };
+    getOutputName() {
+        this.GetOutputName();
+    };
+    GetScoreOffsetSeconds() {
+        this.port.postMessage([&quot;GetScoreOffsetSeconds&quot;]);
+    };
+    getScoreOffsetSeconds() {
+        this.GetScoreOffsetSeconds();
+    };
+    async GetScoreTime() {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; GetScoreTime.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveGetScoreTime = resolve;
+            this.port.postMessage([&quot;GetScoreTime&quot;]);
+        });
+        let result = await promise;
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; GetScoreTime resolved with: &quot; + result + &quot;.]\n&quot;);
+        return result;
+    };
+    async getScoreTime() {
+        this.GetScoreTime();
+    };
+    GetSr() {
+        this.port.postMessage([&quot;GetSr&quot;]);
+    };
+    getSr() {
+        this.GetSr();
+    };
+    GetStringChannel(name) {
+        this.port.postMessage([&quot;GetStringChannel&quot;, name]);
+    };
+    getStringChannel(name) {
+        this.GetStringChannel();
+    };
+    GetVersion() {
+        this.port.postMessage([&quot;GetVersion&quot;]);
+    };
+    getVersion() {
+        this.GetVersion();
+    };
+    InputMessage(text) {
+        this.port.postMessage([&quot;InputMessage&quot;, text]);
+    };
+    inputMessage(text) {
+        this.InputMessage(text);
+    };
+    async IsPlaying() {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; IsPlaying.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveIsPlaying = resolve;
+            this.port.postMessage([&quot;IsPlaying&quot;]);
+        });
+        let result = await promise;
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; IsPlaying resolved with: &quot; + result + &quot;.]\n&quot;);
+        return result;
+    };
+    isPlaying() {
+        this.IsPlaying();
+    };
+    IsScorePending() {
+        this.port.postMessage([&quot;IsScorePending&quot;]);
+    };
+    isScorePending() {
+        this.IsScorePending();
+    };
+    KillInstance(p1, insname, mode, release) {
+        this.port.postMessage([&quot;KillInstance&quot;, p1, insname, mode, release]);
+    };
+    killInstance(p1, insname, mode, release) {
+        this.KillInstance(p1, insname, mode, release);
+    };
+    Message(text) {
+        this.port.postMessage([&quot;Message&quot;, text]);
+    };
+    message(text) {
+        this.Message(text);
+    };
+    Perform() {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Perform.]\n&quot;);
+        this.port.postMessage([&quot;Perform&quot;]);
+    };
+    perform() {
+        this.Perform();
+    };
+    /**
+     * Because AudioWorklet messages are asynchronous, a sequence 
+     * of method calls cannot be guaranteed to execute in proper order. 
+     * Hence, this helper.
+     */
+    PerformCsd(options, csd) {
+        this.port.postMessage([&quot;PerformCsd&quot;, options, csd]);
+    }
+    performCsd(options, csd) {
+        this.PerformCsd(options, csd);
+    };
+    /**
+     * Because AudioWorklet messages are asynchronous, a sequence 
+     * of method calls cannot be guaranteed to execute in proper order. 
+     * Hence, this helper.
+     */
+    PerformOrc(options, orc, sco) {
+        this.port.postMessage([&quot;PerformOrc&quot;, options, orc, sco]);
+    };
+    performOrc(options, orc, sco) {
+        this.PerformOrc(options, orc, sco);
+    };
+    async ReadScore(score) {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; ReadScore.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveReadScore = resolve;
+            this.port.postMessage([&quot;ReadScore&quot;, score]);
+        });
+        let result = await promise;
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; ReadScore resolved with: &quot; + result + &quot;.]\n&quot;);
+        return result;
+    };
+    async readScore(score) {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; ReadScore.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveReadScore = resolve;
+            this.port.postMessage([&quot;ReadScore&quot;, score]);
+        });
+        let result = await promise;
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; ReadScore resolved with: &quot; + result + &quot;.]\n&quot;);
+        return result;
+    }
+    async Reset() {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Reset.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveReset = resolve;
+            this.port.postMessage([&quot;Reset&quot;]);
+        });
+        await promise;
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Reset resolved.]\n&quot;);
+    };
+    async reset() {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Reset.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveReset = resolve;
+            this.port.postMessage([&quot;Reset&quot;]);
+        });
+        await promise;
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Reset resolved.]\n&quot;);
+    };
+    RewindScore() {
+        this.port.postMessage([&quot;RewindScore&quot;]);
+    };
+    SetControlChannel(name, value) {
+        this.port.postMessage([&quot;SetControlChannel&quot;, name, value]);
+    };
+    SetGlobalEnv(name, value) {
+        this.port.postMessage([&quot;SetGlobalEnv&quot;, name, value]);
+    };
+    SetInput(name) {
+        this.input = name;
+        this.port.postMessage([&quot;SetInput&quot;, name]);
+    };
+    SetMessageCallback(message_callback_) {
+        this.message_callback = message_callback_;
+    }
+    SetOption(option) {
+        if (option.startsWith(&quot;-odac&quot;)) {
+            this.output = option.substr(2);
+        }
+        if (option.startsWith(&quot;-iadc&quot;)) {
+            this.input = option.substr(2);
+        }
+        this.port.postMessage([&quot;SetOption&quot;, option]);
+    };
+    SetOutput(name, type, format) {
+        this.output = name;
+        this.port.postMessage([&quot;SetOutput&quot;, name, type, format]);
+    };
+    SetScoreOffsetSeconds(seconds) {
+        this.port.postMessage([&quot;SetScoreOffsetSeconds&quot;, seconds]);
+    };
+    SetScorePending(is_pending) {
+        this.port.postMessage([&quot;SetScorePending&quot;, is_pending]);
+    };
+    SetStringChannel(name, value) {
+        this.port.postMessage([&quot;SetStringChannel&quot;, name, value]);
+    };
+    /**
+     * Starts the Csound performance with or without any connection to the 
+     * Web Audio signal flow graph. Such connections may be created in the 
+     * usual manner for constructing Web Audio graphs, either before, or 
+     * after, calling StartNode.
+     */
+    StartNode() {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; StartNode.]\n&quot;);
+        try {
+            this.port.postMessage([&quot;Start&quot;]);
+            this.is_playing = true;
+            this.message_callback(&quot;is_playing...\n&quot;);
+        } catch (e) {
+            this.message_callback(e);
+        }
+    }
+    startNode() {
+        this.StartNode();
+    }
+    /**
+     * First connects to the default WebAudio output and the WebAudio 
+     * context&apos;s media source input, if it exists, and the MIDI input, 
+     * if it exists, then starts the Csound performance. Wiring into the Web 
+     * Audio graph is up here in the upper half, wiring within Csound is down 
+     * in the lower half.
+     */
+    async Start() {
+        // this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Start.]\n&quot;);
+        try {
+            let device_list = await navigator.mediaDevices.enumerateDevices();
+            var message_callback_ = this.message_callback;
+            var index = 0;
+            var input_connected = false;
+            var print_device = function(device) {
+                message_callback_(&quot;mediaDevices: &quot; + index + &quot; &quot; + device.kind + &quot;: &quot; + device.label + &quot;\n&quot;);
+                index++;
+            };     
+            device_list.forEach(print_device);
+            this.message_callback(&quot;WebAudio frames per second:         &quot; +  this.context.sampleRate + &quot;\n&quot;);
+            this.message_callback(&quot;WebAudio maximum output channels:   &quot; +  this.context.destination.maxChannelCount + &quot;\n&quot;);
+            this.connect(this.context.destination);
+            if (navigator.requestMIDIAccess) {
+              let midi_access = await navigator.requestMIDIAccess({sysex:false});
+              const inputs = midi_access.inputs.values();
+              let thus = this;
+              for (let entry of midi_access.inputs) {
+                  const midi_input = entry[1];
+                  message_callback_(&quot;MIDI port: type: &quot; + midi_input.type + &quot;  manufacturer: &quot; + midi_input.manufacturer + &quot; name: &quot; + midi_input.name +
+                      &quot; version: &quot; + midi_input.version + &quot;\n&quot;);
+                  // Using the MessagePort for this is probably not good enough.
+                  midi_input.onmidimessage = function(event) {
+                      console.log(event, event.data[0], event.data[1], event.data[2]);
+                      thus.port.postMessage([&quot;MidiEvent&quot;, event.data[0], event.data[1], event.data[2]]);
+                  };
+              }
+              for (let entry of midi_access.outputs) {
+                  var port_ = entry[1];
+                  message_callback_( &quot;MIDI port: type: &quot; + port_.type + &quot; manufacturer: &quot; + port_.manufacturer + &quot; name: &quot; + port_.name +
+                    &quot; version: &quot; + port_.version + &quot;\n&quot;);
+              }
+            }
+            // Try to obtain the Web browser audio input, if available.
+            // Not to be confused with any other audio input interfaces on the 
+            // computer, which are inputs in the device list above!
+            try {
+                this.message_callback(&quot;Trying to open browser audio input...\n&quot;)
+                let stream = await navigator.mediaDevices.getUserMedia({audio: true});
+                this.userMediaAudioInputNode = this.context.createMediaStreamSource(stream);
+                this.message_callback(&quot;WebAudio UserMedia outputs:         &quot; +  this.userMediaAudioInputNode.numberOfOutputs + &quot;\n&quot;);
+                this.userMediaAudioInputNode.connect(this);
+                this.message_callback(&quot;Audio input initialized.\n&quot;);
+            } catch (e) {
+                this.message_callback(e + &quot;\n&quot;);
+            }
+            this.port.postMessage([&quot;Start&quot;]);
+            this.is_playing = true;
+            this.message_callback(&quot;is_playing...\n&quot;);
+        } catch (e) {
+            this.message_callback(e);
+        }
+    }
+    async start() {
+        this.Start();
+    };
+    async Stop() {
+        this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Stop.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveStop = resolve;
+            this.port.postMessage([&quot;Stop&quot;]);
+            if (this.userMediaAudioInputNode !== null) {
+                ///this.userMediaAudioInputNode.stop();
+                this.userMediaAudioInputNode.disconnect(this);
+            }
+            this.disconnect();
+            this.reset_();
+        });
+        await promise;
+        this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Stop resolved.]\n&quot;);
+    };
+    async stop() {
+        this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Stop.]\n&quot;);
+        let promise = new Promise((resolve, reject) =&gt; {
+            // Not exactly intuitive!
+            this.resolveStop = resolve;
+            this.port.postMessage([&quot;Stop&quot;]);
+            if (this.userMediaAudioInputNode !== null) {
+                ///this.userMediaAudioInputNode.stop();
+                this.userMediaAudioInputNode.disconnect(this);
+            }
+            this.disconnect();
+            this.reset_();
+        });
+        await promise;
+        this.message_callback(&quot;[&quot; + window.performance.now() + &quot; Stop resolved.]\n&quot;);
+    };
+    TableGet(number, index) {
+        this.port.postMessage([&quot;TableGet&quot;, number, index]);
+    };
+    tableGet(number, index) {
+        this.TableGet(number, index);
+    };
+    TableLength(number) {
+        this.port.postMessage([&quot;TableLength&quot;, number]);
+    };
+    tableLength(number) {
+        this.TableLength(number);
+    };
+    TableSet(number, index, value) {
+        this.port.postMessage([&quot;TableSet&quot;, index, value]);
+    };   
+    tableSet(number, index, value) {
+        this.TableSet(number, index, value);
+    };
+}
+
+
+
+
+</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

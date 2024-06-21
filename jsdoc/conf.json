@@ -1,0 +1,37 @@
+{
+    "opts": {
+        "encoding": "utf8",               
+        "destination": "./cloud-5/jsdocs/",         
+        "recurse": true                  
+    },
+    "plugins": [
+        "plugins/markdown"
+    ],
+    "recurseDepth": 4,
+    "source": {
+        "include": [
+            "public",
+            "public/cloud-5.js",
+            "public/csoundac.mjs",
+            "public/statefulpatterns.mjs",
+            "public/CsoundAC.mjs",
+            "public/CsoundAudioNode.js"
+        ],
+        "exclude": [
+             "strudel",
+            ".vite",
+            "node_modules"
+        ],
+        "includePattern": ".+\\.(m)js(doc|x)?$",
+        "excludePattern": "(node_modules|docs)"
+    },
+    "sourceType": "module",
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc","closure"]
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    }
+}

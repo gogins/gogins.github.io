@@ -95,7 +95,7 @@ must be created at module scope and passed to the relevant Patterns.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line917">line 917</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line1079">line 1079</a>
     </li></ul></dd>
     
 
@@ -158,7 +158,7 @@ must be created at module scope and passed to the relevant Patterns.</p></div>
     
 
     
-    <h4 class="name" id="acP"><span class="type-signature"></span>acP<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acP"><span class="type-signature"></span>acP<span class="signature">(is_onset, pitv, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -177,6 +177,101 @@ must be created at module scope and passed to the relevant Patterns.</p></div>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>pitv</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">PITV</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The PITV object to be inserted.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -210,7 +305,7 @@ must be created at module scope and passed to the relevant Patterns.</p></div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line940">line 940</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line1107">line 1107</a>
     </li></ul></dd>
     
 
@@ -235,6 +330,28 @@ must be created at module scope and passed to the relevant Patterns.</p></div>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -246,7 +363,7 @@ must be created at module scope and passed to the relevant Patterns.</p></div>
     
 
     
-    <h4 class="name" id="acPC"><span class="type-signature"></span>acPC<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acPC"><span class="type-signature"></span>acPC<span class="signature">(is_onset, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -254,8 +371,8 @@ must be created at module scope and passed to the relevant Patterns.</p></div>
 
 
 <div class="description">
-    <p>acPC:       Insert the Chord corresponding to the PITV element into the
-Pattern's state.</p>
+    <p>acPC:       Insert the Chord corresponding to the current PITV element
+into the Pattern's state.</p>
 </div>
 
 
@@ -266,6 +383,78 @@ Pattern's state.</p>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -299,7 +488,7 @@ Pattern's state.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line1026">line 1026</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line1217">line 1217</a>
     </li></ul></dd>
     
 
@@ -324,6 +513,28 @@ Pattern's state.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -335,7 +546,7 @@ Pattern's state.</p>
     
 
     
-    <h4 class="name" id="acPI"><span class="type-signature"></span>acPI<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acPI"><span class="type-signature"></span>acPI<span class="signature">(is_onset, I, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -355,6 +566,101 @@ state.</p>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>I</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The PITV inversion.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -388,7 +694,7 @@ state.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line975">line 975</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line1152">line 1152</a>
     </li></ul></dd>
     
 
@@ -413,6 +719,28 @@ state.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -424,7 +752,7 @@ state.</p>
     
 
     
-    <h4 class="name" id="acPO"><span class="type-signature"></span>acPO<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acPO"><span class="type-signature"></span>acPO<span class="signature">(is_onset, V, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -444,6 +772,101 @@ Pattern's state.</p>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>V</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The index of the octavewise revoicing in this PITV.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -477,7 +900,7 @@ Pattern's state.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line1009">line 1009</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line1196">line 1196</a>
     </li></ul></dd>
     
 
@@ -502,6 +925,28 @@ Pattern's state.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -513,7 +958,7 @@ Pattern's state.</p>
     
 
     
-    <h4 class="name" id="acPP"><span class="type-signature"></span>acPP<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acPP"><span class="type-signature"></span>acPP<span class="signature">(is_onset, P, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -533,6 +978,101 @@ state.</p>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>P</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The PITV index of the prime form.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -566,7 +1106,7 @@ state.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line955">line 955</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line1127">line 1127</a>
     </li></ul></dd>
     
 
@@ -591,6 +1131,28 @@ state.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -602,7 +1164,7 @@ state.</p>
     
 
     
-    <h4 class="name" id="acPT"><span class="type-signature"></span>acPT<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acPT"><span class="type-signature"></span>acPT<span class="signature">(is_onset, T, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -610,7 +1172,7 @@ state.</p>
 
 
 <div class="description">
-    <p>acPT:       Set the transposition index of the PITV element in the
+    <p>acPT:       Set the transposition of the PITV element in the
 Pattern's state.</p>
 </div>
 
@@ -622,6 +1184,101 @@ Pattern's state.</p>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>T</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The PITV transposition.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -655,7 +1312,7 @@ Pattern's state.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line992">line 992</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line1174">line 1174</a>
     </li></ul></dd>
     
 
@@ -680,6 +1337,28 @@ Pattern's state.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -691,7 +1370,7 @@ Pattern's state.</p>
     
 
     
-    <h4 class="name" id="acPV"><span class="type-signature"></span>acPV<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acPV"><span class="type-signature"></span>acPV<span class="signature">(is_onset, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -700,7 +1379,7 @@ Pattern's state.</p>
 
 <div class="description">
     <p>acPV:       Move notes in the Pattern to fit the pitch-class set of the
-element of the PITV group in the Pattern's state.</p>
+current element of the PITV group in the Pattern's state.</p>
 </div>
 
 
@@ -709,6 +1388,78 @@ element of the PITV group in the Pattern's state.</p>
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -744,7 +1495,7 @@ element of the PITV group in the Pattern's state.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line1041">line 1041</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line1236">line 1236</a>
     </li></ul></dd>
     
 
@@ -769,6 +1520,28 @@ element of the PITV group in the Pattern's state.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -780,7 +1553,7 @@ element of the PITV group in the Pattern's state.</p>
     
 
     
-    <h4 class="name" id="acPVV"><span class="type-signature"></span>acPVV<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acPVV"><span class="type-signature"></span>acPVV<span class="signature">(is_onset, voice, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -789,7 +1562,7 @@ element of the PITV group in the Pattern's state.</p>
 
 <div class="description">
     <p>acPVV:      Generate a note that represents a particular voice of the
-Chord.</p>
+Chord represented by the current elemet of the PITV in this.</p>
 </div>
 
 
@@ -798,6 +1571,101 @@ Chord.</p>
 
 
 
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>voice</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
 
 
 
@@ -833,7 +1701,7 @@ Chord.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line1063">line 1063</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line1263">line 1263</a>
     </li></ul></dd>
     
 
@@ -858,6 +1726,28 @@ Chord.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -869,7 +1759,7 @@ Chord.</p>
     
 
     
-    <h4 class="name" id="acPVVL"><span class="type-signature"></span>acPVVL<span class="signature">()</span><span class="type-signature"></span></h4>
+    <h4 class="name" id="acPVVL"><span class="type-signature"></span>acPVVL<span class="signature">(is_onset, voice, hap)</span><span class="type-signature"> &rarr; {Hap}</span></h4>
     
 
     
@@ -889,6 +1779,101 @@ Chord, as the closest voice-leading from the prior element of this.</p>
 
 
 
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>is_onset</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">boolean</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>Indicates whether this Hap is the onset of its cycle.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>voice</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">number</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The number of the voice in thre chord that is to ber used.</p></td>
+        </tr>
+
+    
+
+        <tr>
+            
+                <td class="name"><code>hap</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">Hap</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last"><p>The current Hap.</p></td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
 
 
 
@@ -922,7 +1907,7 @@ Chord, as the closest voice-leading from the prior element of this.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line1075">line 1075</a>
+        <a href="csoundac.mjs.html">csoundac.mjs</a>, <a href="csoundac.mjs.html#line1280">line 1280</a>
     </li></ul></dd>
     
 
@@ -947,6 +1932,28 @@ Chord, as the closest voice-leading from the prior element of this.</p>
 
 
 
+<h5>Returns:</h5>
+
+        
+<div class="param-desc">
+    <p>A new Hap.</p>
+</div>
+
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">Hap</span>
+
+
+    </dd>
+</dl>
+
+    
 
 
 
@@ -968,13 +1975,13 @@ Chord, as the closest voice-leading from the prior element of this.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="ChordPatterns.html">ChordPatterns</a></li><li><a href="PitvPatterns.html">PitvPatterns</a></li><li><a href="ScalePatterns.html">ScalePatterns</a></li><li><a href="StatefulPatterns.html">StatefulPatterns</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Chord">Chord</a></li><li><a href="global.html#Clone">Clone</a></li><li><a href="global.html#Pitv">Pitv</a></li><li><a href="global.html#Scale">Scale</a></li><li><a href="global.html#csound">csound</a></li><li><a href="global.html#csoundn">csoundn</a></li><li><a href="global.html#diagnostic">diagnostic</a></li><li><a href="global.html#diagnostic_level">diagnostic_level</a></li><li><a href="global.html#diagnostic_level_">diagnostic_level_</a></li><li><a href="global.html#frequencyToMidiInteger">frequencyToMidiInteger</a></li><li><a href="global.html#frequencyToMidiReal">frequencyToMidiReal</a></li><li><a href="global.html#getFrequency">getFrequency</a></li><li><a href="global.html#setPitch">setPitch</a></li><li><a href="global.html#track">track</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Classes</h3><ul><li><a href="-_anonymous_-ParametricLindenmayer.PLSystem.html">PLSystem</a></li><li><a href="-_anonymous_-ParametricLindenmayer.Turtle.html">Turtle</a></li><li><a href="-_anonymous_-ParametricLindenmayer.Word.html">Word</a></li><li><a href="ChordPatterns.html">ChordPatterns</a></li><li><a href="Cloud5.html">Cloud5</a></li><li><a href="Cloud5About.html">Cloud5About</a></li><li><a href="Cloud5Log.html">Cloud5Log</a></li><li><a href="Cloud5PianoRoll.html">Cloud5PianoRoll</a></li><li><a href="Cloud5Piece.html">Cloud5Piece</a></li><li><a href="Cloud5Shader.html">Cloud5Shader</a></li><li><a href="Cloud5ShaderToy.html">Cloud5ShaderToy</a></li><li><a href="Cloud5Strudel.html">Cloud5Strudel</a></li><li><a href="CsoundAudioNode.html">CsoundAudioNode</a></li><li><a href="PitvPatterns.html">PitvPatterns</a></li><li><a href="ScalePatterns.html">ScalePatterns</a></li><li><a href="StatefulPatterns.html">StatefulPatterns</a></li></ul><h3>Global</h3><ul><li><a href="global.html#Chord">Chord</a></li><li><a href="global.html#Clone">Clone</a></li><li><a href="global.html#Pitv">Pitv</a></li><li><a href="global.html#Scale">Scale</a></li><li><a href="global.html#arrange">arrange</a></li><li><a href="global.html#arrange_silencio">arrange_silencio</a></li><li><a href="global.html#canon">canon</a></li><li><a href="global.html#csound">csound</a></li><li><a href="global.html#csoundac">csoundac</a></li><li><a href="global.html#csoundn">csoundn</a></li><li><a href="global.html#diagnostic">diagnostic</a></li><li><a href="global.html#diagnostic_level">diagnostic_level</a></li><li><a href="global.html#diagnostic_level_">diagnostic_level_</a></li><li><a href="global.html#downsample_lttb">downsample_lttb</a></li><li><a href="global.html#frequencyToMidiInteger">frequencyToMidiInteger</a></li><li><a href="global.html#frequencyToMidiReal">frequencyToMidiReal</a></li><li><a href="global.html#getFrequency">getFrequency</a></li><li><a href="global.html#get_csound">get_csound</a></li><li><a href="global.html#hsvToRgb">hsvToRgb</a></li><li><a href="global.html#load_csound">load_csound</a></li><li><a href="global.html#non_csound">non_csound</a></li><li><a href="global.html#parameters">parameters</a></li><li><a href="global.html#resize">resize</a></li><li><a href="global.html#rgb_to_hsv">rgb_to_hsv</a></li><li><a href="global.html#setPitch">setPitch</a></li><li><a href="global.html#track">track</a></li><li><a href="global.html#url_for_soundfile">url_for_soundfile</a></li><li><a href="global.html#write_file">write_file</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Feb 22 2024 11:17:15 GMT+0000 (Western European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Fri Jun 21 2024 13:20:59 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl">
+  <title data-ice="title">Home</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/CsoundAudioNode.js~CsoundAudioNode.html">CsoundAudioNode</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/csoundac.mjs~ChordPatterns.html">ChordPatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/csoundac.mjs~PitvPatterns.html">PitvPatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/csoundac.mjs~ScalePatterns.html">ScalePatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/statefulpatterns.mjs~StatefulPatterns.html">StatefulPatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Chord">Chord</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Clone">Clone</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Pitv">Pitv</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Scale">Scale</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-frequencyToMidiInteger">frequencyToMidiInteger</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-frequencyToMidiReal">frequencyToMidiReal</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-getFrequency">getFrequency</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hsvToRgb">hsvToRgb</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-print_counter">print_counter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setPitch">setPitch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-set_instrument_count">set_instrument_count</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-track">track</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-diagnostic">diagnostic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-diagnostic_level">diagnostic_level</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-audioContext">audioContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-chordn_counter">chordn_counter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csound">csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundac">csoundac</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundn">csoundn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundn_counter">csoundn_counter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-instrument_count">instrument_count</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ALWAYS">ALWAYS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DEBUG">DEBUG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ERROR">ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INFORMATION">INFORMATION</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NEVER">NEVER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WARNING">WARNING</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-audioContext">audioContext</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csound">csound</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundac">csoundac</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-diagnostic_level_">diagnostic_level_</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><div data-ice="index" class="github-markdown"><h1 id="-a-href--https---github-com-gogins-cloud-5--cloud-5--a-"><a href="https://github.com/gogins/cloud-5">cloud-5</a></h1><h4 id="an-html5-based-computer-music-system-with-csound--csoundac--and-strudel-by--a-href--https---michaelgogins-tumblr-com--michael-gogins--a-">An HTML5-based computer music system with Csound, CsoundAC, and Strudel by <a href="https://michaelgogins.tumblr.com">Michael Gogins</a></h4><p><a href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png">
+</a><br>Musical examples herein are licensed under a <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">
+Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>. </p>
+<p>Code written as part of cloud-5 is licensed under the terms of the same 
+license as Csound, the 
+<a href="https://github.com/csound/csound/blob/master/COPYING">GNU Lesser Public License, version 2.1</a>. 
+Components and libraries used by cloud-5 come under a variety of open source 
+licenses; see the links to individual packages for more information.</p>
+<h2 id="introduction">Introduction</h2><p>Welcome to cloud-5, a system for making sophisticated computer music purely in 
+the HTML5 environment! The system is especially suited for pieces that play 
+online, for pieces that play indefinitely, for visual music, for algorithmic 
+composition, and for live coding.</p>
+<p>cloud-5 runs on every system with an audio output that can run a Web server 
+and a standards compliant Web browser. That includes <em>all</em> computers 
+running macOS, Linux, or Windows, as well as most Android devices. It is also 
+possible to run cloud-5 on single-board computers (SBCs) such as <a href="https://bela.io/">Bela</a>, 
+<a href="https://monome.org/docs/norns/">Norns</a>, <a href="https://www.beagleboard.org/">BeagleBoards</a>, 
+<a href="https://www.raspberrypi.com/">Raspberry Pi</a>, and others. However, running 
+cloud-5 on a SBC requires installing at least a Web server (and probably also 
+a Web browser) on the device. Most users without special need for a SBC (such 
+as an installation or kiosk) will be better off just using a personal 
+computer.</p>
+<p>cloud-5 is used by my own Web site of &quot;always-on&quot; computer music pieces, 
+<a href="https://gogins.github.io/">cloud-music</a>. The underlying technology is my 
+<a href="https://github.com/gogins/csound-wasm">own WebAssembly builds of 
+Csound and CsoundAC</a>. Some pieces may use third party libraries. The home 
+page of Csound itself is <a href="https://csound.com/">here</a>.</p>
+<p>For recent changes, see the <em><a href="#release-notes">Release Notes</a></em> at the end of 
+this document.</p>
+<h3 id="components">Components</h3><ul>
+<li><p><a href="https://csound.com/">Csound</a> version 6.18, one of the oldest and most 
+powerful sound programming languages, compiled for WebAssembly to run in 
+Web browers in <a href="https://github.com/gogins/csound-wasm">csound-wasm</a>.</p>
+</li>
+<li><p><a href="https://github.com/gogins/csound-ac">CsoundAC</a>, my C++ library for 
+algorithmic composition with Csound, compiled for WebAssembly to run in 
+Web browsers in <a href="https://github.com/gogins/csound-wasm">csound-wasm</a>, and 
+incorporating my implementation of mathematical theories of chord space and 
+neo-Reimannian operations, and scales and functional harmony, by 
+<a href="http://dmitri.mycpanel.princeton.edu/">Dmitri Tymoczko</a>.</p>
+</li>
+<li><p>A collection of predefined Csound instrument definitions by me from 
+<a href="https://github.com/gogins/csound-ac/tree/master/patches">CsoundAC</a>.</p>
+</li>
+<li><p><a href="https://strudel.tidalcycles.org/">Strudel</a>, a JavaScript port of the 
+widely used live coding system <a href="http://tidalcycles.org/">Tidal Cycles</a>, by 
+Alex McLean, Felix Roos, and others. <em>Note</em>: cloud-5 makes several 
+necessary patches to the Strudel source code and distribution.</p>
+</li>
+<li><p>Of course, a standards-compliant Web browser, which has an awesome set of 
+capabilities, including the most widely used programming language, 
+JavaScript, which can call Csound, CsoundAC, and Strudel.</p>
+</li>
+</ul>
+<h3 id="capabilities">Capabilities</h3><ul>
+<li><p>High-resolution, sample-accurate sound synthesis using one of the largest and 
+most capable libraries that exists for synthesis and signal processing, the 
+<a href="https://csound.com/docs/manual/index.html">Csound opcodes</a>.</p>
+</li>
+<li><p>Interactive live music coding using the domain-specific, real-time music 
+programming language Strudel; this includes a neat animated piano roll 
+display of currently playing notes in the music.</p>
+</li>
+<li><p>Control of Csound from Strudel. This includes both real-time notes 
+generated by Strudel patches for the <code>csound</code> and <code>csoundm</code> outputs, and 
+real-time control channel values created by Strudel Patterns, including the 
+new <code>slider</code> widget.</p>
+</li>
+<li><p>MIDI input and output from Csound and Strudel.</p>
+</li>
+<li><p>Open Sound Control input and output from Csound and Strudel.</p>
+</li>
+<li><p>Several systems for time-frequency analysis/synthesis, from Csound, including 
+Victor Lazzarini&apos;s 
+<a href="https://csound.com/docs/manual/SpectralRealTime.html">phase vocoder streaming</a> 
+(PVS) opcodes.</p>
+</li>
+<li><p>Several high-fidelity sample players, from Csound 
+(<a href="https://csound.com/docs/manual/SiggenSample.html#SiggenSampleSF">Fluidsynth opcodes</a>) 
+and Strudel (<a href="https://github.com/tidalcycles/strudel/tree/main/packages/superdough">superdough</a>).</p>
+</li>
+<li><p>High-resolution, three-dimensional, animated computer graphics using 
+WebGL and/or OpenGL Shader Language (GLSL), from the Web browser.</p>
+</li>
+<li><p>All of the staggering panoply of capabilities that are built into every 
+standards-compliant Web browser, see <a href="https://html5test.com/">HTML5 Test</a>.</p>
+</li>
+</ul>
+<h2 id="running-in-the-browser">Running in the Browser</h2><h3 id="limitations">Limitations</h3><p>The major limitation of running in the browser is that csound-5 pieces are 
+sandboxed, and cannot write to the file system. In other words, cloud-5 
+cannot write soundfiles, or any other kind of files. That means all audio is 
+streaming audio. </p>
+<p>However, it _is_ possible to use an audio loopback driver such as 
+<a href="https://github.com/ExistentialAudio/BlackHole">BlackHole</a> to route 
+audio produced by cloud-5 to a digital audio workstation that <em>can</em> write 
+soundfiles. The maximum resolution of such soundfiles is floating-point 
+samples at 48 KHz, significantly higher resolution than the CD format.</p>
+<p>To set this up on the Mac, open the Audio MIDI Setup app, click on the <code>+</code> at
+the bottom, and click on Create Multi-Ouput Device, including both your 
+standard audio output and BlackHole. Then, in the Sound settings, select that 
+Multi-Output Device as the default output. Finally, in your DAW or recording 
+software, select BlackHole as the audio input device.</p>
+<h2 id="getting-started">Getting Started</h2><h3 id="pre-requisites">Pre-requisites</h3><ul>
+<li><p>A Web server that will run from a configurable directory in which you can 
+read, edit, and write files. On most systems, the simplest way to get a Web 
+server is to install <a href="https://www.python.org/">Python 3</a>.</p>
+</li>
+<li><p>A standards-compliant Web browser (currently, that includes nearly all Web 
+browsers). Should already exist on your system. On Android, install a Web 
+server app such as 
+<a href="https://play.google.com/store/apps/details?id=com.phlox.simpleserver">Phlox</a>.</p>
+</li>
+<li><p>A text or code editor for writing your compositions. A simple text editor 
+should already exist on your system. I use 
+<a href="https://code.visualstudio.com/">Visual Studio Code</a> myself, as it is very 
+powerful and yet easy to customize. On Android, install a text editor such as
+<a href="https://play.google.com/store/apps/details?id=com.rhmsoft.edit.pro">QuickEdit Pro</a>. </p>
+</li>
+<li><p>Of course, an audio driver that will play audio from Web browsers! Should 
+already be part of your operating system.</p>
+</li>
+</ul>
+<h3 id="installation">Installation</h3><p>There is no installation! Simply download the release, and unzip it.</p>
+<p>cloud-5 can be stored on a USB thumb drive, and will run with all functionality 
+<em>from</em> the thumb drive. This makes it possible to carry all of your work in 
+progress from computer to device to computer.</p>
+<p>Or, simply copy the entire cloud-5 directory with all contents to your computer 
+or device. Make sure you can execute, read, edit, and write files in your 
+cloud-5 directory.</p>
+<h3 id="configuration">Configuration</h3><p>There is no configuration!</p>
+<p>Well, actually there might be one thing. You might need to configure your 
+local Web server to serve files from your cloud-5 directory.</p>
+<h3 id="running">Running</h3><ol>
+<li><p>Start a local Web server to serve the cloud-5 directory. The easiest way 
+to do this on most systems is to open a terminal, change to your cloud-5 
+directory, and execute <code>python3 -m http.server</code>. </p>
+</li>
+<li><p>Start your Web browser, and navigate to your cloud-5 Web site (usually 
+just something like <code>https://localhost:8000</code>). Some users have problems 
+with Firefox, e.g. with WebMIDI permissions. If you experience this, try 
+the Chrome browser.</p>
+</li>
+<li><p>You should see this README as a Web page. Click on 
+<a href="cloud_music_no_1.html">cloud_music_no_1.html</a> and verify that you see 
+animated graphics, and can play and hear the piece.</p>
+</li>
+<li><p>Some cloud-5 pieces use the dat.gui library to create a popup menu of 
+controls for Csound instruments or other purposes. You can create new 
+presets, and you can get the Web browser to remember the current preset 
+parameters in local storage. If you need to revert to the hard-coded 
+parameters in a piece, clear local storage in the browser settings, or 
+in the browser&apos;s debugger.</p>
+</li>
+</ol>
+<h2 id="making-music">Making Music</h2><p>In cloud-5, musical compositions are written as Web pages, i.e. as .html 
+files. </p>
+<p>It&apos;s a good idea for each composition to be written as just one .html file. 
+It must be in your cloud-5 directory. Any Csound orchestra code, JavaScript 
+code, and GLSL shader programs should simply be embedded in the HTML file in, 
+e.g., template strings (string literals) in JavaScript code, or included as 
+<code>&lt;script&gt;</code> or <code>&lt;textview&gt;</code> elements.</p>
+<p>There are many ways to write compositions, because the capabilities of Csound, 
+Strudel, and HTML5 are so vast. Start out by a making a copy of one of the 
+examples below, and edit it to suit your own purposes. The examples start 
+out simple, and get more and more complicated and capable.</p>
+<ul>
+<li><p>A <a href="minimal.html">minimal example</a> that just plays an embedded Csound piece.</p>
+</li>
+<li><p>A <a href="player.html">Csound Player</a> that will play, and let you edit, any 
+Csound piece that you paste into the text area.</p>
+</li>
+<li><p><a href="message.html">Message from Another Planet</a>, a Csound piece with a basic 
+HTML user interface.</p>
+</li>
+<li><p><a href="strudel_repl.html">Strudel REPL</a>, exactly the same as the main Strudel Web 
+site.</p>
+</li>
+<li><p><a href="trichord_space.cloud5.html">Trichord Space</a>, an interactive piece that displays 
+Dmitri Tymoczko&apos;s chord space for trichords, with the ability to perform, 
+hear, and visualize various operations on the chords in the space.</p>
+</li>
+<li><p><a href="scrims.html">Scrims</a>, a JavaScript piece that samples an animated WebGL 
+hopalong fractal to obtain notes that are then harmonized using CsoundAC&apos;s 
+chord space operations.</p>
+</li>
+<li><p><a href="cloud_music_no_1.html">Cloud Music No. 1</a>, a piece that generates an 
+abstract flowing visual using a GLSL shader. Data from the moving image 
+is sampled to obtain musical notes, which are then harmonized using 
+chords, scales, and modulations generated by CsoundAC, and rendered as 
+audio using Csound.</p>
+</li>
+<li><p><a href="cloud_music_no_9.html">Cloud Music No. 9</a>, a Strudel piece in an 
+alternative tuning system that uses Csound for synthesis, with a music 
+visualization written in GLSL. There is an embedded Strudel REPL that 
+allows the user to live code the piece, while showing an animated piano 
+roll display of the generated notes.</p>
+</li>
+<li><p><a href="cloud_music_no_14.html">Cloud Music No. 14</a>, a piece that generates an 
+abstract flowing visual using a GLSL shader. Data from the moving image 
+is sampled to obtain musical notes, which are then harmonized using 
+chords, scales, and modulations generated by CsoundAC, and rendered as 
+audio using Csound. The <em>Record</em> button begins to record the performance,
+and the <em>Pause</em> button stops recording and downloads the recording to the 
+user&apos;s computer.</p>
+</li>
+<li><p><a href="cancycle.html">Cancycle</a>, a piece in three sections designed for live 
+coding.</p>
+</li>
+</ul>
+<h2 id="tutorial-pieces">Tutorial Pieces</h2><p>These are pieces designed to show how to use the new architecture for cloud-5 
+based on <code>cloud-5.js</code>, a library of resuable Web components that greatly 
+simplifies writing cloud music pieces.</p>
+<ul>
+<li><p><a href="cloud5-example-simple.html"><code>cloud5-example-simple.html</code></a>: a very simple 
+composition that illustrates my paper on cloud-music. </p>
+</li>
+<li><p><a href="cloud5-example-score-generator.html"><code>cloud5-example-score-generator.html</code></a>: 
+a fixed-length piece with a score generated by CsoundAC, with an animated 
+piano roll display and audio visualization.</p>
+</li>
+<li><p><a href="cloud5-example-strudel.html"><code>cloud5-example-strudel.html</code></a>: always-on 
+music produced by a Strudel patch, with audio visualization. This piece is 
+live-codeable.</p>
+</li>
+<li><p><a href="cloud5-example-visual-music.html"><code>cloud5-example-visual-music.html</code></a>: 
+always-on visual music produced by a GLSL shader that is sampled and 
+shaped using CsoundAC.</p>
+</li>
+</ul>
+<h2 id="documentation">Documentation</h2><ul>
+<li><p><a href="cloud-5.pdf">My paper on the cloud-5 system</a>.</p>
+</li>
+<li><p><a href="jsdocs">cloud-5 reference</a>.</p>
+</li>
+<li><p><a href="https://strudel.tidalcycles.org/workshop/getting-started">Strudel documentation</a>.</p>
+</li>
+<li><p><a href="https://csound.com/docs/manual/index.html">Csound reference</a>.</p>
+</li>
+</ul>
+<h2 id="extending-cloud-5">Extending cloud-5</h2><p>You can extend the capabilities of cloud-5 in several ways, including:</p>
+<ul>
+<li><p>Write user-defined opcodes (UDOs) in Csound that you can <code>#include</code> in any 
+Csound orchestra.</p>
+</li>
+<li><p>Write a custom JavaScript module that you can use in any .html file.</p>
+</li>
+<li><p>Write code in another high-level language and compile it for WebAssembly, 
+so that it will run in any standards-compliant Web browser.</p>
+</li>
+<li><p>Subclass any of cloud-5&apos;s custom HTML elements, or create your own.</p>
+</li>
+<li><p>Adapt for your musical purposes any other software that can run in a Web 
+browser and be controlled by JavaScript. That covers rather a lot of 
+ground....</p>
+</li>
+</ul>
+<h2 id="contributing-to-cloud-5">Contributing to cloud-5</h2><ul>
+<li><p>Enter an issue in the cloud-5 GitHub repository: either a bug, or a 
+feature request. It should briefly describe what you are going to 
+contribute.</p>
+</li>
+<li><p>Make your own fork of the cloud-5 repository.</p>
+</li>
+<li><p>Make any contributions or changes in your fork.</p>
+</li>
+<li><p>Create a pull request in your fork. Reference the issue you have 
+created.</p>
+</li>
+<li><p>I will review the pull request, and I will probably merge it if it does not 
+break existing functionality, is in keeping with the general objectives of 
+cloud-5, and builds and runs for me.</p>
+</li>
+</ul>
+<p>Avoid introducing new external dependencies as much as possible. Avoid 
+introducing new programming languages as much as possible. Do not load 
+dependencies from content distribution networks (CDNs); all dependendencies 
+used by cloud-5 must be static resources in the cloud-5 directory 
+(obviously, Strudel is a big exception, but I want to keep that the only one; 
+besides, the build process bundles Strudel into .js files that <em>are</em> 
+statically served from the cloud-5 directory).</p>
+<h2 id="building">Building</h2><p>Building cloud-5 is not normally necessary, as pieces will run directly from 
+the downloaded files. However, if you plan to make substantial contributions 
+to, or alterations of, cloud-5. these are the instructions for building.</p>
+<p>Install <a href="https://www.npmjs.com/package/pnpm">pnpm</a>, which cloud-5 and 
+Strudel use rather than npm. On macOS (I don&apos;t know about other platforms), 
+you may need to specifically install node@18.</p>
+<p>To initialize the local repository, obtain dependencies, build a static Web 
+site, and run it locally, execute the following commands:</p>
+<pre><code><code class="source-code prettyprint">pnpm install
+pnpm run setup
+pnpm run build
+pnpm run debug</code>
+</code></pre><p>These commands will patch Strudel with my addons; build everything; make a 
+distributable copy of the cloud-5 Web site in the <code>cloud-5</code> directory, with 
+all resources statically available; and run a local Web site, which is source 
+level debuggable, in that directory. Examine <code>package.json</code> for details. </p>
+<p>This may fail due to failure to build <code>canvas.node</code> (not actually used here). 
+If that happens, execute <code>cd cloud-5/strudel/packages/canvas</code> and 
+<code>node-gyp rebuild</code>, and try again from <code>pnpm run build</code>.</p>
+<p>Before updating Strudel from GitHub, make a branch to contain the updates if 
+they break cloud-5.</p>
+<p>If you see warnings or errors, don&apos;t panic unless browsing localhost does not 
+open a working Web site with playable pieces! </p>
+<p>It may be necessary to clear the browser cache and application site data to 
+see updated pieces.</p>
+<p><em><strong>NOTE WELL</strong></em>: The <code>gogins.github.io</code> repository is maintained using 
+<code>pnpm run deploy</code> in <em>this</em> <code>cloud-5</code> repository. <em>DO NOT</em> delete any files 
+from <code>gogins.github.io</code>, although pieces may be added there. In other words, 
+<code>gogins.github.io</code> can be the same as, or a superset of, <code>cloud-5</code>.</p>
+<h2 id="running-in-nw-js">Running in NW.js</h2><p>It also is possible to run cloud-5 pieces locally in <a href="https://nwjs.io/">NW.js</a> 
+using <a href="https://github.com/gogins/csound-extended-node">csound.node</a>. In this 
+case, csound.node provides a native code build of Csound, and such pieces can 
+load native code plugins and read and write to the local filesystem.</p>
+<p>This involves installing a number of pre-requisites, but the advantages 
+include somewhat higher performance from native code Csound, the ability to 
+use native plugins (both Csound plugin opcodes and VST3 plugins), and the 
+ability to read and write in the local filesystem.</p>
+<h3 id="installation">Installation</h3><ol>
+<li>Install regular <a href="https://csound.com/download.html">Csound for desktop computers</a>.</li>
+<li>Install <a href="https://pnpm.io/installation">pnpm</a>.</li>
+<li>Install <a href="https://github.com/gogins/csound-extended-node">csound.node</a>. Note that 
+the API for csound.node is virtually the same as the API for my WebAssembly build 
+of Csound.</li>
+<li>Install <a href="https://nwjs.io/">NW.js</a>.</li>
+</ol>
+<h3 id="configuration-and-running">Configuration and Running</h3><p>Read about <a href="https://github.com/gogins/csound-extended-node">csound.node</a> 
+and make sure that the application directory for your <code>csound.node</code> pieces is the 
+<code>cloud-5</code> directory, which includes necessary resources.</p>
+<h2 id="release-notes">Release Notes</h2><h3 id="-a-href--xxx--v1-0--a-"><a href="xxx">v1.0</a></h3><ul>
+<li><p>Added cloud-5.js, cloud-5.css, example pieces, and my paper on using 
+cloud-5. These greatly simplify writing cloud music pieces.</p>
+</li>
+<li><p>Various bug fixes ported from CsoundAC&apos;s Silencio score, used for the piano 
+roll display.</p>
+</li>
+<li><p>Updated Csound, CsoundAC, and Strudel.</p>
+</li>
+</ul>
+<h3 id="-a-href--https---github-com-gogins-cloud-5-commits-v0-2--v0-2--a-"><a href="https://github.com/gogins/cloud-5/commits/v0.2">v0.2</a></h3><ul>
+<li><p>Added <em>Record</em> and <em>Pause</em> button to <em>Cloud Music No. 14</em>, for the user to
+download a soundfile that records the performance using Csound&apos;s <code>fout</code> 
+opcode.</p>
+</li>
+<li><p>Updated Csound, <a href="https://github.com/gogins/csound-wasm">csound-wasm</a>, 
+and Strudel to current versions.</p>
+<h3 id="-a-href--https---github-com-gogins-cloud-5-commits-v0-1--v0-1--a-"><a href="https://github.com/gogins/cloud-5/commits/v0.1">v0.1</a></h3></li>
+<li><p>Improved user interface and code organization in some pieces, making them 
+more usable as templates for newer pieces.</p>
+</li>
+<li><p>Improved documentation.</p>
+</li>
+<li><p>Updated Csound, <a href="https://github.com/gogins/csound-wasm">csound-wasm</a>, 
+and Strudel to current versions.</p>
+</li>
+<li><p>Pieces in cloud-5, including pieces using Strudel, can now also run locally 
+in <a href="https://nwjs.io/">NW.js</a> using 
+<a href="https://github.com/gogins/csound-extended-node">csound.node</a>.</p>
+</li>
+</ul>
+<h3 id="-a-href--https---github-com-gogins-cloud-5-commits-v0-1beta7--v0-1beta7--a-"><a href="https://github.com/gogins/cloud-5/commits/v0.1beta7">v0.1beta7</a></h3><ul>
+<li><p>Updated Csound to version 6.19.0.</p>
+</li>
+<li><p>Improved <a href="https://github.com/gogins/csound-wasm">csound-wasm</a> 
+and the <a href="cloud_music_no_9.html">Cloud Music No. 9</a> example to support 
+running either in NW.js with native Csound, or in Web browsers with 
+Csound for WebAssembly. This makes it possible to compose pieces 
+using Strudel that use native Csound, VST plugins, access to the local 
+filesystem, and so on.</p>
+</li>
+</ul>
+<h3 id="-a-href--https---github-com-gogins-cloud-5-commits-v0-1beta6--v0-1beta6--a-"><a href="https://github.com/gogins/cloud-5/commits/v0.1beta6">v0.1beta6</a></h3><ul>
+<li><p>Introduced the CsoundAC <code>track</code> function, a variant of Strudel&apos;s <code>arrange</code> 
+that does not crash when the number of cycles for a section is set to zero 
+to silence it.</p>
+</li>
+<li><p>Improved the CsoundAC <code>csoundn</code> output to send all control parameters 
+with names beginning <code>gi</code> or <code>gk</code> to Csound as control channel values; 
+these channels must first be set up in the Csound orchestra with the same 
+names.</p>
+</li>
+<li><p>Added <code>cancyle.html</code>, a piece designed for live performance by doing a 
+modest amount of live coding during play.</p>
+</li>
+</ul>
+<h3 id="-a-href--https---github-com-gogins-cloud-5-commits-v0-1beta5--v0-1beta5--a-"><a href="https://github.com/gogins/cloud-5/commits/v0.1beta5">v0.1beta5</a></h3><ul>
+<li><p>Updated Strudel to get the extremely useful <code>slider</code>, which can be either 
+discrete or continuous. The <code>slider</code> is embedded directly into the Strudel 
+patch.</p>
+</li>
+<li><p>Added some code to <code>csoundn</code> that sends the value of any Strudel control 
+registered with <code>createParam</code> and whose name begins with <code>gi</code> or <code>gk</code> to 
+Csound as a control channel value. This also means that the new <code>slider</code> 
+widget in Strudel can send its value to the Csound control channel.</p>
+</li>
+</ul>
+<h3 id="-a-href--https---github-com-gogins-cloud-5-commits-v0-1beta4--v0-1beta4--a-"><a href="https://github.com/gogins/cloud-5/commits/v0.1beta4">v0.1beta4</a></h3><ul>
+<li><p>Attempts have been made to correct the scheduling of the <code>csoundn</code> output 
+based on a trigger, and to get <code>csoundn</code> to output correct piano roll 
+events.</p>
+</li>
+<li><p>Put in diagnostic messages marked <code>sync</code> for testing.</p>
+</li>
+<li><p>Colorize notes in the piano roll that come from <code>csoundn</code>.</p>
+</li>
+<li><p>In <code>package.json</code> always make a releasable zip file in each build.</p>
+</li>
+</ul>
+<h3 id="-a-href--https---github-com-gogins-cloud-5-commits-v0-1beta3--v0-1beta3--a-"><a href="https://github.com/gogins/cloud-5/commits/v0.1beta3">v0.1beta3</a></h3><ul>
+<li><p>Put in needed patch for <code>cyclist.mjs</code>.</p>
+</li>
+<li><p>Restored concatenated Strudel controls string in <code>csoundac.mjs</code>.</p>
+</li>
+</ul>
+<h3 id="-a-href--https---github-com-gogins-cloud-5-commits-v0-1beta2--v0-1beta2--a-"><a href="https://github.com/gogins/cloud-5/commits/v0.1beta2">v0.1beta2</a></h3><ul>
+<li><p>Improved README.md/index.html.</p>
+</li>
+<li><p>Corrected broken links and incorrect credits in example pieces.</p>
+</li>
+<li><p>Replaced the favicon from Strudel with cloud-5&apos;s own favicon.</p>
+</li>
+</ul>
+<h3 id="-a-href--https---github-com-gogins-cloud-5-commits-v0-1beta--v0-1beta--a-"><a href="https://github.com/gogins/cloud-5/commits/v0.1beta">v0.1beta</a></h3><ul>
+<li>This was the initial release.</li>
+</ul>
+</div>
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

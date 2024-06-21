@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <base data-ice="baseUrl" href="../../">
+  <title data-ice="title">public/Quaternion.js</title>
+  <link type="text/css" rel="stylesheet" href="css/style.css">
+  <link type="text/css" rel="stylesheet" href="css/prettify-tomorrow.css">
+  <script src="script/prettify/prettify.js"></script>
+  <script src="script/manual.js"></script>
+</head>
+<body class="layout-container" data-ice="rootContainer">
+
+<header>
+  <a href="./">Home</a>
+  
+  <a href="identifiers.html">Reference</a>
+  <a href="source.html">Source</a>
+  
+  <div class="search-box">
+  <span>
+    <img src="./image/search.png">
+    <span class="search-input-edge"></span><input class="search-input"><span class="search-input-edge"></span>
+  </span>
+    <ul class="search-result"></ul>
+  </div>
+</header>
+
+<nav class="navigation" data-ice="nav"><div>
+  <ul>
+    
+  <li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/csoundac.mjs~ChordPatterns.html">ChordPatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/csoundac.mjs~PitvPatterns.html">PitvPatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/csoundac.mjs~ScalePatterns.html">ScalePatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-class">C</span><span data-ice="name"><span><a href="class/public/statefulpatterns.mjs~StatefulPatterns.html">StatefulPatterns</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Chord">Chord</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Clone">Clone</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Pitv">Pitv</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-Scale">Scale</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-frequencyToMidiInteger">frequencyToMidiInteger</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-frequencyToMidiReal">frequencyToMidiReal</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-hsvToRgb">hsvToRgb</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-print_counter">print_counter</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-setPitch">setPitch</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-set_instrument_count">set_instrument_count</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-track">track</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-diagnostic">diagnostic</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-function">F</span><span data-ice="name"><span><a href="function/index.html#static-function-diagnostic_level">diagnostic_level</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-csoundn">csoundn</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ALWAYS">ALWAYS</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-DEBUG">DEBUG</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-ERROR">ERROR</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-INFORMATION">INFORMATION</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-NEVER">NEVER</a></span></span></li>
+<li data-ice="doc"><span data-ice="kind" class="kind-variable">V</span><span data-ice="name"><span><a href="variable/index.html#static-variable-WARNING">WARNING</a></span></span></li>
+</ul>
+</div>
+</nav>
+
+<div class="content" data-ice="content"><h1 data-ice="title">public/Quaternion.js</h1>
+<pre class="source-code line-number raw-source-code"><code class="prettyprint linenums" data-ice="content">/**
+ * @license Quaternion.js v1.4.0 27/03/2022
+ *
+ * Copyright (c) 2022, Robert Eisele (robert@xarg.org)
+ * Licensed under the MIT license.
+ **/
+(function(root) {
+
+  &apos;use strict&apos;;
+
+  /**
+   * Calculates log(sqrt(a^2+b^2)) in a way to avoid overflows
+   *
+   * @param {number} a
+   * @param {number} b
+   * @returns {number}
+   */
+  function logHypot(a, b) {
+
+    var _a = Math.abs(a);
+    var _b = Math.abs(b);
+
+    if (a === 0) {
+      return Math.log(_b);
+    }
+
+    if (b === 0) {
+      return Math.log(_a);
+    }
+
+    if (_a &lt; 3000 &amp;&amp; _b &lt; 3000) {
+      return 0.5 * Math.log(a * a + b * b);
+    }
+
+    a = a / 2;
+    b = b / 2;
+
+    return 0.5 * Math.log(a * a + b * b) + Math.LN2;
+  }
+
+  /*
+   * Default is the multiplicative one element
+   *
+   */
+  var P = {
+    &apos;w&apos;: 1,
+    &apos;x&apos;: 0,
+    &apos;y&apos;: 0,
+    &apos;z&apos;: 0
+  };
+
+  function parse(dest, w, x, y, z) {
+
+    // Most common internal use case with 4 params
+    if (z !== undefined) {
+      dest[&apos;w&apos;] = w;
+      dest[&apos;x&apos;] = x;
+      dest[&apos;y&apos;] = y;
+      dest[&apos;z&apos;] = z;
+      return;
+    }
+
+    if (typeof w === &apos;object&apos; &amp;&amp; y === undefined) {
+
+      // Check for quats, for example when an object gets cloned
+      if (&apos;w&apos; in w || &apos;x&apos; in w || &apos;y&apos; in w || &apos;z&apos; in w) {
+        dest[&apos;w&apos;] = w[&apos;w&apos;] || 0;
+        dest[&apos;x&apos;] = w[&apos;x&apos;] || 0;
+        dest[&apos;y&apos;] = w[&apos;y&apos;] || 0;
+        dest[&apos;z&apos;] = w[&apos;z&apos;] || 0;
+        return;
+      }
+
+      // Check for complex numbers
+      if (&apos;re&apos; in w &amp;&amp; &apos;im&apos; in w) {
+        dest[&apos;w&apos;] = w[&apos;re&apos;];
+        dest[&apos;x&apos;] = w[&apos;im&apos;];
+        dest[&apos;y&apos;] = 0;
+        dest[&apos;z&apos;] = 0;
+        return;
+      }
+
+      // Check for array
+      if (w.length === 4) {
+        dest[&apos;w&apos;] = w[0];
+        dest[&apos;x&apos;] = w[1];
+        dest[&apos;y&apos;] = w[2];
+        dest[&apos;z&apos;] = w[3];
+        return;
+      }
+
+      // Check for augmented vector
+      if (w.length === 3) {
+        dest[&apos;w&apos;] = 0;
+        dest[&apos;x&apos;] = w[0];
+        dest[&apos;y&apos;] = w[1];
+        dest[&apos;z&apos;] = w[2];
+        return;
+      }
+
+      throw new Error(&apos;Invalid object&apos;);
+    }
+
+    // Parse string values
+    if (typeof w === &apos;string&apos; &amp;&amp; y === undefined) {
+
+      var tokens = w.match(/\d+\.?\d*e[+-]?\d+|\d+\.?\d*|\.\d+|./g);
+      var plus = 1;
+      var minus = 0;
+
+      var iMap = { &apos;i&apos;: &apos;x&apos;, &apos;j&apos;: &apos;y&apos;, &apos;k&apos;: &apos;z&apos; };
+
+      if (tokens === null) {
+        throw new Error(&apos;Parse error&apos;);
+      }
+
+      // Reset the current state
+      dest[&apos;w&apos;] =
+        dest[&apos;x&apos;] =
+        dest[&apos;y&apos;] =
+        dest[&apos;z&apos;] = 0;
+
+      for (var i = 0; i &lt; tokens.length; i++) {
+
+        var c = tokens[i];
+        var d = tokens[i + 1];
+
+        if (c === &apos; &apos; || c === &apos;\t&apos; || c === &apos;\n&apos;) {
+          /* void */
+        } else if (c === &apos;+&apos;) {
+          plus++;
+        } else if (c === &apos;-&apos;) {
+          minus++;
+        } else {
+
+          if (plus + minus === 0) {
+            throw new Error(&apos;Parse error&apos; + c);
+          }
+          var g = iMap[c];
+
+          // Is the current token an imaginary sign?
+          if (g !== undefined) {
+
+            // Is the following token a number?
+            if (d !== &apos; &apos; &amp;&amp; !isNaN(d)) {
+              c = d;
+              i++;
+            } else {
+              c = &apos;1&apos;;
+            }
+
+          } else {
+
+            if (isNaN(c)) {
+              throw new Error(&apos;Parser error&apos;);
+            }
+
+            g = iMap[d];
+
+            if (g !== undefined) {
+              i++;
+            }
+          }
+
+          dest[g || &apos;w&apos;] += parseFloat((minus % 2 ? &apos;-&apos; : &apos;&apos;) + c);
+          plus = minus = 0;
+        }
+      }
+
+      // Still something on the stack
+      if (plus + minus &gt; 0) {
+        throw new Error(&apos;Parser error&apos;);
+      }
+      return;
+    }
+
+    // If no single variable was given AND it was the constructor, set it to the identity
+    if (w === undefined &amp;&amp; dest !== P) {
+      dest[&apos;w&apos;] = 1;
+      dest[&apos;x&apos;] =
+      dest[&apos;y&apos;] =
+      dest[&apos;z&apos;] = 0;
+    } else {
+
+      dest[&apos;w&apos;] = w || 0;
+
+      // Note: This isn&apos;t setFromAxis, it&apos;s just syntactic sugar!
+      if (x &amp;&amp; x.length === 3) {
+        dest[&apos;x&apos;] = x[0];
+        dest[&apos;y&apos;] = x[1];
+        dest[&apos;z&apos;] = x[2];
+      } else {
+        dest[&apos;x&apos;] = x || 0;
+        dest[&apos;y&apos;] = y || 0;
+        dest[&apos;z&apos;] = z || 0;
+      }
+    }
+  }
+
+  function numToStr(n, char, prev) {
+
+    var ret = &apos;&apos;;
+
+    if (n !== 0) {
+
+      if (prev !== &apos;&apos;) {
+        ret += n &lt; 0 ? &apos; - &apos; : &apos; + &apos;;
+      } else if (n &lt; 0) {
+        ret += &apos;-&apos;;
+      }
+
+      n = Math.abs(n);
+
+      if (1 !== n || char === &apos;&apos;) {
+        ret += n;
+      }
+      ret += char;
+    }
+    return ret;
+  }
+
+  /**
+   * Quaternion constructor
+   *
+   * @constructor
+   * @param {number|Object|string} w real
+   * @param {number=} x imag
+   * @param {number=} y imag
+   * @param {number=} z imag
+   * @returns {Quaternion}
+   */
+  function Quaternion(w, x, y, z) {
+
+    if (!(this instanceof Quaternion)) {
+      return new Quaternion(w, x, y, z);
+    }
+
+    parse(this, w, x, y, z);
+  }
+
+  Quaternion.prototype = {
+    &apos;w&apos;: 1,
+    &apos;x&apos;: 0,
+    &apos;y&apos;: 0,
+    &apos;z&apos;: 0,
+    /**
+     * Adds two quaternions Q1 and Q2
+     *
+     * @param {number|Object|string} w real
+     * @param {number=} x imag
+     * @param {number=} y imag
+     * @param {number=} z imag
+     * @returns {Quaternion}
+     */
+    &apos;add&apos;: function(w, x, y, z) {
+
+      parse(P, w, x, y, z);
+
+      // Q1 + Q2 := [w1, v1] + [w2, v2] = [w1 + w2, v1 + v2]
+
+      return new Quaternion(
+        this[&apos;w&apos;] + P[&apos;w&apos;],
+        this[&apos;x&apos;] + P[&apos;x&apos;],
+        this[&apos;y&apos;] + P[&apos;y&apos;],
+        this[&apos;z&apos;] + P[&apos;z&apos;]);
+    },
+    /**
+     * Subtracts a quaternions Q2 from Q1
+     *
+     * @param {number|Object|string} w real
+     * @param {number=} x imag
+     * @param {number=} y imag
+     * @param {number=} z imag
+     * @returns {Quaternion}
+     */
+    &apos;sub&apos;: function(w, x, y, z) {
+
+      parse(P, w, x, y, z);
+
+      // Q1 - Q2 := Q1 + (-Q2)
+      //          = [w1, v1] - [w2, v2] = [w1 - w2, v1 - v2]
+
+      return new Quaternion(
+        this[&apos;w&apos;] - P[&apos;w&apos;],
+        this[&apos;x&apos;] - P[&apos;x&apos;],
+        this[&apos;y&apos;] - P[&apos;y&apos;],
+        this[&apos;z&apos;] - P[&apos;z&apos;]);
+    },
+    /**
+     * Calculates the additive inverse, or simply it negates the quaternion
+     *
+     * @returns {Quaternion}
+     */
+    &apos;neg&apos;: function() {
+
+      // -Q := [-w, -v]
+
+      return new Quaternion(-this[&apos;w&apos;], -this[&apos;x&apos;], -this[&apos;y&apos;], -this[&apos;z&apos;]);
+    },
+    /**
+     * Calculates the length/modulus/magnitude or the norm of a quaternion
+     *
+     * @returns {number}
+     */
+    &apos;norm&apos;: function() {
+
+      // |Q| := sqrt(|Q|^2)
+
+      // The unit quaternion has |Q| = 1
+
+      var w = this[&apos;w&apos;];
+      var x = this[&apos;x&apos;];
+      var y = this[&apos;y&apos;];
+      var z = this[&apos;z&apos;];
+
+      return Math.sqrt(w * w + x * x + y * y + z * z);
+    },
+    /**
+     * Calculates the squared length/modulus/magnitude or the norm of a quaternion
+     *
+     * @returns {number}
+     */
+    &apos;normSq&apos;: function() {
+
+      // |Q|^2 := [w, v] * [w, -v]
+      //        = [w^2 + dot(v, v), -w * v + w * v + cross(v, -v)]
+      //        = [w^2 + |v|^2, 0]
+      //        = [w^2 + dot(v, v), 0]
+      //        = dot(Q, Q)
+      //        = Q * Q&apos;
+
+      var w = this[&apos;w&apos;];
+      var x = this[&apos;x&apos;];
+      var y = this[&apos;y&apos;];
+      var z = this[&apos;z&apos;];
+
+      return w * w + x * x + y * y + z * z;
+    },
+    /**
+     * Normalizes the quaternion to have |Q| = 1 as long as the norm is not zero
+     * Alternative names are the signum, unit or versor
+     *
+     * @returns {Quaternion}
+     */
+    &apos;normalize&apos;: function() {
+
+      // Q* := Q / |Q|
+
+      // unrolled Q.scale(1 / Q.norm())
+
+      var w = this[&apos;w&apos;];
+      var x = this[&apos;x&apos;];
+      var y = this[&apos;y&apos;];
+      var z = this[&apos;z&apos;];
+
+      var norm = Math.sqrt(w * w + x * x + y * y + z * z);
+
+      if (norm &lt; Quaternion[&apos;EPSILON&apos;]) {
+        return Quaternion[&apos;ZERO&apos;];
+      }
+
+      norm = 1 / norm;
+
+      return new Quaternion(w * norm, x * norm, y * norm, z * norm);
+    },
+    /**
+     * Calculates the Hamilton product of two quaternions
+     * Leaving out the imaginary part results in just scaling the quat
+     *
+     * @param {number|Object|string} w real
+     * @param {number=} x imag
+     * @param {number=} y imag
+     * @param {number=} z imag
+     * @returns {Quaternion}
+     */
+    &apos;mul&apos;: function(w, x, y, z) {
+
+      parse(P, w, x, y, z);
+
+      // Q1 * Q2 = [w1 * w2 - dot(v1, v2), w1 * v2 + w2 * v1 + cross(v1, v2)]
+
+      // Not commutative because cross(v1, v2) != cross(v2, v1)!
+
+      var w1 = this[&apos;w&apos;];
+      var x1 = this[&apos;x&apos;];
+      var y1 = this[&apos;y&apos;];
+      var z1 = this[&apos;z&apos;];
+
+      var w2 = P[&apos;w&apos;];
+      var x2 = P[&apos;x&apos;];
+      var y2 = P[&apos;y&apos;];
+      var z2 = P[&apos;z&apos;];
+
+      return new Quaternion(
+        w1 * w2 - x1 * x2 - y1 * y2 - z1 * z2,
+        w1 * x2 + x1 * w2 + y1 * z2 - z1 * y2,
+        w1 * y2 + y1 * w2 + z1 * x2 - x1 * z2,
+        w1 * z2 + z1 * w2 + x1 * y2 - y1 * x2);
+    },
+    /**
+     * Scales a quaternion by a scalar, faster than using multiplication
+     *
+     * @param {number} s scaling factor
+     * @returns {Quaternion}
+     */
+    &apos;scale&apos;: function(s) {
+
+      return new Quaternion(
+        this[&apos;w&apos;] * s,
+        this[&apos;x&apos;] * s,
+        this[&apos;y&apos;] * s,
+        this[&apos;z&apos;] * s);
+    },
+    /**
+     * Calculates the dot product of two quaternions
+     *
+     * @param {number|Object|string} w real
+     * @param {number=} x imag
+     * @param {number=} y imag
+     * @param {number=} z imag
+     * @returns {number}
+     */
+    &apos;dot&apos;: function(w, x, y, z) {
+
+      parse(P, w, x, y, z);
+
+      // dot(Q1, Q2) := w1 * w2 + dot(v1, v2)
+
+      return this[&apos;w&apos;] * P[&apos;w&apos;] + this[&apos;x&apos;] * P[&apos;x&apos;] + this[&apos;y&apos;] * P[&apos;y&apos;] + this[&apos;z&apos;] * P[&apos;z&apos;];
+    },
+    /**
+     * Calculates the inverse of a quat for non-normalized quats such that
+     * Q^-1 * Q = 1 and Q * Q^-1 = 1
+     *
+     * @returns {Quaternion}
+     */
+    &apos;inverse&apos;: function() {
+
+      // Q^-1 := Q&apos; / |Q|^2
+      //       = [w / (w^2 + |v|^2), -v / (w^2 + |v|^2)]
+
+      // Proof:
+      // Q * Q^-1 = [w, v] * [w / (w^2 + |v|^2), -v / (w^2 + |v|^2)]
+      //          = [1, 0]
+      // Q^-1 * Q = [w / (w^2 + |v|^2), -v / (w^2 + |v|^2)] * [w, v]
+      //          = [1, 0].
+
+      var w = this[&apos;w&apos;];
+      var x = this[&apos;x&apos;];
+      var y = this[&apos;y&apos;];
+      var z = this[&apos;z&apos;];
+
+      var normSq = w * w + x * x + y * y + z * z;
+
+      if (normSq === 0) {
+        return Quaternion[&apos;ZERO&apos;]; // TODO: Is the result zero or one when the norm is zero?
+      }
+
+      normSq = 1 / normSq;
+
+      return new Quaternion(w * normSq, -x * normSq, -y * normSq, -z * normSq);
+    },
+    /**
+     * Multiplies a quaternion with the inverse of a second quaternion
+     *
+     * @param {number|Object|string} w real
+     * @param {number=} x imag
+     * @param {number=} y imag
+     * @param {number=} z imag
+     * @returns {Quaternion}
+     */
+    &apos;div&apos;: function(w, x, y, z) {
+
+      parse(P, w, x, y, z);
+
+      // Q1 / Q2 := Q1 * Q2^-1
+
+      var w1 = this[&apos;w&apos;];
+      var x1 = this[&apos;x&apos;];
+      var y1 = this[&apos;y&apos;];
+      var z1 = this[&apos;z&apos;];
+
+      var w2 = P[&apos;w&apos;];
+      var x2 = P[&apos;x&apos;];
+      var y2 = P[&apos;y&apos;];
+      var z2 = P[&apos;z&apos;];
+
+      var normSq = w2 * w2 + x2 * x2 + y2 * y2 + z2 * z2;
+
+      if (normSq === 0) {
+        return Quaternion[&apos;ZERO&apos;]; // TODO: Is the result zero or one when the norm is zero?
+      }
+
+      normSq = 1 / normSq;
+
+      return new Quaternion(
+        (w1 * w2 + x1 * x2 + y1 * y2 + z1 * z2) * normSq,
+        (x1 * w2 - w1 * x2 - y1 * z2 + z1 * y2) * normSq,
+        (y1 * w2 - w1 * y2 - z1 * x2 + x1 * z2) * normSq,
+        (z1 * w2 - w1 * z2 - x1 * y2 + y1 * x2) * normSq);
+    },
+    /**
+     * Calculates the conjugate of a quaternion
+     *
+     * @returns {Quaternion}
+     */
+    &apos;conjugate&apos;: function() {
+
+      // Q&apos; = [s, -v]
+
+      // If the quaternion is normalized,
+      // the conjugate is the inverse of the quaternion - but faster
+      // Q&apos; * Q = Q * Q&apos; = 1
+
+      // Additionally, the conjugate of a unit quaternion is a rotation with the same
+      // angle but the opposite axis.
+
+      // Moreover the following property holds:
+      // (Q1 * Q2)&apos; = Q2&apos; * Q1&apos;
+
+      return new Quaternion(this[&apos;w&apos;], -this[&apos;x&apos;], -this[&apos;y&apos;], -this[&apos;z&apos;]);
+    },
+    /**
+     * Calculates the natural exponentiation of the quaternion
+     *
+     * @returns {Quaternion}
+     */
+    &apos;exp&apos;: function() {
+
+      var w = this[&apos;w&apos;];
+      var x = this[&apos;x&apos;];
+      var y = this[&apos;y&apos;];
+      var z = this[&apos;z&apos;];
+
+      var vNorm = Math.sqrt(x * x + y * y + z * z);
+      var wExp = Math.exp(w);
+      var scale = wExp / vNorm * Math.sin(vNorm);
+
+      if (vNorm === 0) {
+        //return new Quaternion(wExp * Math.cos(vNorm), 0, 0, 0);
+        return new Quaternion(wExp, 0, 0, 0);
+      }
+
+      return new Quaternion(
+        wExp * Math.cos(vNorm),
+        x * scale,
+        y * scale,
+        z * scale);
+    },
+    /**
+     * Calculates the natural logarithm of the quaternion
+     *
+     * @returns {Quaternion}
+     */
+    &apos;log&apos;: function() {
+
+      var w = this[&apos;w&apos;];
+      var x = this[&apos;x&apos;];
+      var y = this[&apos;y&apos;];
+      var z = this[&apos;z&apos;];
+
+      if (y === 0 &amp;&amp; z === 0) {
+        return new Quaternion(
+          logHypot(w, x),
+          Math.atan2(x, w), 0, 0);
+      }
+
+      var qNorm2 = x * x + y * y + z * z + w * w;
+      var vNorm = Math.sqrt(x * x + y * y + z * z);
+
+      var scale = Math.atan2(vNorm, w) / vNorm;
+
+      return new Quaternion(
+        Math.log(qNorm2) * 0.5,
+        x * scale,
+        y * scale,
+        z * scale);
+    },
+    /**
+     * Calculates the power of a quaternion raised to a real number or another quaternion
+     *
+     * @param {number|Object|string} w real
+     * @param {number=} x imag
+     * @param {number=} y imag
+     * @param {number=} z imag
+     * @returns {Quaternion}
+     */
+    &apos;pow&apos;: function(w, x, y, z) {
+
+      parse(P, w, x, y, z);
+
+      if (P[&apos;y&apos;] === 0 &amp;&amp; P[&apos;z&apos;] === 0) {
+
+        if (P[&apos;w&apos;] === 1 &amp;&amp; P[&apos;x&apos;] === 0) {
+          return this;
+        }
+
+        if (P[&apos;w&apos;] === 0 &amp;&amp; P[&apos;x&apos;] === 0) {
+          return Quaternion[&apos;ONE&apos;];
+        }
+
+        // Check if we can operate in C
+        // Borrowed from complex.js
+        if (this[&apos;y&apos;] === 0 &amp;&amp; this[&apos;z&apos;] === 0) {
+
+          var a = this[&apos;w&apos;];
+          var b = this[&apos;x&apos;];
+
+          if (a === 0 &amp;&amp; b === 0) {
+            return Quaternion[&apos;ZERO&apos;];
+          }
+
+          var arg = Math.atan2(b, a);
+          var loh = logHypot(a, b);
+
+          if (P[&apos;x&apos;] === 0) {
+
+            if (b === 0 &amp;&amp; a &gt;= 0) {
+
+              return new Quaternion(Math.pow(a, P[&apos;w&apos;]), 0, 0, 0);
+
+            } else if (a === 0) {
+
+              switch (P[&apos;w&apos;] % 4) {
+                case 0:
+                  return new Quaternion(Math.pow(b, P[&apos;w&apos;]), 0, 0, 0);
+                case 1:
+                  return new Quaternion(0, Math.pow(b, P[&apos;w&apos;]), 0, 0);
+                case 2:
+                  return new Quaternion(-Math.pow(b, P[&apos;w&apos;]), 0, 0, 0);
+                case 3:
+                  return new Quaternion(0, -Math.pow(b, P[&apos;w&apos;]), 0, 0);
+              }
+            }
+          }
+
+          a = Math.exp(P[&apos;w&apos;] * loh - P[&apos;x&apos;] * arg);
+          b = P[&apos;x&apos;] * loh + P[&apos;w&apos;] * arg;
+          return new Quaternion(
+            a * Math.cos(b),
+            a * Math.sin(b), 0, 0);
+        }
+      }
+
+      // Normal quaternion behavior
+      // q^p = e^ln(q^p) = e^(ln(q)*p)
+      return this[&apos;log&apos;]()[&apos;mul&apos;](P)[&apos;exp&apos;]();
+    },
+    /**
+     * Checks if two quats are the same
+     *
+     * @param {number|Object|string} w real
+     * @param {number=} x imag
+     * @param {number=} y imag
+     * @param {number=} z imag
+     * @returns {boolean}
+     */
+    &apos;equals&apos;: function(w, x, y, z) {
+
+      parse(P, w, x, y, z);
+
+      var eps = Quaternion[&apos;EPSILON&apos;];
+
+      // maybe check for NaN&apos;s here?
+      return Math.abs(P[&apos;w&apos;] - this[&apos;w&apos;]) &lt; eps
+        &amp;&amp; Math.abs(P[&apos;x&apos;] - this[&apos;x&apos;]) &lt; eps
+        &amp;&amp; Math.abs(P[&apos;y&apos;] - this[&apos;y&apos;]) &lt; eps
+        &amp;&amp; Math.abs(P[&apos;z&apos;] - this[&apos;z&apos;]) &lt; eps;
+    },
+    /**
+     * Checks if all parts of a quaternion are finite
+     *
+     * @returns {boolean}
+     */
+    &apos;isFinite&apos;: function() {
+
+      return isFinite(this[&apos;w&apos;]) &amp;&amp; isFinite(this[&apos;x&apos;]) &amp;&amp; isFinite(this[&apos;y&apos;]) &amp;&amp; isFinite(this[&apos;z&apos;]);
+    },
+    /**
+     * Checks if any of the parts of the quaternion is not a number
+     *
+     * @returns {boolean}
+     */
+    &apos;isNaN&apos;: function() {
+
+      return isNaN(this[&apos;w&apos;]) || isNaN(this[&apos;x&apos;]) || isNaN(this[&apos;y&apos;]) || isNaN(this[&apos;z&apos;]);
+    },
+    /**
+     * Gets the Quaternion as a well formatted string
+     *
+     * @returns {string}
+     */
+    &apos;toString&apos;: function() {
+
+      var w = this[&apos;w&apos;];
+      var x = this[&apos;x&apos;];
+      var y = this[&apos;y&apos;];
+      var z = this[&apos;z&apos;];
+      var ret = &apos;&apos;;
+
+      if (isNaN(w) || isNaN(x) || isNaN(y) || isNaN(z)) {
+        return &apos;NaN&apos;;
+      }
+
+      // Alternative design?
+      // &apos;(%f, [%f %f %f])&apos;
+
+      ret = numToStr(w, &apos;&apos;, ret);
+      ret += numToStr(x, &apos;i&apos;, ret);
+      ret += numToStr(y, &apos;j&apos;, ret);
+      ret += numToStr(z, &apos;k&apos;, ret);
+
+      if (&apos;&apos; === ret)
+        return &apos;0&apos;;
+
+      return ret;
+    },
+    /**
+     * Returns the real part of the quaternion
+     *
+     * @returns {number}
+     */
+    &apos;real&apos;: function() {
+
+      return this[&apos;w&apos;];
+    },
+    /**
+     * Returns the imaginary part of the quaternion as a 3D vector / array
+     *
+     * @returns {Array}
+     */
+    &apos;imag&apos;: function() {
+
+      return [this[&apos;x&apos;], this[&apos;y&apos;], this[&apos;z&apos;]];
+    },
+    /**
+     * Gets the actual quaternion as a 4D vector / array
+     *
+     * @returns {Array}
+     */
+    &apos;toVector&apos;: function() {
+
+      return [this[&apos;w&apos;], this[&apos;x&apos;], this[&apos;y&apos;], this[&apos;z&apos;]];
+    },
+    /**
+     * Calculates the 3x3 rotation matrix for the current quat
+     *
+     * @param {boolean=} twoD
+     * @returns {Array}
+     */
+    &apos;toMatrix&apos;: function(twoD) {
+
+      var w = this[&apos;w&apos;];
+      var x = this[&apos;x&apos;];
+      var y = this[&apos;y&apos;];
+      var z = this[&apos;z&apos;];
+
+      var wx = w * x, wy = w * y, wz = w * z;
+      var xx = x * x, xy = x * y, xz = x * z;
+      var yy = y * y, yz = y * z, zz = z * z;
+
+      if (twoD) {
+        return [
+          [1 - 2 * (yy + zz), 2 * (xy - wz), 2 * (xz + wy)],
+          [2 * (xy + wz), 1 - 2 * (xx + zz), 2 * (yz - wx)],
+          [2 * (xz - wy), 2 * (yz + wx), 1 - 2 * (xx + yy)]];
+      }
+
+      return [
+        1 - 2 * (yy + zz), 2 * (xy - wz), 2 * (xz + wy),
+        2 * (xy + wz), 1 - 2 * (xx + zz), 2 * (yz - wx),
+        2 * (xz - wy), 2 * (yz + wx), 1 - 2 * (xx + yy)];
+    },
+    /**
+     * Calculates the homogeneous 4x4 rotation matrix for the current quat
+     *
+     * @param {boolean=} twoD
+     * @returns {Array}
+     */
+    &apos;toMatrix4&apos;: function(twoD) {
+
+      var w = this[&apos;w&apos;];
+      var x = this[&apos;x&apos;];
+      var y = this[&apos;y&apos;];
+      var z = this[&apos;z&apos;];
+
+      var wx = w * x, wy = w * y, wz = w * z;
+      var xx = x * x, xy = x * y, xz = x * z;
+      var yy = y * y, yz = y * z, zz = z * z;
+
+      if (twoD) {
+        return [
+          [1 - 2 * (yy + zz), 2 * (xy - wz), 2 * (xz + wy), 0],
+          [2 * (xy + wz), 1 - 2 * (xx + zz), 2 * (yz - wx), 0],
+          [2 * (xz - wy), 2 * (yz + wx), 1 - 2 * (xx + yy), 0],
+          [0, 0, 0, 1]];
+      }
+
+      return [
+        1 - 2 * (yy + zz), 2 * (xy - wz), 2 * (xz + wy), 0,
+        2 * (xy + wz), 1 - 2 * (xx + zz), 2 * (yz - wx), 0,
+        2 * (xz - wy), 2 * (yz + wx), 1 - 2 * (xx + yy), 0,
+        0, 0, 0, 1];
+    },
+    /**
+     * Calculates the Euler angles represented by the current quat
+     * 
+     * @returns {Object}
+     */
+    &apos;toEuler&apos;: function() {
+
+      var w = this[&apos;w&apos;];
+      var x = this[&apos;x&apos;];
+      var y = this[&apos;y&apos;];
+      var z = this[&apos;z&apos;];
+
+      var t = 2 * (w * y - z * x);
+
+      return {
+        // X-axis rotation
+        roll: Math.atan2(2 * (w * x + y * z), 1 - 2 * (x * x + y * y)),
+        // Y-axis rotation
+        pitch: t &gt;= 1 ? Math.PI / 2 : (t &lt;= -1 ? -Math.PI / 2 : Math.asin(t)),
+        // Z-axis rotation
+        yaw: Math.atan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z))
+      };
+    },
+    /**
+     * Clones the actual object
+     *
+     * @returns {Quaternion}
+     */
+    &apos;clone&apos;: function() {
+
+      return new Quaternion(this);
+    },
+    /**
+     * Rotates a vector according to the current quaternion, assumes |q|=1
+     * @link https://www.xarg.org/proof/vector-rotation-using-quaternions/
+     *
+     * @param {Array} v The vector to be rotated
+     * @returns {Array}
+     */
+    &apos;rotateVector&apos;: function(v) {
+
+      var qw = this[&apos;w&apos;];
+      var qx = this[&apos;x&apos;];
+      var qy = this[&apos;y&apos;];
+      var qz = this[&apos;z&apos;];
+
+      var vx = v[0];
+      var vy = v[1];
+      var vz = v[2];
+
+      // t = 2q x v
+      var tx = 2 * (qy * vz - qz * vy);
+      var ty = 2 * (qz * vx - qx * vz);
+      var tz = 2 * (qx * vy - qy * vx);
+
+      // v + w t + q x t
+      return [
+        vx + qw * tx + qy * tz - qz * ty,
+        vy + qw * ty + qz * tx - qx * tz,
+        vz + qw * tz + qx * ty - qy * tx];
+    },
+
+    /**
+     * Gets a function to spherically interpolate between two quaternions
+     * 
+     * @returns Function
+     */
+    &apos;slerp&apos;: function(w, x, y, z) {
+
+      parse(P, w, x, y, z);
+
+      // slerp(Q1, Q2, t) := Q1(Q1^-1 Q2)^t
+
+      var w1 = this[&apos;w&apos;];
+      var x1 = this[&apos;x&apos;];
+      var y1 = this[&apos;y&apos;];
+      var z1 = this[&apos;z&apos;];
+
+      var w2 = P[&apos;w&apos;];
+      var x2 = P[&apos;x&apos;];
+      var y2 = P[&apos;y&apos;];
+      var z2 = P[&apos;z&apos;];
+
+      var cosTheta0 = w1 * w2 + x1 * x2 + y1 * y2 + z1 * z2;
+
+      if (cosTheta0 &lt; 0) {
+        w1 = -w1;
+        x1 = -x1;
+        y1 = -y1;
+        z1 = -z1;
+        cosTheta0 = -cosTheta0;
+      }
+
+      if (cosTheta0 &gt;= 1 - Quaternion[&apos;EPSILON&apos;]) {
+        return function(pct) {
+          return new Quaternion(
+            w1 + pct * (w2 - w1),
+            x1 + pct * (x2 - x1),
+            y1 + pct * (y2 - y1),
+            z1 + pct * (z2 - z1))[&apos;normalize&apos;]();
+        };
+      }
+
+      var Theta0 = Math.acos(cosTheta0);
+      var sinTheta0 = Math.sin(Theta0);
+
+      return function(pct) {
+
+        var Theta = Theta0 * pct;
+        var sinTheta = Math.sin(Theta);
+        var cosTheta = Math.cos(Theta);
+
+        var s0 = cosTheta - cosTheta0 * sinTheta / sinTheta0;
+        var s1 = sinTheta / sinTheta0;
+
+        return new Quaternion(
+          s0 * w1 + s1 * w2,
+          s0 * x1 + s1 * x2,
+          s0 * y1 + s1 * y2,
+          s0 * z1 + s1 * z2);
+      };
+    }
+  };
+
+  Quaternion[&apos;ZERO&apos;] = new Quaternion(0, 0, 0, 0); // This is the additive identity Quaternion
+  Quaternion[&apos;ONE&apos;] = new Quaternion(1, 0, 0, 0); // This is the multiplicative identity Quaternion
+  Quaternion[&apos;I&apos;] = new Quaternion(0, 1, 0, 0);
+  Quaternion[&apos;J&apos;] = new Quaternion(0, 0, 1, 0);
+  Quaternion[&apos;K&apos;] = new Quaternion(0, 0, 0, 1);
+  Quaternion[&apos;EPSILON&apos;] = 1e-16;
+
+  /**
+   * Creates quaternion by a rotation given as axis-angle orientation
+   *
+   * @param {Array} axis The axis around which to rotate
+   * @param {number} angle The angle in radians
+   * @returns {Quaternion}
+   */
+  Quaternion[&apos;fromAxisAngle&apos;] = function(axis, angle) {
+
+    // Q = [cos(angle / 2), v * sin(angle / 2)]
+
+    var halfAngle = angle * 0.5;
+
+    var a = axis[0];
+    var b = axis[1];
+    var c = axis[2];
+
+    var sin_2 = Math.sin(halfAngle);
+    var cos_2 = Math.cos(halfAngle);
+
+    var sin_norm = sin_2 / Math.sqrt(a * a + b * b + c * c);
+
+    return new Quaternion(cos_2, a * sin_norm, b * sin_norm, c * sin_norm);
+  };
+
+  /**
+   * Calculates the quaternion to rotate one vector onto another
+   * @link https://www.xarg.org/proof/quaternion-from-two-vectors/
+   *
+   * @param {Array} u
+   * @param {Array} v
+   */
+  Quaternion[&apos;fromBetweenVectors&apos;] = function(u, v) {
+
+    var ux = u[0];
+    var uy = u[1];
+    var uz = u[2];
+
+    var vx = v[0];
+    var vy = v[1];
+    var vz = v[2];
+
+    var dot = ux * vx + uy * vy + uz * vz;
+
+    // Parallel check (TODO must be normalized)
+    if (dot &gt;= 1 - Quaternion[&apos;EPSILON&apos;]) {
+      //return Quaternion[&apos;ONE&apos;];
+    }
+
+    // Close to PI @TODO
+    //if (1 + dot &lt;= Quaternion[&apos;EPSILON&apos;]) {
+    // return Quaternion.fromAxisAngle(Math.abs(ux) &gt; Math.abs(uz) ? [-uy,  ux, 0] : [0, -uz,  uy], 0) -&gt; OR
+    // return Quaternion.fromAxisAngle(Math.abs(ux) &gt; Math.abs(uz) ? [ uy, -ux, 0] : [0,  uz, -uy], 0)
+    //}
+
+    var wx = uy * vz - uz * vy;
+    var wy = uz * vx - ux * vz;
+    var wz = ux * vy - uy * vx;
+
+    return new Quaternion(
+      dot + Math.sqrt(dot * dot + wx * wx + wy * wy + wz * wz),
+      wx,
+      wy,
+      wz
+    ).normalize();
+  };
+
+  /**
+   * Gets a spherical random number
+   * @link http://planning.cs.uiuc.edu/node198.html
+   */
+  Quaternion[&apos;random&apos;] = function() {
+
+    var u1 = Math.random();
+    var u2 = Math.random();
+    var u3 = Math.random();
+
+    var s = Math.sqrt(1 - u1);
+    var t = Math.sqrt(u1);
+
+    return new Quaternion(
+      t * Math.cos(2 * Math.PI * u3),
+      s * Math.sin(2 * Math.PI * u2),
+      s * Math.cos(2 * Math.PI * u2),
+      t * Math.sin(2 * Math.PI * u3)
+    );
+  };
+
+  /**
+   * Creates a quaternion by a rotation given by Euler angles
+   *
+   * @param {number} phi
+   * @param {number} theta
+   * @param {number} psi
+   * @param {string=} order
+   * @returns {Quaternion}
+   */
+  Quaternion[&apos;fromEuler&apos;] = function(phi, theta, psi, order) {
+
+    var _x = phi * 0.5;
+    var _y = theta * 0.5;
+    var _z = psi * 0.5;
+
+    var cX = Math.cos(_x);
+    var cY = Math.cos(_y);
+    var cZ = Math.cos(_z);
+
+    var sX = Math.sin(_x);
+    var sY = Math.sin(_y);
+    var sZ = Math.sin(_z);
+
+    if (order === undefined || order === &apos;ZXY&apos;) {
+      // axisAngle([0, 0, 1], x) * axisAngle([1, 0, 0], y) * axisAngle([0, 1, 0], z)
+      return new Quaternion(
+        cX * cY * cZ - sX * sY * sZ,
+        cX * cZ * sY - cY * sX * sZ,
+        cX * cY * sZ + cZ * sX * sY,
+        cY * cZ * sX + cX * sY * sZ);
+    }
+
+    if (order === &apos;XYZ&apos; || order === &apos;RPY&apos;) {
+      // axisAngle([1, 0, 0], x) * axisAngle([0, 1, 0], y) * axisAngle([0, 0, 1], z)
+      return new Quaternion(
+        cX * cY * cZ - sX * sY * sZ,
+        cY * cZ * sX + cX * sY * sZ,
+        cX * cZ * sY - cY * sX * sZ,
+        cX * cY * sZ + cZ * sX * sY);
+    }
+
+    if (order === &apos;YXZ&apos;) {
+      // axisAngle([0, 1, 0], x) * axisAngle([1, 0, 0], y) * axisAngle([0, 0, 1], z)
+      return new Quaternion(
+        cX * cY * cZ + sX * sY * sZ,
+        cX * cZ * sY + cY * sX * sZ,
+        cY * cZ * sX - cX * sY * sZ,
+        cX * cY * sZ - cZ * sX * sY);
+    }
+
+    if (order === &apos;ZYX&apos; || order === &apos;YPR&apos;) {
+      // axisAngle([0, 0, 1], x) * axisAngle([0, 1, 0], y) * axisAngle([1, 0, 0], z)
+      return new Quaternion(
+        cX * cY * cZ + sX * sY * sZ,
+        cX * cY * sZ - cZ * sX * sY,
+        cX * cZ * sY + cY * sX * sZ,
+        cY * cZ * sX - cX * sY * sZ);
+    }
+
+    if (order === &apos;YZX&apos;) {
+      // axisAngle([0, 1, 0], x) * axisAngle([0, 0, 1], y) * axisAngle([1, 0, 0], z)
+      return new Quaternion(
+        cX * cY * cZ - sX * sY * sZ,
+        cX * cY * sZ + cZ * sX * sY,
+        cY * cZ * sX + cX * sY * sZ,
+        cX * cZ * sY - cY * sX * sZ);
+    }
+
+    if (order === &apos;XZY&apos;) {
+      // axisAngle([1, 0, 0], x) * axisAngle([0, 0, 1], z) * axisAngle([0, 1, 0], y)
+      return new Quaternion(
+        cX * cY * cZ + sX * sY * sZ,
+        cY * cZ * sX - cX * sY * sZ,
+        cX * cY * sZ - cZ * sX * sY,
+        cX * cZ * sY + cY * sX * sZ);
+    }
+    return null;
+  };
+
+  /**
+   * Creates a quaternion by a rotation matrix
+   *
+   * @param {Array} matrix
+   * @returns {Quaternion}
+   */
+  Quaternion[&apos;fromMatrix&apos;] = function(matrix) {
+
+    if (matrix.length === 9) {
+
+      var m00 = matrix[0];
+      var m01 = matrix[1];
+      var m02 = matrix[2];
+
+      var m10 = matrix[3];
+      var m11 = matrix[4];
+      var m12 = matrix[5];
+
+      var m20 = matrix[6];
+      var m21 = matrix[7];
+      var m22 = matrix[8];
+
+    } else {
+      var m00 = matrix[0][0];
+      var m01 = matrix[0][1];
+      var m02 = matrix[0][2];
+
+      var m10 = matrix[1][0];
+      var m11 = matrix[1][1];
+      var m12 = matrix[1][2];
+
+      var m20 = matrix[2][0];
+      var m21 = matrix[2][1];
+      var m22 = matrix[2][2];
+    }
+
+    var tr = m00 + m11 + m22;
+
+    if (tr &gt; 0) { 
+      var S = Math.sqrt(tr+1.0) * 2; // S=4*qw
+
+      return new Quaternion(
+        0.25 * S,
+        (m21 - m12) / S,
+        (m02 - m20) / S,
+        (m10 - m01) / S);
+    } else if ((m00 &gt; m11)&amp;(m00 &gt; m22)) { 
+      var S = Math.sqrt(1.0 + m00 - m11 - m22) * 2; // S=4*qx
+
+      return new Quaternion(
+        (m21 - m12) / S,
+        0.25 * S,
+        (m01 + m10) / S,
+        (m02 + m20) / S);
+    } else if (m11 &gt; m22) { 
+      var S = Math.sqrt(1.0 + m11 - m00 - m22) * 2; // S=4*qy
+
+      return new Quaternion(
+        (m02 - m20) / S,
+        (m01 + m10) / S,
+        0.25 * S,
+        (m12 + m21) / S);
+    } else { 
+      var S = Math.sqrt(1.0 + m22 - m00 - m11) * 2; // S=4*qz
+
+      return new Quaternion(
+        (m10 - m01) / S,
+        (m02 + m20) / S,
+        (m12 + m21) / S,
+        0.25 * S);
+    }
+  };
+
+  if (typeof define === &apos;function&apos; &amp;&amp; define[&apos;amd&apos;]) {
+    define([], function() {
+      return Quaternion;
+    });
+  } else if (typeof exports === &apos;object&apos;) {
+    Object.defineProperty(Quaternion, &quot;__esModule&quot;, { &apos;value&apos;: true });
+    Quaternion[&apos;default&apos;] = Quaternion;
+    Quaternion[&apos;Quaternion&apos;] = Quaternion;
+    module[&apos;exports&apos;] = Quaternion;
+  } else {
+    root[&apos;Quaternion&apos;] = Quaternion;
+  }
+
+})(this);</code></pre>
+
+</div>
+
+<footer class="footer">
+  Generated by <a href="https://esdoc.org">ESDoc<span data-ice="esdocVersion">(1.1.0)</span><img src="./image/esdoc-logo-mini-black.png"></a>
+</footer>
+
+<script src="script/search_index.js"></script>
+<script src="script/search.js"></script>
+<script src="script/pretty-print.js"></script>
+<script src="script/inherited-summary.js"></script>
+<script src="script/test-summary.js"></script>
+<script src="script/inner-link.js"></script>
+<script src="script/patch-for-local.js"></script>
+</body>
+</html>

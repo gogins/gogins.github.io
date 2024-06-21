@@ -32,8 +32,8 @@ class StrudelReplComponent extends HTMLElement {
       iframe.setAttribute('allow-same-origin', '');
       iframe.setAttribute('allowfullscreen', 'true');
       this.appendChild(iframe);
-      iframe.setAttribute('width', '800px');
-      iframe.setAttribute('height', '600px');
+      iframe.setAttribute('width', '1200');
+      iframe.setAttribute('height', '800');
       iframe.style.display = "visible";
       iframe.style.background = "transparent";
       this.i_frame = iframe;
@@ -90,6 +90,9 @@ class StrudelReplComponent extends HTMLElement {
   }
   setCsoundAC(csoundac_) {
     this.i_frame.contentWindow.__csoundac__ = csoundac_;
+  }
+  setParameters(parameters_) {
+    this.i_frame.contentWindow.__parameters__ = parameters_;
   }
 }
 

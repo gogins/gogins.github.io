@@ -1,0 +1,31 @@
+{
+    "source": {
+        "include": [
+            "README.md",
+            "CsoundAudioNode.js", 
+            "CsoundAC.js", 
+            "csoundac.mjs",
+            "statefulpatterns.mjs",
+            "csound_loader.js",
+            "Silencio.js",
+            "cloud-5.js",
+            "ParametricLindenmayerSystem.js"
+        ],
+        "includePattern": ".*\\.(js|mjs|jsx|html)$"
+    },
+    "sourceType": "module",
+    "tags": {
+        "allowUnknownTags": true,
+        "dictionaries": ["jsdoc", "closure"]
+    },
+    "templates": {
+        "cleverLinks": false,
+        "monospaceLinks": false
+    },
+    "recurseDepth": 3,                        
+    "opts": {
+        "destination": "./jsdocs/",               
+        "recurse": true                      
+    },
+    "plugins": ["plugins/markdown"]
+}
