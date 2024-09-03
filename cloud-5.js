@@ -26,6 +26,25 @@
  */
 
 /**
+ * Holds refernces to windows that must be closed on exit.
+ */
+globalThis.windows_to_close = [];
+
+/**
+ * Close all secondary windows on exit.
+ */
+window.addEventListener("beforeunload", (event) => {
+  for (let window_to_close of globalThis.windows_to_close()) {
+    try {
+      window_to_close.close()
+    } catch (ex) {
+      console.warn(ex);
+    }
+  }
+  globalThis.windows_to_close = [];
+});
+
+/**
  * Sets up the piece, and defines menu buttons. The user may assign the DOM 
  * objects of other cloud-5 elements to the `_overlay` properties. 
  */
@@ -35,7 +54,6 @@ class Cloud5Piece extends HTMLElement {
     this.csound = null;
     this.csoundac = null;
   }
-
   #csound_code_addon = null;
   /**
     * May be assigned the text of a Csound .csd patch. If so, the Csound 
@@ -52,8 +70,8 @@ class Cloud5Piece extends HTMLElement {
   * May be assigned an instance of a cloud5-shader overlay. If so, 
   * the GLSL shader will run at all times, and will normally create the 
   * background for other overlays. The shader overlay may call 
-  * an addon function either to visualize the audio of the performance, 
-  * or to sample the video canvas to generate notes for performance by 
+  * addon functions either to visualize the audio of the performance, 
+  * and/or to sample the video canvas to generate notes for performance by 
   * Csound.
   */
   set shader_overlay(shader) {
@@ -65,6 +83,24 @@ class Cloud5Piece extends HTMLElement {
   get shader_overlay() {
     return this.#shader_overlay;
   }
+  /**
+   * May be assigned the URL of a Web page to implement HTML-based controls 
+   * for the performance. This is normally used only if there is a secondary 
+   * display to use for these controls, so that the primary display can become 
+   * fullscreen. The resulting Web page can obtain a reference to this piece 
+   * from its `window.opener`, which is the window that opens the HTML 
+   * controls window, and the opener can be used to control all aspects of the 
+   * piece.
+   * 
+   * For this to work the HTML controls and the piece must have the same 
+   * origin.
+   */
+  html_controls_url_addon = null;
+  /**
+   * Stores a reference to the HTML controls window; this reference will be 
+   * used to close the HTML controls window upon leaving fullscreen.
+   */
+  html_controls_window = null;
   #control_parameters_addon = null;
   /**
     * May be assigned a JavaScript object consisting of Csound control 
@@ -280,14 +316,53 @@ class Cloud5Piece extends HTMLElement {
       this.stop();
     });
     let menu_item_fullscreen = document.querySelector('#menu_item_fullscreen');
-    menu_item_fullscreen.onclick = ((event) => {
+    menu_item_fullscreen.onclick = (async (event) => {
       console.info("menu_item_fullscreen click...");
-      if (this.#shader_overlay?.canvas?.requestFullscreen) {
-        this.shader_overlay.canvas.requestFullscreen();
-      } else if (this.#shader_overlay?.canvas?.webkitRequestFullscreen) {
-        this.shader_overlay.canvas.webkitRequestFullscreen();
-      } else if (this.#shader_overlay?.canvas?.msRequestFullscreen) {
-        this.shader_overlay.canvas.msRequestFullscreen();
+      try {
+        if (this.#shader_overlay?.canvas?.requestFullscreen) {
+          let new_window = null;
+          // Make the shader canvas fullscreen in the primary window.
+          await this.#shader_overlay.canvas.requestFullscreen();
+          // Try to make the HTML controls, if available, fullscreen 
+          // in the secondary window.
+          const secondary_screen = (await getScreenDetails()).screens.find(
+            (screen) => screen.isExtended,
+          );
+          if (secondary_screen && this?.html_controls_url_addon) {
+            let permissions_granted = false;
+            const { state } = await navigator.permissions.query({ name: 'window-management' });
+            if (state === 'granted') {
+              permissions_granted = true;
+            }
+          }
+          const url = window.location.origin + this?.html_controls_url_addon;
+          const window_features = `top=${secondary_screen.availTop}, left=${secondary_screen.availLeft}, width=${secondary_screen.availWidth}, height=${secondary_screen.availHeight}`;
+          let opened_window = window.open(url, 'HTMLControls', window_features);
+          if (!opened_window || opened_window.closed || typeof opened_window.closed == 'undefined') {
+            alert("Your browser is blocking popups. Please allow popups and redirects in the browser settings for this Web site.")
+            return;
+          } else {
+            this.html_controls_window = opened_window;
+          }
+          globalThis.windows_to_close.push(this.html_controls_window);
+          if (this.html_controls_window) {
+            // These will pile up and that would be a problem... if users 
+            // repeatedly toggled fullscreen.
+            window.addEventListener("fullscreenchange", (event) => {
+              if (document.fullscreenElement) {
+              } else {
+                this.html_controls_window.close();
+                (value) => {
+                  globalThis.windows_to_close = globalThis.windows_to_close.filter(function (ele) {
+                    return ele != value;
+                  });
+                }
+              }
+            });
+          }
+        }
+      } catch (ex) {
+        alert(ex.message + "\nIn the browser's 'Site permissions' for this Web site, set 'Pop-ups and redirects' to 'Allow' and 'Window management' to 'Allow'.");
       };
     });
     let menu_item_strudel = document.querySelector('#menu_item_strudel');
@@ -1378,9 +1453,12 @@ function write_file(filepath, data) {
       console.error(err);
     });
   } catch (err) {
-    navigator.clipboard.writeText(data);
-    console.info("Copied generated csd to system clipboard.\n")
-    console.warn(err);
+    try {
+      navigator.clipboard.writeText(data);
+      console.info("Copied generated csd to system clipboard.\n")
+    } catch (err1) {
+      console.warn(err1);
+    }
   }
 }
 
@@ -1573,34 +1651,40 @@ async function url_for_soundfile(csound) {
 }
 
 /**
- * Generates a new copy of the Score that is in canon to the original, at the 
+ * Generates a new copy(s) of the Score in canon to the original, at the 
  * specified delay in seconds and transposition in semitones (which may be 
  * fractional). If a Scale is supplied, the new Score is conformed to that 
  * Scale.
  * @param {CsoundAC.Score} Score or fragment of score. 
  * @param {number} delay in seconds.
  * @param {number} transposition in semitones.
+ * @param {number} layers.
  * @param {CsoundAC.Scale} csoundac_scale if supplied, the new voice will 
  * be conformed to this scale.
  * @returns a modified {Score}
  */
-function canon(CsoundAC, csoundac_score, delay, transposition, csoundac_scale) {
+function canon(CsoundAC, csoundac_score, delay, transposition, layers, csoundac_scale) {
   let new_score = new CsoundAC.Score();
   // Append both an event and that event in canon to the new Score.
-  for (let i = 0; i < csoundac_score.size(); ++i) {
-    let event = csoundac_score.get(i);
-    new_score.append_event(event);
-    let new_time = event.getTime() + delay;
-    event.setTime(new_time);
-    let new_key = event.getKey() + transposition;
-    event.setKey(new_key);
-    new_score.append_event(event);
+  for (let layer = 1; layer <= layers; ++layer) {
+    for (let i = 0; i < csoundac_score.size(); ++i) {
+      let event = csoundac_score.get(i);
+      if (layer == 1) {
+        new_score.append_event(event);
+      }
+      let new_time = event.getTime() + (delay * layer);
+      event.setTime(new_time);
+      let new_key = event.getKey() + (transposition * layer);
+      event.setKey(new_key);
+      new_score.append_event(event);
+    }
   }
   if (csoundac_scale) {
     CsoundAC.apply(new_score, csoundac_scale, 0, 1000000, true);
   }
   return new_score;
 }
+
 
 
 

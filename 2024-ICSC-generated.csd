@@ -63,6 +63,7 @@
           alwayson "ReverbSC"
           alwayson "MasterOutputOff"
           alwayson "MasterOutput"
+          alwayson "OscListener"
           
           gk_Duration_factor init 4.5
           
@@ -1866,6 +1867,20 @@
         // kres cossegr ia, idur1, ib [, idur2] [, ic] [...], irel, iz
         k_envelope linsegr 0, 6, 1, 1000000000, 1, 6, 0
         outs a_out_left * k_envelope, a_out_right * k_envelope
+        endin
+
+        gi_osc_handle OSCinit 7770
+        instr OscListener
+        kf1 init 0
+        kf2 init 0
+        nxtmsg:
+        kk OSClisten gi_osc_handle, "/foo/bar", "ff", kf1, kf2
+        if (kk == 0) goto ex
+        printk 0,kf1
+        printk 0,kf2
+        kgoto nxtmsg
+        ex:
+        prints "%-24s i %9.4f t %9.4f d %9.4f k %9.4f v %9.4f p %9.4f #%3d\n", nstrstr(p1), p1, p2, p3, p4, p5, p7, active(p1)
         endin
 
           </CsInstruments>

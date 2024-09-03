@@ -1,0 +1,19 @@
+# Hashes of file build rules.
+4671c6e61ce6a74a96137b890347d956 /Users/michaelgogins/cloud-5/csound-node/src/csound-node-stamp/csound-node-build
+8bd067f59964822d7941302b25115225 /Users/michaelgogins/cloud-5/csound-node/src/csound-node-stamp/csound-node-configure
+76bda2cd4cc083a35de039c9757c6729 /Users/michaelgogins/cloud-5/csound-node/src/csound-node-stamp/csound-node-download
+e2902f58d1a43a2054396a337dfb0ff9 /Users/michaelgogins/cloud-5/csound-node/src/csound-node-stamp/csound-node-install
+92907661ae4e5ab6cc643bfe37438a11 /Users/michaelgogins/cloud-5/csound-node/src/csound-node-stamp/csound-node-mkdir
+73a40ff1dd379012f4828e2bbdd930e3 /Users/michaelgogins/cloud-5/csound-node/src/csound-node-stamp/csound-node-patch
+ce7099992cbb6f061b1126ff1c835994 /Users/michaelgogins/cloud-5/csound-node/src/csound-node-stamp/csound-node-update
+9437ca2e6cdd3394e5257d5a787aafb8 /Users/michaelgogins/cloud-5/csound-wasm/src/csound-wasm-stamp/csound-wasm-build
+67b50823f41b5540915f83aa59dedf0d /Users/michaelgogins/cloud-5/csound-wasm/src/csound-wasm-stamp/csound-wasm-configure
+59bb7124e05c3d09327baee2473c833d /Users/michaelgogins/cloud-5/csound-wasm/src/csound-wasm-stamp/csound-wasm-download
+db736d067ba1940f3aec8973b5a79b5e /Users/michaelgogins/cloud-5/csound-wasm/src/csound-wasm-stamp/csound-wasm-install
+6f4cd999c47af5c089f7c73f06ed8cba /Users/michaelgogins/cloud-5/csound-wasm/src/csound-wasm-stamp/csound-wasm-mkdir
+c02d0165373f4d77acf331e58910755b /Users/michaelgogins/cloud-5/csound-wasm/src/csound-wasm-stamp/csound-wasm-patch
+60b02c37d7aee8673a3a805203eff2a5 /Users/michaelgogins/cloud-5/csound-wasm/src/csound-wasm-stamp/csound-wasm-update
+3812292999af2b6cf1aa5a04de505ca1 CMakeFiles/csound-node
+01ee3956e05d61c318f39f31681189c9 CMakeFiles/csound-node-complete
+3812292999af2b6cf1aa5a04de505ca1 CMakeFiles/csound-wasm
+e8aa8399585ec9385bb4b3a63848d333 CMakeFiles/csound-wasm-complete

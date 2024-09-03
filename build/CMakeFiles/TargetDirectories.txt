@@ -1,0 +1,4 @@
+/Users/michaelgogins/cloud-5/build/CMakeFiles/csound-wasm.dir
+/Users/michaelgogins/cloud-5/build/CMakeFiles/csound-node.dir
+/Users/michaelgogins/cloud-5/build/CMakeFiles/edit_cache.dir
+/Users/michaelgogins/cloud-5/build/CMakeFiles/rebuild_cache.dir
