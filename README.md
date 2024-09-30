@@ -24,11 +24,11 @@ code.
    hopalong fractal to obtain notes that are then harmonized using CsoundAC's 
    chord space operations.
  - [Cloud Music No. 1](cloud_music_no_1.html).
- - [Cloud Music No. 2](http://localhost:8000/cloud_music_no_2.html).
- - [Cloud Music No. 3](http://localhost:8000/cloud_music_no_3.html).
- - [Cloud Music No. 4](http://localhost:8000/cloud_music_no_4.html).
- - [Cloud Music No. 6](http://localhost:8000/cloud_music_no_6.html).
- - [Cloud Music No. 8](http://localhost:8000/cloud_music_no_8.html).
+ - [Cloud Music No. 2](cloud_music_no_2.html).
+ - [Cloud Music No. 3](cloud_music_no_3.html).
+ - [Cloud Music No. 4](cloud_music_no_4.html).
+ - [Cloud Music No. 6](cloud_music_no_6.html).
+ - [Cloud Music No. 8](cloud_music_no_8.html).
  - [Cloud Music No. 9](cloud_music_no_9.html).
  - [Cloud Music No. 14](cloud_music_no_14.html). This one has a button so the 
    user can record a performance and download the resulting soundfile.
