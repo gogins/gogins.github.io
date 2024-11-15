@@ -191,7 +191,7 @@ program notes for the piece, or other information.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line167">line 167</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line179">line 179</a>
     </li></ul></dd>
     
 
@@ -226,7 +226,17 @@ underscore, Csound control channel name. For example:</p>
 &quot;gk_Shimmer_wetDry&quot;: 0.06843403205918619
 };</p>
 <p>The Csound orchestra should define matching control channels. Such
-parameters may also be used to control other processes.</p>
+parameters may also be used to control other processes.
+saveAs: function saveAs(presetName) {
+if (!this.load.remembered) {
+this.load.remembered = {};
+this.load.remembered[DEFAULT_DEFAULT_PRESET_NAME] = getCurrentPreset(this, true);
+}
+this.load.remembered[presetName] = getCurrentPreset(this);
+this.preset = presetName;
+addPresetOption(this, presetName, true);
+this.saveToLocalStorageIfPossible();
+},</p>
 </div>
 
 
@@ -264,7 +274,7 @@ parameters may also be used to control other processes.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line121">line 121</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line132">line 132</a>
     </li></ul></dd>
     
 
@@ -391,7 +401,7 @@ also be called by user code.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line180">line 180</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line192">line 192</a>
     </li></ul></dd>
     
 
@@ -587,7 +597,7 @@ values to any of these fields.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line234">line 234</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line246">line 246</a>
     </li></ul></dd>
     
 
@@ -651,7 +661,7 @@ roll display of the generated CsoundAC Score.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line147">line 147</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line159">line 159</a>
     </li></ul></dd>
     
 
@@ -717,7 +727,7 @@ overlay, and played or rendered by Csound.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line135">line 135</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line147">line 147</a>
     </li></ul></dd>
     
 
@@ -808,7 +818,7 @@ Csound.</p>
 
 
 <div class="description">
-    <p>Stops Csound and Strudel from performing.</p>
+    <p>Stops both Csound and Strudel from performing.</p>
 </div>
 
 
@@ -846,7 +856,7 @@ Csound.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line537">line 537</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line551">line 551</a>
     </li></ul></dd>
     
 
@@ -937,7 +947,7 @@ JSON format.</p>
 
             <td class="description last"><p>A dictionary containing the current state of all
 controls; keys are control parameter names, values are control parameter
-values. This can be pasted from the clipboard it source code, as a
+values. This can be pasted from the clipboard into source code, as a
 convenient method of updating a piece with parameters that have been tweaked
 during performance.</p></td>
         </tr>
@@ -980,7 +990,7 @@ during performance.</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line455">line 455</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line464">line 464</a>
     </li></ul></dd>
     
 
@@ -1142,7 +1152,7 @@ the same name.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line638">line 638</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line679">line 679</a>
     </li></ul></dd>
     
 
@@ -1279,7 +1289,7 @@ the same name.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line560">line 560</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line574">line 574</a>
     </li></ul></dd>
     
 
@@ -1417,7 +1427,7 @@ scrolling <csound5-log> element overlay.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line227">line 227</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line239">line 239</a>
     </li></ul></dd>
     
 
@@ -1624,7 +1634,7 @@ piece.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line654">line 654</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line695">line 695</a>
     </li></ul></dd>
     
 
@@ -1761,7 +1771,7 @@ piece.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line602">line 602</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line643">line 643</a>
     </li></ul></dd>
     
 
@@ -2014,7 +2024,7 @@ negative).</p></td>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line617">line 617</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line658">line 658</a>
     </li></ul></dd>
     
 
@@ -2153,7 +2163,7 @@ the values of those channels.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line587">line 587</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line628">line 628</a>
     </li></ul></dd>
     
 
@@ -2290,7 +2300,7 @@ the values of those channels.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line550">line 550</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line564">line 564</a>
     </li></ul></dd>
     
 
@@ -2428,7 +2438,7 @@ hidden, or to hide the overlay if it is visible</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line571">line 571</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line585">line 585</a>
     </li></ul></dd>
     
 
@@ -2567,7 +2577,7 @@ async member function because it is bound to this.</p>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line462">line 462</a>
+        <a href="cloud-5.js.html">cloud-5.js</a>, <a href="cloud-5.js.html#line474">line 474</a>
     </li></ul></dd>
     
 
@@ -2619,7 +2629,7 @@ async member function because it is bound to this.</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Tue Sep 03 2024 15:13:20 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Thu Nov 14 2024 10:25:49 GMT-0500 (Eastern Standard Time)
 </footer>
 
 <script> prettyPrint(); </script>

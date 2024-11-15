@@ -1,0 +1,2 @@
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar qc ../libcsnd6.a "CMakeFiles/libcsnd6-static.dir/CppSound.cpp.o" "CMakeFiles/libcsnd6-static.dir/CsoundFile.cpp.o" "CMakeFiles/libcsnd6-static.dir/Soundfile.cpp.o" "CMakeFiles/libcsnd6-static.dir/csPerfThread.cpp.o" "CMakeFiles/libcsnd6-static.dir/cs_glue.cpp.o" "CMakeFiles/libcsnd6-static.dir/filebuilding.cpp.o"
+/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib ../libcsnd6.a

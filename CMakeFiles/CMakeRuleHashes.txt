@@ -1,0 +1,25 @@
+# Hashes of file build rules.
+d1e1cfc90a5d4ddd3de04040df506eb1 CMakeFiles/csound-node
+c83a2fb72b1dd996988c4c518fca9ec2 CMakeFiles/csound-node-complete
+05bb39e5ea19f59afadda91c9122e0c4 CMakeFiles/csound-node-updated
+d1e1cfc90a5d4ddd3de04040df506eb1 CMakeFiles/csound-wasm
+247256e8858b90d5fac68a1c3bdca9e8 CMakeFiles/csound-wasm-complete
+aee542259ec7189a40a9a2a048f6b1d7 CMakeFiles/csound-wasm-updated
+5bca1bd838973f04573470248320fb56 CMakeFiles/strudel
+1b7ae25dd44c2ed1913626a9fa29a97a CMakeFiles/vscode-playpen
+280f76be8d88d30ca70c70ff1eb8e817 csound-node-prefix/src/csound-node-stamp/csound-node-build
+1df747517b519da54f1e39f9a07c1854 csound-node-prefix/src/csound-node-stamp/csound-node-configure
+674898ca4c81e68cf149a9dcc08de845 csound-node-prefix/src/csound-node-stamp/csound-node-download
+db39168ffbefb1c481938af52d8dc4cc csound-node-prefix/src/csound-node-stamp/csound-node-install
+5a1164e093f7c2579d7efb6cc9fa5020 csound-node-prefix/src/csound-node-stamp/csound-node-mkdir
+494513c6c9030ff2d64b0c301e3a044e csound-node-prefix/src/csound-node-stamp/csound-node-patch
+e283d418576fbe8581611fbe78856551 csound-node-prefix/src/csound-node-stamp/csound-node-patch_disconnected
+eac4c7ed8260487b15f798922a17af3f csound-node-prefix/src/csound-node-stamp/csound-node-update
+38dfde695b88caa72cb8682609251d18 csound-node-prefix/src/csound-node-stamp/csound-node-update_disconnected
+414e12c48a2da3e2af1ee0963eccfb5b csound-wasm-prefix/src/csound-wasm-stamp/csound-wasm-build
+7014f1946a6c660abc1b2cf8c48bc800 csound-wasm-prefix/src/csound-wasm-stamp/csound-wasm-configure
+d6f134f79a3370c8f4702e31cbc70618 csound-wasm-prefix/src/csound-wasm-stamp/csound-wasm-download
+4368cfc94d28f8c725b014acb536bb3d csound-wasm-prefix/src/csound-wasm-stamp/csound-wasm-install
+806995deba943447f2135e05ee1df4d0 csound-wasm-prefix/src/csound-wasm-stamp/csound-wasm-mkdir
+d486c280579b13a1c82144579dea6276 csound-wasm-prefix/src/csound-wasm-stamp/csound-wasm-patch
+9949a8f08c7714dbcb2762508e0ec60a csound-wasm-prefix/src/csound-wasm-stamp/csound-wasm-update

@@ -1,0 +1,16 @@
+# Hashes of file build rules.
+718b43ac51834eec0b6294b6fa6e41f9 dependencies/csound/CMakeFiles/doc
+8ea685e1ddc0babc39f736bd0eb95880 dependencies/csound/CMakeFiles/etags
+3a262b2021fbf9e9d567660502d96602 dependencies/csound/CMakeFiles/tags
+4580edfa926a0506bf473b59a89c1b42 dependencies/csound/CMakeFiles/uninstall
+5c478e33d7f07af11c9d34ac1942782f dependencies/csound/Frontends/beats.tab.c
+4f3ddc6b8865cc4dff94c3aa844a323e dependencies/csound/Frontends/beatslex.yy.c
+ad1221f53d4162495b9bd904edd17869 dependencies/csound/csound_orclex.c
+56b7d4fa47b02a1eeee4fb78a1a98f9f dependencies/csound/csound_orcparse.c
+cb4bcd39d4d5a0c482554b862f54f02d dependencies/csound/csound_prelex.c
+9c93deef32a9a90b7fdc55f1d23cd1a0 dependencies/csound/csound_prslex.c
+44f3fdc1dae2a099ecaa1c1008706483 dependencies/csound/interfaces/CMakeFiles/_jcsound6.dir/java_interfaceJAVA.stamp
+38bb5310f7fea8a908789a12d7fe160c dependencies/csound/interfaces/CMakeFiles/_jcsound6_swig_compilation
+4d3362d31bc1c564f2661033f03c37db dependencies/csound/tests/commandline/CMakeFiles/csdtests
+16b7cab2e388099794e8df51833c70ed dependencies/csound/tests/regression/CMakeFiles/regression
+e0f38f4792cbda25fd51e76796726c01 dependencies/csound/tests/soak/CMakeFiles/soak

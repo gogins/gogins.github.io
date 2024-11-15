@@ -1,0 +1,8 @@
+/Users/michaelgogins/cloud-5/CMakeFiles/csound-wasm-updated.dir
+/Users/michaelgogins/cloud-5/CMakeFiles/csound-wasm.dir
+/Users/michaelgogins/cloud-5/CMakeFiles/csound-node-updated.dir
+/Users/michaelgogins/cloud-5/CMakeFiles/csound-node.dir
+/Users/michaelgogins/cloud-5/CMakeFiles/strudel.dir
+/Users/michaelgogins/cloud-5/CMakeFiles/vscode-playpen.dir
+/Users/michaelgogins/cloud-5/CMakeFiles/edit_cache.dir
+/Users/michaelgogins/cloud-5/CMakeFiles/rebuild_cache.dir

@@ -1,1 +1,1 @@
-{"version":3,"file":"learn.astro.mjs","sources":[],"sourcesContent":[],"names":[],"mappings":";;;;;;;"}
+{"version":3,"file":"learn.astro.mjs","sources":["../../src/pages/learn/index.astro"],"sourcesContent":["<script is:inline>\n  window.location.pathname = `/workshop/getting-started`;\n</script>\n"],"names":[],"mappings":";;;;;;;;;;AAAA,CAAA,EAAA,4EAAA,KAAA,CAAA,CAAA,CAAA;;;;;;;;;;;;;;;;"}
