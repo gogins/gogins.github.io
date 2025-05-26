@@ -65,7 +65,7 @@
           alwayson "ReverbSC"
           alwayson "MasterOutput"
           
-gk_Duration_factor init 1.887587340731607 // Updated from: gk_Duration_factor init 4.5
+gk_Duration_factor init 1.887587340731607 ; Updated from: gk_Duration_factor init 4.5
           
           prealloc 1, 50
           prealloc 2, 50
@@ -91,15 +91,15 @@ gk_Duration_factor init 1.887587340731607 // Updated from: gk_Duration_factor in
           gk_FMWaterBell_vibrato_depth chnexport "gk_FMWaterBell_vibrato_depth", 3 ; 0.05
           gk_FMWaterBell_vibrato_rate chnexport "gk_FMWaterBell_vibrato_rate", 3 ; 6
           gk_FMWaterBell_midi_dynamic_range chnexport "gk_FMWaterBell_midi_dynamic_range", 3 ; 20
-gk_FMWaterBell_level init 0.9094645976775197 // Updated from: gk_FMWaterBell_level init 0
-gi_FMWaterBell_attack init 0.002 // Updated from: gi_FMWaterBell_attack init 0.002
-gi_FMWaterBell_release init 0.01 // Updated from: gi_FMWaterBell_release init 0.01
-gi_FMWaterBell_sustain init 20 // Updated from: gi_FMWaterBell_sustain init 20
-gi_FMWaterBell_sustain_level init 0.1 // Updated from: gi_FMWaterBell_sustain_level init .1
-gk_FMWaterBell_index init 0.5 // Updated from: gk_FMWaterBell_index init .5
-gk_FMWaterBell_crossfade init 0.5 // Updated from: gk_FMWaterBell_crossfade init .5
-gk_FMWaterBell_vibrato_depth init 0.05 // Updated from: gk_FMWaterBell_vibrato_depth init 0.05
-gk_FMWaterBell_vibrato_rate init 6 // Updated from: gk_FMWaterBell_vibrato_rate init 6
+gk_FMWaterBell_level init 0.9094645976775197 ; Updated from: gk_FMWaterBell_level init 0
+gi_FMWaterBell_attack init 0.002 ; Updated from: gi_FMWaterBell_attack init 0.002
+gi_FMWaterBell_release init 0.01 ; Updated from: gi_FMWaterBell_release init 0.01
+gi_FMWaterBell_sustain init 20 ; Updated from: gi_FMWaterBell_sustain init 20
+gi_FMWaterBell_sustain_level init 0.1 ; Updated from: gi_FMWaterBell_sustain_level init .1
+gk_FMWaterBell_index init 0.5 ; Updated from: gk_FMWaterBell_index init .5
+gk_FMWaterBell_crossfade init 0.5 ; Updated from: gk_FMWaterBell_crossfade init .5
+gk_FMWaterBell_vibrato_depth init 0.05 ; Updated from: gk_FMWaterBell_vibrato_depth init 0.05
+gk_FMWaterBell_vibrato_rate init 6 ; Updated from: gk_FMWaterBell_vibrato_rate init 6
           gk_FMWaterBell_midi_dynamic_range init 20
           gk_FMWaterBell_space_left_to_right chnexport "gk_FMWaterBell_space_left_to_right", 3
           gk_FMWaterBell_space_left_to_right init .5
@@ -152,11 +152,11 @@ gk_FMWaterBell_vibrato_rate init 6 // Updated from: gk_FMWaterBell_vibrato_rate 
           gk_Phaser_midi_dynamic_range chnexport "gk_Phaser_midi_dynamic_range", 3 ;  20
           gk_Phaser_attack init .125
           gk_Phaser_release init .125
-gk_Phaser_ratio1 init 2 // Updated from: gk_Phaser_ratio1 init 1
-gk_Phaser_ratio2 init 3 // Updated from: gk_Phaser_ratio2 init 1/5
-gk_Phaser_index1 init 1.0266159695817492 // Updated from: gk_Phaser_index1 init 1.01
-gk_Phaser_index2 init 0.533347035248176 // Updated from: gk_Phaser_index2 init .103
-gk_Phaser_level init -21.452060425444458 // Updated from: gk_Phaser_level init 0.5
+gk_Phaser_ratio1 init 2 ; Updated from: gk_Phaser_ratio1 init 1
+gk_Phaser_ratio2 init 3 ; Updated from: gk_Phaser_ratio2 init 1/5
+gk_Phaser_index1 init 1.0266159695817492 ; Updated from: gk_Phaser_index1 init 1.01
+gk_Phaser_index2 init 0.533347035248176 ; Updated from: gk_Phaser_index2 init .103
+gk_Phaser_level init -21.452060425444458 ; Updated from: gk_Phaser_level init 0.5
           gk_Phaser_midi_dynamic_range init 20
           gi_Phaser_sine ftgen 0,0,65537,10,1
           instr Phaser
@@ -202,17 +202,17 @@ gk_Phaser_level init -21.452060425444458 // Updated from: gk_Phaser_level init 0
           gk_Droner_partial10 chnexport "gk_Droner_partial10", 3
           gk_Droner_level chnexport "gk_Droner_level", 3
           gi_Droner_waveform chnexport "gi_Droner_waveform", 3
-gk_Droner_partial1 init 0.12105641763436441 // Updated from: gk_Droner_partial1 init .5
-gk_Droner_partial2 init 0.22628712362552666 // Updated from: gk_Droner_partial2 init .05
-gk_Droner_partial3 init 0.6406330284657281 // Updated from: gk_Droner_partial3 init .1
-gk_Droner_partial4 init 0.11447949850991676 // Updated from: gk_Droner_partial4 init .2
-gk_Droner_partial5 init 0 // Updated from: gk_Droner_partial5 init .1
+gk_Droner_partial1 init 0.12105641763436441 ; Updated from: gk_Droner_partial1 init .5
+gk_Droner_partial2 init 0.22628712362552666 ; Updated from: gk_Droner_partial2 init .05
+gk_Droner_partial3 init 0.6406330284657281 ; Updated from: gk_Droner_partial3 init .1
+gk_Droner_partial4 init 0.11447949850991676 ; Updated from: gk_Droner_partial4 init .2
+gk_Droner_partial5 init 0 ; Updated from: gk_Droner_partial5 init .1
           gk_Droner_partial6 init 0
           gk_Droner_partial7 init 0
           gk_Droner_partial8 init 0
           gk_Droner_partial9 init 0
           gk_Droner_partial10 init 0
-gk_Droner_level init -29.34648581997534 // Updated from: gk_Droner_level init 0
+gk_Droner_level init -29.34648581997534 ; Updated from: gk_Droner_level init 0
           gi_Droner_waveform init 0
           gk_Droner_space_left_to_right chnexport "gk_Droner_space_left_to_right", 3
           gk_Droner_space_left_to_right init .5
@@ -306,11 +306,11 @@ gk_Droner_level init -29.34648581997534 // Updated from: gk_Droner_level init 0
           gk_Sweeper_midi_dynamic_range init 20
           gk_Sweeper_attack init .125
           gk_Sweeper_release init .25
-gk_Sweeper_britel init 0.11591819956838968 // Updated from: gk_Sweeper_britel init .01
-gk_Sweeper_briteh init 0.826225465008735 // Updated from: gk_Sweeper_briteh init 5
-gk_Sweeper_britels init 0.5631487000308293 // Updated from: gk_Sweeper_britels init .5
-gk_Sweeper_britehs init 1.668071112938033 // Updated from: gk_Sweeper_britehs init 1.75
-gk_Sweeper_level init -11.586681738772988 // Updated from: gk_Sweeper_level init 0
+gk_Sweeper_britel init 0.11591819956838968 ; Updated from: gk_Sweeper_britel init .01
+gk_Sweeper_briteh init 0.826225465008735 ; Updated from: gk_Sweeper_briteh init 5
+gk_Sweeper_britels init 0.5631487000308293 ; Updated from: gk_Sweeper_britels init .5
+gk_Sweeper_britehs init 1.668071112938033 ; Updated from: gk_Sweeper_britehs init 1.75
+gk_Sweeper_level init -11.586681738772988 ; Updated from: gk_Sweeper_level init 0
           gk_Sweeper_space_left_to_right chnexport "gk_Sweeper_space_left_to_right", 3
           gk_Sweeper_space_left_to_right init .5
           gi_Sweeper_sine ftgen 0, 0, 65537, 10, 1
@@ -399,8 +399,8 @@ gk_Sweeper_level init -11.586681738772988 // Updated from: gk_Sweeper_level init
           gk_Buzzer_midi_dynamic_range chnexport "gk_Buzzer_midi_dynamic_range", 3
           gk_Buzzer_attack init .125
           gk_Buzzer_release init .25
-gk_Buzzer_harmonics init 1.3688212927756656 // Updated from: gk_Buzzer_harmonics init 8
-gk_Buzzer_level init 0.2466091245376134 // Updated from: gk_Buzzer_level init 0
+gk_Buzzer_harmonics init 1.3688212927756656 ; Updated from: gk_Buzzer_harmonics init 8
+gk_Buzzer_level init 0.2466091245376134 ; Updated from: gk_Buzzer_level init 0
           gk_Buzzer_midi_dynamic_range init 20
           gi_Buzzer_sine ftgen 0, 0, 65537, 10, 1
           instr Buzzer
@@ -439,9 +439,9 @@ gk_Buzzer_level init 0.2466091245376134 // Updated from: gk_Buzzer_level init 0
         gk_Shiner_release chnexport "gk_Shiner_release", 3 ;  .0125
         gk_Shiner_level chnexport "gk_Shiner_level", 3 ;  0.5
         gk_Shiner_midi_dynamic_range init 20
-gk_Shiner_attack init 0.125 // Updated from: gk_Shiner_attack init .0125
-gk_Shiner_release init 0.5 // Updated from: gk_Shiner_release init .0125
-gk_Shiner_level init -16.848217038331107 // Updated from: gk_Shiner_level init -23
+gk_Shiner_attack init 0.125 ; Updated from: gk_Shiner_attack init .0125
+gk_Shiner_release init 0.5 ; Updated from: gk_Shiner_release init .0125
+gk_Shiner_level init -16.848217038331107 ; Updated from: gk_Shiner_level init -23
         gk_Shiner_front_to_back chnexport "gk_Shiner_front_to_back", 3 ;  0
         gk_Shiner_left_to_right chnexport "gk_Shiner_left_to_right", 3 ;  0.5
         gk_Shiner_bottom_to_top chnexport "gk_Shiner_bottom_to_top", 3 ;  0
@@ -499,11 +499,11 @@ gk_Shiner_level init -16.848217038331107 // Updated from: gk_Shiner_level init -
         endin
 
         gk_FMModerate_level chnexport "gk_FMModerate_level", 3
-gk_FMModerate_level init -34 // Updated from: gk_FMModerate_level init -12
+gk_FMModerate_level init -34 ; Updated from: gk_FMModerate_level init -12
         gk_FMModerate_space_left_to_right chnexport "gk_FMModerate_space_left_to_right", 3
         gk_FMModerate_space_left_to_right init .5
         gi_FMModerate_exponent chnexport "gi_FMModerate_exponent", 3
-gi_FMModerate_exponent init -99.50678175092477 // Updated from: gi_FMModerate_exponent init -9
+gi_FMModerate_exponent init -99.50678175092477 ; Updated from: gi_FMModerate_exponent init -9
 
         gi_FMModerate_cosine ftgen 0, 0, 65537, 11, 1
 
@@ -578,13 +578,13 @@ gi_FMModerate_exponent init -99.50678175092477 // Updated from: gi_FMModerate_ex
         gk_Blower_release chnexport "gk_Blower_release", 3
         gk_Blower_level chnexport "gk_Blower_level", 3
         gk_Blower_midi_dynamic_range chnexport "gk_Blower_midi_dynamic_range", 3
-gk_Blower_grainDensity init 245.730140787175 // Updated from: gk_Blower_grainDensity init 40
-gk_Blower_grainDuration init 0.03750899188161545 // Updated from: gk_Blower_grainDuration init 0.2
-gk_Blower_grainAmplitudeRange init 119.4532935977803 // Updated from: gk_Blower_grainAmplitudeRange init 100
-gk_Blower_grainFrequencyRange init 50.251772685232766 // Updated from: gk_Blower_grainFrequencyRange init 3
-gk_Blower_attack init 1.5 // Updated from: gk_Blower_attack init 1.5
-gk_Blower_release init 2 // Updated from: gk_Blower_release init 2
-gk_Blower_level init -29.344363374781626 // Updated from: gk_Blower_level init 0
+gk_Blower_grainDensity init 245.730140787175 ; Updated from: gk_Blower_grainDensity init 40
+gk_Blower_grainDuration init 0.03750899188161545 ; Updated from: gk_Blower_grainDuration init 0.2
+gk_Blower_grainAmplitudeRange init 119.4532935977803 ; Updated from: gk_Blower_grainAmplitudeRange init 100
+gk_Blower_grainFrequencyRange init 50.251772685232766 ; Updated from: gk_Blower_grainFrequencyRange init 3
+gk_Blower_attack init 1.5 ; Updated from: gk_Blower_attack init 1.5
+gk_Blower_release init 2 ; Updated from: gk_Blower_release init 2
+gk_Blower_level init -29.344363374781626 ; Updated from: gk_Blower_level init 0
         gk_Blower_midi_dynamic_range init 20
         gk_Blower_space_left_to_right chnexport "gk_Blower_space_left_to_right", 3
         gk_Blower_space_left_to_right init .5
@@ -665,7 +665,7 @@ gk_Blower_level init -29.344363374781626 // Updated from: gk_Blower_level init 0
           gi_ZakianFLute_seed chnexport "gi_ZakianFLute_seed", 3 ;  .5
           gi_ZakianFLute_space_left_to_front chnexport "gi_ZakianFLute_space_left_to_front", 3 ;  .5
           gk_ZakianFlute_midi_dynamic_range init 20
-gk_ZakianFlute_level init -22.767444250333984 // Updated from: gk_ZakianFlute_level init 0
+gk_ZakianFlute_level init -22.767444250333984 ; Updated from: gk_ZakianFlute_level init 0
           gk_ZakianFlute_pan init .5
           gi_ZakianFLute_seed init .5
           gi_ZakianFLute_space_left_to_front init .5
@@ -907,7 +907,7 @@ gk_ZakianFlute_level init -22.767444250333984 // Updated from: gk_ZakianFlute_le
         gi_FilteredSines_attack chnexport "gi_FilteredSines_attack", 3
         gi_FilteredSines_release chnexport "gi_FilteredSines_release", 3
         
-gk_FilteredSines_level init -18.163600863220637 // Updated from: gk_FilteredSines_level init 0
+gk_FilteredSines_level init -18.163600863220637 ; Updated from: gk_FilteredSines_level init 0
         gi_FilteredSines_attack init 1
           gi_FilteredSines_release init 1
         
@@ -986,7 +986,7 @@ gk_FilteredSines_level init -18.163600863220637 // Updated from: gk_FilteredSine
           gk_Guitar_midi_dynamic_range chnexport "gk_Guitar_midi_dynamic_range", 3 ; 127
         gk_Guitar_midi_dynamic_range init 30
         gk_Guitar_level chnexport "gk_Guitar_level", 3
-gk_Guitar_level init 0 // Updated from: gk_Guitar_level init 0
+gk_Guitar_level init 0 ; Updated from: gk_Guitar_level init 0
         gk_Guitar_space_left_to_right chnexport "gk_Guitar_space_left_to_right", 3
         gk_Guitar_space_left_to_right init .5
         
@@ -1068,7 +1068,7 @@ gk_Guitar_level init 0 // Updated from: gk_Guitar_level init 0
         gk_Harpsichord_midi_dynamic_range chnexport "gk_Harpsichord_midi_dynamic_range", 3
         gk_Harpsichord_space_left_to_right chnexport "gk_Harpsichord_space_left_to_right", 3
         
-gk_Harpsichord_level init -6 // Updated from: gk_Harpsichord_level init 0
+gk_Harpsichord_level init -6 ; Updated from: gk_Harpsichord_level init 0
         gk_Harpsichord_pick init .075
         gk_Harpsichord_reflection init .5
         gk_Harpsichord_pluck init .75
@@ -1139,7 +1139,7 @@ gk_Harpsichord_level init -6 // Updated from: gk_Harpsichord_level init 0
         gi_Kung2_detune_cents chnexport "gk_Kung2_detune_cents", 3
         gi_Kung2_detune_cents init 8
         gk_Kung2_level chnexport "gk_Kung2_level", 3
-gk_Kung2_level init -10.275380189066993 // Updated from: gk_Kung2_level init 0
+gk_Kung2_level init -10.275380189066993 ; Updated from: gk_Kung2_level init 0
         gk_Kung2_midi_dynamic_range chnexport "gk_Kung2_midi_dynamic_range", 3
         gk_Kung2_midi_dynamic_range init 30
         gk_Kung2_space_left_to_right chnexport "gk_Kung2_space_left_to_right", 3
@@ -1218,7 +1218,7 @@ gk_Kung2_level init -10.275380189066993 // Updated from: gk_Kung2_level init 0
         gi_Kung4_detune_cents chnexport "gk_Kung4_detune_cents", 3
         gi_Kung4_detune_cents init 8
         gk_Kung4_level chnexport "gk_Kung4_level", 3
-gk_Kung4_level init -20.136676600554924 // Updated from: gk_Kung4_level init 0
+gk_Kung4_level init -20.136676600554924 ; Updated from: gk_Kung4_level init 0
         gk_Kung4_midi_dynamic_range chnexport "gk_Kung4_midi_dynamic_range", 3
         gk_Kung4_midi_dynamic_range init 30
         gk_Kung4_space_left_to_right chnexport "gk_Kung4_space_left_to_right", 3
@@ -1321,7 +1321,7 @@ gk_Kung4_level init -20.136676600554924 // Updated from: gk_Kung4_level init 0
         gk_Plucked_space_left_to_right chnexport "gk_Plucked_space_left_to_right", 3
         gk_Plucked_space_left_to_right init .5
         gk_Plucked_level chnexport "gk_Plucked_level", 3
-gk_Plucked_level init 27.874833007912855 // Updated from: gk_Plucked_level init 0
+gk_Plucked_level init 27.874833007912855 ; Updated from: gk_Plucked_level init 0
         
         gi_Plucked_sine ftgen 0, 0, 65537, 10, 1
         
@@ -1416,7 +1416,7 @@ gk_Plucked_level init 27.874833007912855 // Updated from: gk_Plucked_level init 
         gi_SeidelHarmOsc_release chnexport "gi_SeidelHarmOsc_release", 3 ;  0.01
         gk_SeidelHarmOsc_midi_dynamic_range chnexport "gk_SeidelHarmOsc_midi_dynamic_range", 3 ;  20
         
-gk_SeidelHarmOsc_level init -20.136676600554924 // Updated from: gk_SeidelHarmOsc_level init 0
+gk_SeidelHarmOsc_level init -20.136676600554924 ; Updated from: gk_SeidelHarmOsc_level init 0
         gi_SeidelHarmOsc_attack init 0.003
         gi_SeidelHarmOsc_petals init 2.99
         gi_SeidelHarmOsc_release init 0.01
@@ -1577,7 +1577,7 @@ gk_SeidelHarmOsc_level init -20.136676600554924 // Updated from: gk_SeidelHarmOs
         gi_TubularBell_vibrato_depth chnexport "gi_TubularBell_vibrato_depth", 3
         gi_TubularBell_vibrato_rate chnexport "gi_TubularBell_vibrato_rate", 3
         
-gk_TubularBell_level init -17.505908950775876 // Updated from: gk_TubularBell_level init 0
+gk_TubularBell_level init -17.505908950775876 ; Updated from: gk_TubularBell_level init 0
         gi_TubularBell_crossfade init 2
         gi_TubularBell_vibrato_depth init .1
         gi_TubularBell_vibrato_rate init 5
@@ -1667,7 +1667,7 @@ gk_TubularBell_level init -17.505908950775876 // Updated from: gk_TubularBell_le
         gi_YiString_overlap chnexport "gi_YiString_overlap", 3 ;  .1
         
         gk_YiString_midi_dynamic_range init 20
-gk_YiString_level init 0 // Updated from: gk_YiString_level init 0
+gk_YiString_level init 0 ; Updated from: gk_YiString_level init 0
         gk_YiString_reverb_send init .5
         gk_YiString_chorus_send init .5
         gi_YiString_overlap init .1
@@ -1739,7 +1739,7 @@ gk_YiString_level init 0 // Updated from: gk_YiString_level init 0
         endin
         gk_Xing_level chnexport "gk_Xing_level", 3
         
-gk_Xing_level init 0 // Updated from: gk_Xing_level init 0
+gk_Xing_level init 0 ; Updated from: gk_Xing_level init 0
         
         gi_Xing_isine ftgen 0, 0, 65537, 10, 1
         
@@ -1804,10 +1804,10 @@ gk_Xing_level init 0 // Updated from: gk_Xing_level init 0
           gi_ReverbSC_delay_modulation chnexport "gi_ReverbSC_delay_modulation", 3
           gk_ReverbSC_frequency_cutoff chnexport "gk_ReverbSC_frequency_cutoff", 3
           
-gk_ReverbSC_feedback init 0.8707357172215372 // Updated from: gk_ReverbSC_feedback init 0.875
-gk_ReverbSC_wet init 0.5 // Updated from: gk_ReverbSC_wet init 0.5
+gk_ReverbSC_feedback init 0.8707357172215372 ; Updated from: gk_ReverbSC_feedback init 0.875
+gk_ReverbSC_wet init 0.5 ; Updated from: gk_ReverbSC_wet init 0.5
           gi_ReverbSC_delay_modulation init 0.0075
-gk_ReverbSC_frequency_cutoff init 9000 // Updated from: gk_ReverbSC_frequency_cutoff init 15000
+gk_ReverbSC_frequency_cutoff init 9000 ; Updated from: gk_ReverbSC_frequency_cutoff init 15000
           
           instr ReverbSC
           gk_ReverbSC_dry = 1.0 - gk_ReverbSC_wet
@@ -1829,7 +1829,7 @@ gk_ReverbSC_frequency_cutoff init 9000 // Updated from: gk_ReverbSC_frequency_cu
           gk_MasterOutput_level chnexport "gk_MasterOutput_level", 3 ; 0
           gS_MasterOutput_filename chnexport "gS_MasterOutput_filename", 3 ; ""
           
-gk_MasterOutput_level init -2.383888203863542 // Updated from: gk_MasterOutput_level init 0
+gk_MasterOutput_level init -2.383888203863542 ; Updated from: gk_MasterOutput_level init 0
           gS_MasterOutput_filename init ""
         
           chn_k "gk_MasterOutput_output_level_left", 3

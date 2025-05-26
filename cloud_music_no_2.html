@@ -16,6 +16,7 @@
     <script src="tinycolor.js"></script>
     <script src="CsoundAudioNode.js"></script>
     <script src="CsoundAC.js"></script>
+    <script defer src="global-menu.js"></script>
     <link rel="stylesheet" href="w3.css">
     <link rel="icon" href="data:,">
     <style>
@@ -56,13 +57,13 @@
     all events from the user interface. Most of this code requires little or 
     no change when writing a new piece.
     ------------------------------------------------------------------------->
-    <div class="w3-bar " style="position:fixed;background:transparent;">
-        <ul class="menu">
+    <div class="w3-bar" id="main_menu" style="position:fixed;background:transparent;">
+        <ul class="menu" id="main_menu_list">
             <li id="menu_item_play" class="w3-btn w3-hover-text-light-green">Play</li>
             <li id="menu_item_fullscreen" class="w3-btn w3-hover-text-light-green">Fullscreen</li>
             <li id="menu_item_controls" class="w3-btn w3-hover-text-light-green">Controls</li>
             <li id="menu_item_console" class="w3-btn w3-hover-text-light-green">Log</li>
-            <li id="menu_item_about" class="w3-btn w3-hover-text-light-green">About</li>
+            <li id="menu_item_about" class="w3-btn w3-hover-text-light-green">About Cloud Music No. 2</li>
         </ul>
     </div>
     <canvas id="display" class="w3-container" style="background-color:black;height:100%;margin:0;padding:0;z-index:0;">
@@ -1242,6 +1243,13 @@ f3 0 524288 -12 20.0  ;unscaled ln(I(x)) from 0 to 20.0
                 if ($("#controls_view").is(":visible")) {
                     $("#controls_view").hide();
                 } else {
+                    const menu_bar = document.getElementById('main_menu');
+                    const menu_bar_bottom = menu_bar.getBoundingClientRect().bottom;
+                    let controls_view = document.getElementById('controls_view');
+                    controls_view.style.top = `${menu_bar_bottom}px`;
+                    // Back out menu bar height from console view height.
+                    controls_view.style.height= `calc(${controls_view.style.height} - ${menu_bar_bottom}px)`;
+                    // Needed to make visible in place.
                     $("#controls_view").show();
                 }
             });
@@ -1254,6 +1262,14 @@ f3 0 524288 -12 20.0  ;unscaled ln(I(x)) from 0 to 20.0
                     $("#console_view").hide();
                 } else {
                     $("#console_view").show();
+                    const menu_bar = document.getElementById('main_menu');
+                    const menu_bar_bottom = menu_bar.getBoundingClientRect().bottom;
+                    let console_view = document.getElementById('console_view');
+                    console_view.style.top = `${menu_bar_bottom}px`;
+                    // Back out menu bar height from console view height.
+                    console_view.style.height= `calc(${console_view.style.height} - ${menu_bar_bottom}px)`;
+                    // Needed to make visible in place.
+                    console_editor.resize(true);
                     // Needed to make visible in place.
                     console_editor.resize(true);
                 }
@@ -1266,6 +1282,13 @@ f3 0 524288 -12 20.0  ;unscaled ln(I(x)) from 0 to 20.0
                     $("#about_view").hide();
                 } else {
                     $("#about_view").show();
+                    $("#about_view").show();
+                    const menu_bar = document.getElementById('main_menu');
+                    const menu_bar_bottom = menu_bar.getBoundingClientRect().bottom;
+                    let about_view = document.getElementById('about_view');
+                    about_view.style.top = `${menu_bar_bottom}px`;
+                    // Back out menu bar height from about view height.
+                    about_view.style.height= `calc(${document.body.style.height} - ${menu_bar_bottom}px)`;
                 }
             });
             $(document).keydown(function (event) {

@@ -258,10 +258,11 @@ class Cloud5Piece extends HTMLElement {
     "genre": null,
   };
   connectedCallback() {
+    const filename = document.location.pathname.split("/").pop()
     this.innerHTML = `
-    <div class="w3-bar" id="main_menu" style="position:fixed;background:transparent;z-index:1000;">
-    <ul class="menu">
-        <li id="menu_item_play" title="Play piece on system audio output" class="w3-btn w3-hover-text-light-green">
+    <div class="w3-bar cloud5-menu" id="main_menu">
+    <ul class="menu" id="main_menu_list">
+        <li id="menu_item_play" title="Play piece on output" class="w3-btn w3-hover-text-light-green">
             Play</li>
         <li id="menu_item_render" title="Render piece to soundfile" class="w3-btn w3-hover-text-light-green">Render
         </li>
@@ -274,7 +275,7 @@ class Cloud5Piece extends HTMLElement {
         <li id="menu_item_log" title="Show/hide message log" class="w3-btn w3-hover-text-light-green">Log
         </li>
         <li id="menu_item_about" title="Show/hide information about this piece"
-            class="w3-btn w3-hover-text-light-green">About</li>
+            class="w3-btn w3-hover-text-light-green">About ${filename}</li>
         <li id="mini_console" class="w3-btn w3-text-green w3-hover-text-light-green"></li>
         <li id="vu_meter_left" class="w3-btn w3-hover-text-light-green"></li>
         <li id="vu_meter_right" class="w3-btn w3-hover-text-light-green"></li>
@@ -397,6 +398,9 @@ class Cloud5Piece extends HTMLElement {
     });
     let menu_item_log = document.querySelector('#menu_item_log');
     menu_item_log.onclick = ((event) => {
+      const menu_bottom = document.getElementById('main_menu').getBoundingClientRect().bottom;
+      this.log_overlay.style.position='fixed';
+      this.log_overlay.style.top = `${menu_bottom}px`;
       console.info("menu_item_log click...");
       //this.show(this.piano_roll_overlay)
       //this.hide(this.strudel_overlay);
@@ -564,14 +568,25 @@ class Cloud5Piece extends HTMLElement {
     this.csound_message_callback("Csound has stopped.\n");
   };
   /**
-   * Helper function to show custom element overlays.
+   * Helper function to show custom element overlays. Resizes overlay 
+   * if required to fit layout.
    * 
    * @param {Object} overlay 
    */
   show(overlay) {
     if (overlay) {
       overlay.style.display = 'block';
-    }
+      // Back out the menu bar height from console view height for the log 
+      // console, the score, and the about page.
+      if (['CLOUD5-LOG', 'CLOUD5-PIANO-ROLL', 'CLOUD5-ABOUT'].includes(overlay.tagName)) {
+        const menu_bar = document.getElementById('main_menu');
+        const menu_bar_bottom = menu_bar.getBoundingClientRect().bottom;
+        overlay.style.top = `${menu_bar_bottom}px`;
+        const computed_height = window.getComputedStyle(document.body).height;
+        overlay.style.height= `calc(${computed_height} - ${menu_bar_bottom}px)`;
+        console.log(`overlay style: ${overlay.style}`);
+      }
+   }
   }
   /**
    * Helper function to hide custom element overlays.
@@ -939,10 +954,9 @@ class Cloud5Shader extends HTMLElement {
   connectedCallback() {
     this.canvas = document.createElement('canvas');
     this.appendChild(this.canvas);
-    this.canvas.style.position = 'absolute';
-    this.canvas.style.top = '0';
-    this.canvas.style.left = '0';
-    this.canvas.style.margin_top = '40px';
+    this.canvas.style.position = 'fixed';
+    this.canvas.style.top = '0px';
+    this.canvas.style.left = '0px';
     this.canvas.style.display = 'block';
     this.canvas.style.width = '100%';
     this.canvas.style.height = '100%';
@@ -1346,7 +1360,7 @@ class Cloud5ShaderToy extends HTMLElement {
     this?.write_audio_texture(this.analyser, this.channel0_texture_unit, this.channel0_texture, this.channel0_sampler);
     // Actually render the frame.
     this.gl.drawElements(this.gl.TRIANGLES, this.webgl_buffers.inx.len, this.gl.UNSIGNED_SHORT, 0);
-    // Custom attributes may be accessed in this addon. Such attributes can be 
+    // Ï attributes may be accessed in this addon. Such attributes can be 
     // used e.g. to sample visuals and translate them to musical notes.
     if (this.post_draw_frame_function_addon) {
       this.post_draw_frame_function_addon();

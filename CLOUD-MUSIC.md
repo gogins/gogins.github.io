@@ -1,135 +1,71 @@
-# cloud-music
+<h2 align="center"><a href="https://michaelgogins.tumblr.com">Michael Gogins</a></h2>
 
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" 
 style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" />
-</a><br />This work is licensed under a 
+</a>
+<p>All music and examples herein are licensed under the  
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">
 Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
 
-## Computer music in the cloud by Michael Gogins 
+This is computer music that is hosted online, but actually rendered in Web 
+browsers. The pieces are not soundfiles and they are not streamed. Each piece 
+is a Web page that contains embedded software that runs in the browser to 
+synthesize the music.  Most pieces will play indefinitely. There may or may 
+not be animated visuals along with the music. The listener may or may not be 
+able to control and/or customize the piece -- perhaps quite a bit, amounting 
+to a new piece, co-composed with me.
 
-This is real music. Each piece will play indefinitely in any standard Web 
-browser. There may or may not be animated visuals along with the music. The 
-listener may or may not be able to customize the piece -- perhaps quite a bit, 
-amounting to a new piece, co-composed with me.
+For more information on most of these pieces, open the piece and view its 
+<i><b>About</b></i> tab, or use the browser's inspector to view the underlying 
+code.
 
-All source code for these pieces is available in the GitHub repository.
+## The cloud-5 System
 
-The underlying technology is my 
-<a href="https://github.com/gogins/csound-wasm">own WebAssembly builds of Csound and CsoundAC</a>.
-Some pieces may use third party libraries. The home page of Csound itself 
-is <a href="[xx](https://csound.com/)">here</a>.
+The cloud-music pieces are (mostly) implemented using my cloud-5 system for 
+creating computer music that runs in Web browsers. I presented a 
+[paper](https://github.com/gogins/michael.gogins.studio/blob/master/music/ICSC-2024/cloud-5.pdf) 
+on cloud-5 at the [2024 International Csound Conference in Vienna](https://mdw.ac.at/icsc2024/).
 
-## Installation
+For more information, including instructions on how to set up the cloud-5 
+system and use it for making your own pieces, go to the 
+[cloud-5](https://github.com/gogins/cloud-5) GitHub repository.
 
-This repository is a bit of a hack, but I have tried to make it as 
-maintainable as possible.
+## Other Things
 
-The basic idea is to extend Strudel not only with Csound, but also with 
-CsoundAC, and then to make Strudel into an embeddable component that I can use 
-in my pieces. This is possible because the Strudel Web site serves a REPL page 
-that will run Strudel code from users via an HTTP request, which I can hijack 
-for my own purposes.
+The following is a list of all Web pages on this site. It includes pieces (good, 
+indifferent, bad, or even broken), examples, tests, and so on.
 
-To this end, Strudel is included in this repository as a Git submodule. But, 
-before actually building Strudel, this repository makes the following patches 
-to Strudel head:
-
- 1. Make some minor patches to the Strudel source code. There is a Python 
-    script that npm will use to make these patches. If this quits working, 
-    change the `patch-strudel.py` script as required.
- 2. Patch the generated `strudel/website/dist/index.html` file to use relative 
-    rather than absolute pathnames for imported assets. This is needed in 
-    order to run the Strudel REPL from GitHub pages, which are not necessarily 
-    at the root of their Web server. There is a Python script that npm will 
-    use to make this patch. If this quits working, change the `patch-dist.py` 
-    script as required.
-    
-I have done my best to keep these patches as few and simple as possible.
-
-## Building
-
-Install [pnpm](https://www.npmjs.com/package/pnpm), which cloud-music and 
-Strudel use rather than npm. On macOS (I don't know about other platforms), 
-you may need to specifically install node@18.
-
-To initialize the local repository, obtain dependencies, build a static Web 
-site, and run it locally, execute the following commands:
-
-```
-pnpm install
-pnpm run setup
-pnpm run build
-pnpm run debug
-```
-These commands will patch Strudel with my addons; build everything; make a 
-distributable copy of the cloud-music Web site in the `dist` directory, with 
-all resources statically available; and run a local Web site, which is source 
-level debuggable, in that directory. Examine `package.json` for details. 
-
-This may fail due to failure to build `canvas.node` (not actually used here). 
-If that happens, execute `ccd loud-music/strudel/packages/canvas` and 
-`node-gyp rebuild`, and try again from `pnpm run build`.
-
-Before updating strudel from GitHub, make a branch to contain the updates if 
-they break cloud-music.
-
-If you see warnings or errors, don't panic unless browsing localhost does not 
-open a working Web site with playable pieces! 
-
-It may be necessary to clear the browser cache and application site data to 
-see updated pieces.
-
-## Debugging Hints
-
-The JavaScript `debugging;` command will break in the debugger at that line.
-
-Be sure to enable JavaScript source maps in the debugger settings. That won't 
-necessarily work for Strudel sources; load their source maps manually e.g. by
-opening a deployed (usually minified) source file in the debugger, then right-
-clicking on the code, and selecting "Add source map..." from the context menu.
-Oops, that should work, but I don't actually _find_ the source maps....
-
-## Deployment
-
-Build this project, then copy the entire contents of the `dist` directory 
-to your own Web site's public HTML directory.
-
-_**NOTE WELL**_: The `gogins.github.io` repository is maintained using 
-`pnpm run deploy` in the `cloud-5` repository. _DO NOT_ delete any files from  
-`gogins.github.io`, although pieces may be added there. In other words, 
-`gogins.github.io` can be a superset of `cloud-5`.
-
-## Maintenance Notes!
-
-_If at all possible_, never edit _existing_ Strudel files, always add _new_ 
-Strudel files. This is to keep conflicts between Strudel and cloud-music 
-to an absolute minimum.
-
-Track the version of [Csound for WebAssembly]
-(https://github.com/gogins/csound-wasm) and update the files if a new version 
-becomes available.
-
-## Extending Strudel
-
-For cloud-music pieces that use Strudel's REPL, it is possible to add new 
-user-defined Patterns and perhaps other functions to Strudel _without 
-rebuilding Strudel_.
-
-1. Write a static `MyModule.mjs` module in the Web root (the `docs` 
-   directory).
-2. Do _not_ import anything that will already have been imported by the 
-   Strudel REPL itself -- which is essentially all of Strudel.
-3. Call Strudel's `register` function to integrate any new Patterns into 
-   Strudel.
-4. Don't forget, any Strudel piece that uses MyModule has to 
-  `import('/MyModule.mjs');` first thing!
-   
-The `csoundac.mjs` module is an example of such a plugin.
-
-
-
-
-
-
-
+<ul>
+<li><a href="2024-ICSC-controller.html">2024-ICSC-controller.html</a></li>
+<li><a href="2024-ICSC.html">2024-ICSC.html</a></li>
+<li><a href="Tishina.html">Tishina.html</a></li>
+<li><a href="cancycle.html">cancycle.html</a></li>
+<li><a href="cloud5-example-parametric-lindenmayer.html">cloud5-example-parametric-lindenmayer.html</a></li>
+<li><a href="cloud5-example-score-generator.html">cloud5-example-score-generator.html</a></li>
+<li><a href="cloud5-example-simple.html">cloud5-example-simple.html</a></li>
+<li><a href="cloud5-example-strudel.html">cloud5-example-strudel.html</a></li>
+<li><a href="cloud5-example-visual-music.html">cloud5-example-visual-music.html</a></li>
+<li><a href="cloud5-example-web.html">cloud5-example-web.html</a></li>
+<li><a href="cloud_music_no_1.html">cloud_music_no_1.html</a></li>
+<li><a href="cloud_music_no_10.html">cloud_music_no_10.html</a></li>
+<li><a href="cloud_music_no_11.html">cloud_music_no_11.html</a></li>
+<li><a href="cloud_music_no_12.html">cloud_music_no_12.html</a></li>
+<li><a href="cloud_music_no_13.html">cloud_music_no_13.html</a></li>
+<li><a href="cloud_music_no_14.html">cloud_music_no_14.html</a></li>
+<li><a href="cloud_music_no_2.html">cloud_music_no_2.html</a></li>
+<li><a href="cloud_music_no_3.html">cloud_music_no_3.html</a></li>
+<li><a href="cloud_music_no_4.html">cloud_music_no_4.html</a></li>
+<li><a href="cloud_music_no_5.html">cloud_music_no_5.html</a></li>
+<li><a href="cloud_music_no_6.html">cloud_music_no_6.html</a></li>
+<li><a href="cloud_music_no_7.html">cloud_music_no_7.html</a></li>
+<li><a href="cloud_music_no_8.html">cloud_music_no_8.html</a></li>
+<li><a href="cloud_music_no_9.html">cloud_music_no_9.html</a></li>
+<li><a href="epicycles.html">epicycles.html</a></li>
+<li><a href="index.html">index.html</a></li>
+<li><a href="message.html">message.html</a></li>
+<li><a href="minimal.html">minimal.html</a></li>
+<li><a href="player.html">player.html</a></li>
+<li><a href="polymetric.html">polymetric.html</a></li>
+<li><a href="scrims.html">scrims.html</a></li>
+<li><a href="trichord_space.cloud5.html">trichord_space.cloud5.html</a></li>
+</ul>

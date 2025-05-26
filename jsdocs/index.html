@@ -43,50 +43,22 @@
 
 
     <section>
-        <article><p>
-<a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" 
+        <article><h1>cloud-5</h1>
+<p><a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" 
 style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" />
-</a>
+</a></p>
 <p>All music and examples herein are licensed under the  
 <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">
 Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>.
-<h2>Computer music in the cloud by <a href="https://michaelgogins.tumblr.com">Michael Gogins</a></h2>
-<p>This is computer music that is hosted online, but actually rendered in Web
-browsers. The pieces are not soundfiles and they are not streamed. Each piece
-is a Web page that contains embedded software that runs in the browser to
-synthesize the music.  Most pieces will play indefinitely. There may or may
-not be animated visuals along with the music. The listener may or may not be
-able to control and/or customize the piece -- perhaps quite a bit, amounting
-to a new piece, co-composed with me.</p>
-<p>For more information on most of these pieces, open the piece and view its
-<i><b>About</b></i> tab, or use the browser's inspector to view the underlying
-code.</p>
-<ul>
-<li><a href="scrims.html">Scrims</a>, a JavaScript piece that samples an animated WebGL
-hopalong fractal to obtain notes that are then harmonized using CsoundAC's
-chord space operations.</li>
-<li><a href="cloud_music_no_1.html">Cloud Music No. 1</a>.</li>
-<li><a href="http://localhost:8000/cloud_music_no_2.html">Cloud Music No. 2</a>.</li>
-<li><a href="http://localhost:8000/cloud_music_no_3.html">Cloud Music No. 3</a>.</li>
-<li><a href="http://localhost:8000/cloud_music_no_4.html">Cloud Music No. 4</a>.</li>
-<li><a href="http://localhost:8000/cloud_music_no_6.html">Cloud Music No. 6</a>.</li>
-<li><a href="http://localhost:8000/cloud_music_no_8.html">Cloud Music No. 8</a>.</li>
-<li><a href="cloud_music_no_9.html">Cloud Music No. 9</a>.</li>
-<li><a href="cloud_music_no_14.html">Cloud Music No. 14</a>. This one has a button so the
-user can record a performance and download the resulting soundfile.</li>
-<li><a href="2024-ICSC.html">2024-ICSC</a>, prepared for the 2024 International Csound
-Conference in Vienna. This is the same as Cloud Music No. 14, except that
-the &quot;Full screen&quot; menu item moves compositional controls onto a
-second monitor for unobscured visuals.</li>
-<li><a href="cancycle.html">Cancycle</a>. Set up to enable live coding.</li>
-<li><a href="polymetric.html">Polymetric</a>.</li>
-</ul>
-<h1><a href="https://github.com/gogins/cloud-5">cloud-5</a></h1>
-<p>The cloud-music pieces are implemented using my cloud-5 system for creating
-computer music that runs in Web browsers. This in turn is based on
-<a href="https://github.com/gogins/csound-wasm">my own WebAssembly builds of Csound and CsoundAC</a>.
-Some pieces may use third party libraries. The home page of Csound itself
-is <a href="[xx](https://csound.com/)">here</a>.</p>
+<h2><a href="https://michaelgogins.tumblr.com">Michael Gogins</a></h2>
+<p>The cloud-5 system is a toolkit and library designed for creating computer
+music that is hosted on Web servers and that runs and plays in a user's computer
+or device. For examples of such music, see
+<a href="https://gogins.github.io/">cloud-music</a>.</p>
+<p>The cloud-5 system is based on <a href="https://github.com/gogins/csound-wasm">
+my own WebAssembly builds of Csound and CsoundAC</a>. Some pieces may use
+third party libraries. The home page of Csound itself is
+<a href="[xx](https://csound.com/)">here</a>.</p>
 <p>Code written as part of cloud-5 is licensed under the terms of the same
 license as Csound, the
 <a href="https://github.com/csound/csound/blob/master/COPYING">GNU Lesser Public License, version 2.1</a>.
@@ -421,10 +393,13 @@ sources are newer than the local sources, or if the targets of the build are
 missing. If you still have problems with one of these targets, completely
 delete the problematic external project source directory, e.g.
 <code>rm -rf csound-wasm-prefix/src</code>, delete <code>CMakeCache.txt</code>, and rebuild.</p>
-<p><em><strong>NOTE WELL</strong></em>: The <code>gogins.github.io</code> repository is maintained using
-<code>pnpm run deploy</code> in <em>this</em> <code>cloud-5</code> repository. <em>DO NOT</em> delete any files
-from <code>gogins.github.io</code>, although pieces may be added there. In other words,
-<code>gogins.github.io</code> can be the same as, or a superset of, <code>cloud-5</code>.</p>
+<p><em><strong>NOTE WELL</strong></em>: The <code>gogins.github.io</code> repository is maintained by hand.
+<em>DO NOT</em> delete any files from <code>gogins.github.io</code>, although pieces may be
+added there. In other words, <code>gogins.github.io</code> can be a superset of
+<code>cloud-5</code>. Unzip the cloud-5.zip file in this build, into the
+<code>gogins.github.io</code> directory, add all files thus updated (<code>git add .</code>),
+commit, and push. The same procedure can be used to update other GitHub pages
+repositories.</p>
 <h2>Running in NW.js</h2>
 <p>It also is possible to run cloud-5 pieces locally in <a href="https://nwjs.io/">NW.js</a>
 using <a href="https://github.com/gogins/csound-extended-node">csound.node</a>. In this
@@ -448,6 +423,19 @@ of Csound.</li>
 and make sure that the application directory for your <code>csound.node</code> pieces is the
 <code>cloud-5</code> directory, which includes necessary resources.</p>
 <h2>Release Notes</h2>
+<h3><a href="https://github.com/gogins/cloud-5/releases/tag/v1.1">v1.1</a></h3>
+<ul>
+<li>
+<p>Made a clearer distinction between the Web site serving showcase for
+cloud-music pieces, and the README.md for the cloud-5 system.</p>
+</li>
+<li>
+<p>Added a global menu with a curated list of better pieces.</p>
+</li>
+<li>
+<p>Improved layouts to deal with presence/absence of global menu.</p>
+</li>
+</ul>
 <h3><a href="https://github.com/gogins/cloud-5/releases/tag/v1-beta">v1</a></h3>
 <ul>
 <li>
@@ -613,7 +601,7 @@ events.</p>
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Sat Mar 29 2025 16:30:47 GMT+0100 (Central European Standard Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.3</a> on Mon May 26 2025 15:03:09 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
