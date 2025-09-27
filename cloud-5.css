@@ -1,42 +1,55 @@
 /* A cloud-5 piece always fills the viewport and only the viewport. */
 
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100vw;
   height: 100vh;
   overflow: hidden;
   position: relative;
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 html::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+  display: none;
+  /* Chrome, Safari and Opera */
 }
 
 .ace_scrollbar {
   display: none !important;
 }
 
+/* Make the gutter background transparent */
+.ace_editor .ace_gutter {
+  background: transparent !important;
+  border: none !important;
+  /* optional, remove divider line */
+  color: #888 !important;
+  /* pick your line number color */
+}
+
+/* Adjust line number text if you want */
+.ace_editor .ace_gutter-cell {
+  background: transparent !important;
+}
+
 .no-scroll {
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
+  /* IE and Edge */
+  scrollbar-width: none;
+  /* Firefox */
 }
 
 .no-scroll::-webkit-scrollbar {
-  display: none; /* Chrome, Safari and Opera */
+  display: none;
+  /* Chrome, Safari and Opera */
 }
 
 /* The cloud-5 custom elements share a common style, which can be overridden by lower level styles. */
-
-.cloud5-menu {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;  
-}
 
 .cloud5-body {
   margin: 0;
@@ -45,22 +58,149 @@ html::-webkit-scrollbar {
   height: 100vh;
   overflow: hidden;
   position: relative;
-  background-color:black;
+  background-color: black;
+
+}
+
+/**
+ * Overlay elements are fixed position, filling the viewport, and hidden by
+ * default. They can be shown or hidden by setting their display style to
+ * 'block' or 'none'. They are stacked in a specific order using z-index.
+ * The main menu (cloud5-menu) is always visible and has the highest z-index.
+ * Other overlays can be toggled on and off, and their visibility is managed
+ * by the cloud-5 piece.
+ *
+ * From highest stacking order to lowest:
+ *
+ * Menu (i.e. Piece), always visible.
+ * Strudel.
+ * Piano Roll.
+ * Log.
+ * About (hides all others except Menu).
+ * Shader (always visible except when About is visible).
+ */
+cloud5-shadertoy,
+cloud5-strudel,
+cloud5-piano-roll,
+cloud5-log,
+cloud5-about {
+  position: fixed;
+  inset: 0;
+  display: none;
+  /* toggle with .is-open */
+  width: 100vw;
+  height: 100vh;
+  isolation: isolate;
+}
+
+/* Must be on top to permit editing text fields. */
+#menu_item_dat_gui {
+  z-index: 9000;
+}
+
+/* Layering (top → bottom) */
+cloud5-menu {
+  position: fixed;
+  inset: 0 auto auto 0;
+  z-index: 8000;
+}
+
+cloud5-strudel {
+  z-index: 1400;
+}
+
+cloud5-piano-roll {
+  z-index: 1200;
+}
+
+cloud5-log {
+  z-index: 1100;
+}
+
+cloud5-about {
+  z-index: 1000;
+}
+
+cloud5-shadertoy {
+  z-index: 100;
+}
+
+cloud5-piece {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  inset: 0px;
+  width: 100vw;
+  height: 100vh;
+  background: transparent;
+  display: block;
+  pointer-events: none;
+  z-index: 8000;
+}
+
+
+.cloud5-menu {
+  pointer-events: auto;
+  position: fixed;
+  z-index: 8001;
+}
+
+cloud5-strudel {
+  isolation: isolate;
+  padding: 80px;
+  font-size: 11px;
+  color: rgb(255, 255, 200, 67%);
+  /* overflow-y: auto; */
+  background: transparent;
+  overflow-wrap: break-word;
+}
+
+cloud5-piano-roll {
+  background: black;
+  overflow-wrap: break-word;
+}
+
+cloud5-log {
+  padding: 20px;
+  padding-left: 60px;
+  overflow: auto;
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* Internet Explorer and Edge */
+}
+
+cloud5-about {
+  isolation: isolate;
+  padding: 4em;
+  font-size: 11px;
+  color: rgb(255, 255, 200, 67%);
+  overflow: auto;
+  overflow-wrap: break-word;
+}
+
+cloud5-shadertoy {
+  font-size: 11px;
+  background: transparent;
+  color: rgb(255, 255, 200, 67%);
+  /* overflow-y: auto; */
+  overflow-wrap: break-word;
 }
 
 .cloud5-score-canvas,
 .cloud5-shader-canvas {
-  background:black;
+  background: transparent;
   margin: 0px;
-  width: 100vw;
-  height: 100vh;
+  inset: 0px;
+  width: 100%;
+  height: 100%;
 }
 
 .cloud5-strudel-repl {
   position: fixed;
   top: 0px;
-  width:120em;
-  height:80em;
+  width: 120em;
+  height: 80em;
   left: 40px;
   /* Bring Strudel's self-determined font size back into line with ours. */
   transform: scale(.666667);
@@ -69,135 +209,88 @@ html::-webkit-scrollbar {
 .cloud5-log-editor {
   background: transparent;
   display: block;
+  padding: 2em;
   margin: 0px;
   width: 100%;
   height: 100%;
   font-size: 11px;
   opacity: 70%;
-  color: rgb(255, 255, 200);
+  color: rgba(0, 255, 17, 0.904);
   overflow-wrap: break-word;
   overflow: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer and Edge */
+  scrollbar-width: none;
+  /* Firefox */
+  -ms-overflow-style: none;
+  /* Internet Explorer and Edge */
 }
 
-cloud5-log {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  visibility: none;
+
+/* Fill the host regardless of classes applied */
+cloud5-piano-roll>canvas {
   display: block;
-  padding: 20px;
-  padding-left: 60px;
-  width: 100vw;
-  height: 100vh;
-  color: rgb(255, 255, 200, 67%);
-  background: transparent;
-  overflow: auto;
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* Internet Explorer and Edge */
+  width: 100%;
+  height: 100%;
 }
 
-cloud5-strudel,
-cloud5-about {
-  isolation: isolate;
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: none;
-  padding: 80px;
-  width: 100vw;
-  height:100vh;
-  font-size: 11px;
-  background: transparent;
-  color: rgb(255, 255, 200, 67%);
-  /* overflow-y: auto; */
-  overflow-wrap: break-word;
-  z-index:1;
-}
-
-cloud5-shader, 
-cloud5-shadertoy {
-  position: fixed;
-  top: 0;
-  left: 0;
-  display: none;
-  margin: 0;
-  width: 100vw;
-  height: 100vh;
-  font-size: 11px;
-  /* z-index: 5; */
-  background: transparent;
-  color: rgb(255, 255, 200, 67%);
-  /* overflow-y: auto; */
-  overflow-wrap: break-word;
-}
-
-cloud5-piano-roll {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  visibility: none;
-  display: none;
-  margin: 0px;
-  width: 100vw;
-  height: 100vh;
-  font-size: 11px;
-  /* z-index: 5; */
-  background:  black;
-   /* overflow-y: auto; */
-  overflow-wrap: break-word;
-}
-
-/**
- * Stacking order for all overlays. The shader should always be at the bottom 
- * and the menu bar should always be at the top.
- */
- cloud5-shader, cloud5-shadertoy {
-  z-index: 0;
- }
- cloud5-score {
-  z-index: 10;
- }
- cloud5-log {
-  z-index: 20;
- }
- cloud5-about {
-  z-index: 40;
- }
- cloud5-piece {
-  z-index: 50;
- }
- cloud5-strudel {
-  z-index: 60;
- }
 /**
  * Override styles of dat.gui menu to suit our styles.
  */
-  
+
 .dg {
-    font: 12px 'Verdana', sans-serif;
+  font: 12px 'Verdana', sans-serif;
 }
 
 .dg .c {
-    background: transparent;
+  background: transparent;
+}
+
+#main_menu {
+  isolation: isolate;
 }
 
 .dg.main {
-  isolation: isolate;
-  z-index: 3000;
+  pointer-events: auto;
+  z-index: 10000;
+  overflow: visible;
 }
 
 .dg.main .close-button {
-    background: transparent;
-    font: 15px 'Verdana', sans-serif;
+  background: transparent;
+  font: 15px 'Verdana', sans-serif;
 }
 
 .dg.main .close-button:hover {
-    background: transparent;
+  background: transparent;
 }
 
 input {
-    font: 1em/1.25em Verdana, sans-serif;
-    background: transparent;
+  font: 1em/1.25em Verdana, sans-serif;
+  background: transparent;
 }
+
+/* Make dat.gui fields truly editable & visibly so inside the button-styled LI */
+#menu_item_dat_gui,
+#menu_item_dat_gui * {
+  -webkit-user-select: text !important;
+  user-select: text !important;
+}
+
+#menu_item_dat_gui .dg input,
+#menu_item_dat_gui .dg textarea,
+#menu_item_dat_gui .dg select {
+  pointer-events: auto !important;
+  -webkit-user-select: text !important;
+  user-select: text !important;
+  /* Make typing visible against transparent layers */
+  background: rgba(0,0,0,0.3) !important;
+  color: #fff !important;
+}
+
+#menu_item_dat_gui .dg input:focus,
+#menu_item_dat_gui .dg textarea:focus,
+#menu_item_dat_gui .dg select:focus {
+  border-color: rgba(0,255,128,0.8);
+}
+
+/* Neutralize button-like cursor on this LI so clicks feel “form-like” */
+#menu_item_dat_gui.w3-btn { cursor: default; }

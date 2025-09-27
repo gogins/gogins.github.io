@@ -9,14 +9,16 @@ Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License<
 ## [Michael Gogins](https://michaelgogins.tumblr.com)
 
 The cloud-5 system is a toolkit and library designed for creating computer 
-music that is hosted on Web servers and that runs and plays in a user's computer 
-or device. For examples of such music, see 
+music that is hosted on Web servers and that runs and plays in the user's Web 
+browser. In theory, that can be any current Web browser, even on smartphones 
+and tablets, although performance might be an issue on less powerful systems. 
+For examples of such music, see 
 <a href="https://gogins.github.io/">cloud-music</a>.
 
 The cloud-5 system is based on <a href="https://github.com/gogins/csound-wasm"> 
 my own WebAssembly builds of Csound and CsoundAC</a>. Some pieces may use 
 third party libraries. The home page of Csound itself is 
-<a href="[xx](https://csound.com/)">here</a>.
+<a href="https://csound.com/">here</a>.
 
 Code written as part of cloud-5 is licensed under the terms of the same 
 license as Csound, the 
@@ -33,7 +35,8 @@ composition, and for live coding.
 
 cloud-5 runs on every system with an audio output that can run a Web server 
 and a standards compliant Web browser. That includes _all_ computers 
-running macOS, Linux, or Windows, as well as most Android devices. 
+running macOS, Linux, or Windows, as well as the more powerful smartphones and 
+tablets. 
 
 For recent changes, see the _[Release Notes](#release-notes)_ at the end of 
 this document.
@@ -59,11 +62,12 @@ this document.
 
 ### Installation
 
-There is no installation! Simply download the release, and unzip it into a 
-cloud-5 directory.
+There is no installation! 
+
+Simply download the release (`cloud-5.zip`), and unzip it into an empty directory.
 
 cloud-5 can be stored on a USB thumb drive, and will run with all functionality 
-_from_ the thumb drive. This makes it possible to carry all of your work in 
+_from_ the thumb drive. That makes it possible to carry all of your work in 
 progress from computer to device to computer.
 
 Or, simply copy the entire cloud-5 directory with all contents to your computer 
@@ -74,23 +78,24 @@ cloud-5 directory.
 
 There is no configuration!
 
-Well, actually there might be one thing. You might need to configure your 
-local Web server to serve files from your cloud-5 directory.
+If you have built cloud-5 yourself, cloud-5's Web root directory is 
+`cloud-5/strudel/website/dist`. If you have downloaded the prebuilt cloud-5 
+release, the Web root directory is where you unzipped `cloud-5.zip`.
 
 ### Running
 
- 1. Start a local Web server to serve the cloud-5 directory. The easiest way 
-    to do this on most systems is to open a terminal, change to your cloud-5 
-    directory, and execute `python3 -m http.server`. 
+ 1. Start a local Web server to serve the Web root directory. The easiest 
+    way to do this on most systems is to open a terminal, change to the Web 
+    root directory, and run `python3 -m http.server`.
 
  2. Start your Web browser, and navigate to your cloud-5 Web site (usually 
     just something like `https://localhost:8000`). Some users have problems 
     with Firefox, e.g. with WebMIDI permissions. If you experience this, try 
     the Chrome browser.
 
- 3. You should see this README as a Web page. Click on 
-    [cloud_music_no_1.html](cloud_music_no_1.html) and verify that you see 
-    animated graphics, and can play and hear the piece.
+ 3. The home page of the default installation is 
+    [cloud_music_no_1.html](cloud_music_no_1.html). Verify that you see 
+    animated graphics on this page, and can play and hear the piece.
 
  4. Some cloud-5 pieces use the dat.gui library to create a popup menu of 
     controls for Csound instruments or other purposes. You can create new 
@@ -105,10 +110,10 @@ In cloud-5, musical compositions are written as Web pages, i.e. as .html
 files. 
 
 It's a good idea for each composition to be written as just one .html file. 
-It must be in your cloud-5 directory. Any Csound orchestra code, JavaScript 
-code, and GLSL shader programs should simply be embedded in the HTML file in, 
-e.g., template strings (string literals) in JavaScript code, or included as 
-`<script>` or `<textview>` elements.
+It must end up in the cloud-5 Web root directory. Any Csound orchestra code, 
+JavaScript code, and GLSL shader programs should simply be embedded in the 
+HTML file, e.g. in template strings (string literals) in JavaScript code, or 
+included as `<script>` or `<textview>` elements.
 
 There are many ways to write compositions, because the capabilities of Csound, 
 Strudel, and HTML5 are so vast. Start out by a making a copy of one of the 
@@ -120,9 +125,6 @@ These are pieces designed to show how to use the new architecture for cloud-5
 based on `cloud-5.js`, a library of resuable Web components that greatly 
 simplifies writing cloud music pieces.
 
-- [`cloud5-example-simple.html`](cloud5-example-simple.html): a very simple 
-  composition that illustrates my paper on cloud-music. 
-  
 - [`cloud5-example-score-generator.html`](cloud5-example-score-generator.html): 
   a fixed-length piece with a score generated by CsoundAC, with an animated 
   piano roll display and audio visualization.
@@ -139,8 +141,13 @@ simplifies writing cloud music pieces.
   always-on visual music produced by a GLSL shader that is sampled and 
   shaped using CsoundAC.
 
-### Other Examples
+### Other Things
 
+ - [Strudel REPL](strudel_repl.html), exactly like the main Strudel Web site.
+
+ - [CsoundAC Reference](jsdocs/), reference documentation for cloud-5's 
+   JavaScript code.
+ 
  - A [minimal example](minimal.html) that just plays an embedded Csound piece.
  
  - A [Csound Player](player.html) that will play, and let you edit, any 
@@ -148,9 +155,6 @@ simplifies writing cloud music pieces.
    
  - [Message from Another Planet](message.html), a Csound piece with a basic 
    HTML user interface.
- 
- - [Strudel REPL](strudel_repl.html), exactly the same as the main Strudel Web 
-   site.
  
  - [Trichord Space](trichord_space.cloud5.html), an interactive piece that displays 
    Dmitri Tymoczko's chord space for trichords, with the ability to perform, 
@@ -174,13 +178,32 @@ simplifies writing cloud music pieces.
  
  - [Strudel](https://strudel.tidalcycles.org/), a JavaScript port of the 
    widely used live coding system [Tidal Cycles](http://tidalcycles.org/), by 
-   Alex McLean, Felix Roos, and others. _Note_: cloud-5 makes several 
-   necessary patches to the Strudel source code and distribution.
+   Alex McLean, Felix Roos, and others. 
    
  - Of course, a standards-compliant Web browser, which has an awesome set of 
    capabilities, including the most widely used programming language, 
    JavaScript, which can call Csound, CsoundAC, and Strudel.
-   
+
+### Design Notes
+
+The integration between Csound and Strudel has been implemented without any 
+changes to Strudel's source code. Instead, the Csound and CsoundAC APIs are 
+exposed as global singletons in `globalThis.csound` and `globalThis.csoundac`. 
+These are copied into the Strudel REPL's JavaScript context, also as 
+`globalThis.csound` and `globalThis.csoundac`. This is permitted because the 
+cloud-5 Web site and the Strudel REPL's IFrame have the same HTTP origin. 
+
+The cloud-5 build copies cloud-5 pieces, examples, tests, documentation, and 
+other resources from the cloud-5 repository's root directory (`cloud-5`) to 
+the Strudel submodule's Web root directory (`cloud-5/strudel/website/dist`) 
+-- _after_ building Strudel.
+
+This means that cloud-5 becomes a completely static Web site hosted from 
+`cloud-5/strudel/website/dist`.
+
+It also means that any Strudel patch can import or access Csound, CsoundAC, or 
+any JavaScript or other resource in the Web root.
+
 ### Capabilities
 
  - High-resolution, sample-accurate sound synthesis using one of the largest and 
@@ -192,7 +215,7 @@ simplifies writing cloud music pieces.
    display of currently playing notes in the music.
    
  - Control of Csound from Strudel. This includes both real-time notes 
-   generated by Strudel patches for the `csound` and `csoundm` outputs, and 
+   generated by Strudel patches for the `csound` and `csoundn` outputs, and 
    real-time control channel values created by Strudel Patterns, including the 
    new `slider` widget.
    
@@ -221,14 +244,23 @@ simplifies writing cloud music pieces.
 
 The major limitation of running in the browser is that csound-5 pieces are 
 sandboxed, and can write files only to a temporary filesystem inside the 
-sandbox. It is not possible to write directly to the filesystem on the user's 
-computer.
+sandbox. It is not possible to write soundfiles directly to the filesystem on 
+the user's computer.
 
-However, it _is_ possible to use an audio loopback driver such as 
+However, in some cloud-5 pieces, the Csound orchestra supports not only 
+rendering to the sandbox filesystem, but also automatically downloading the 
+finished soundfile to the user's _Downloads_ directory. This done using the 
+_Render_ button on the cloud-5 menu. However, the WebAssembly runtime sets a 
+hard limit on the size of such soundfiles, which cannot exceed the size of the 
+WebAssembly heap; pieces should probably not be more than about 10 minutes 
+long.
+
+It is _also_ possible to use an audio loopback driver such as 
 [BlackHole](https://github.com/ExistentialAudio/BlackHole) to route 
 audio produced by cloud-5 to a digital audio workstation that _can_ write 
 soundfiles. The maximum resolution of such soundfiles is floating-point 
-samples at 48 KHz, significantly higher resolution than the CD format.
+samples at 48 KHz, significantly higher resolution than the CD format, and 
+there is no hard limit to the size of the resulting soundfiles.
 
 To set this up on the Mac, open the Audio MIDI Setup app, click on the `+` at
 the bottom, and click on Create Multi-Ouput Device, including both your 
@@ -253,7 +285,8 @@ You can extend the capabilities of cloud-5 in several ways, including:
  - Write user-defined opcodes (UDOs) in Csound that you can `#include` in any 
    Csound orchestra.
    
- - Write a custom JavaScript module that you can use in any .html file.
+ - Write a custom JavaScript module that you can use in any .html file; it 
+   must be served from cloud-5's Web root, i.e. `./my_file.mjs`.
  
  - Write code in another high-level language and compile it for WebAssembly, 
    so that it will run in any standards-compliant Web browser.
@@ -284,71 +317,54 @@ You can extend the capabilities of cloud-5 in several ways, including:
 Avoid introducing new external dependencies as much as possible. Avoid 
 introducing new programming languages as much as possible. Do not load 
 dependencies from content distribution networks (CDNs); all dependendencies 
-used by cloud-5 must be static resources in the cloud-5 directory 
-(obviously, Strudel is a big exception, but I want to keep that the only one; 
-besides, the build process bundles Strudel into .js files that _are_ 
-statically served from the cloud-5 directory).
+used by cloud-5 must be static resources in the cloud-5 directory; 
+that includes a bundled version of Strudel.
 
 ## Building
 
-Building cloud-5 is not normally necessary, as pieces will run directly from 
-the root directory of the system, which is a static Web site. However, if you 
-plan to make substantial contributions to, or alterations of, cloud-5, these 
-are the instructions for building.
+It's not necessary to build cloud-5 in order to run it, or to write new pieces 
+for it. But if you want to build it, the fundamental assumptions of the build 
+are:
 
-Install [pnpm](https://www.npmjs.com/package/pnpm), which cloud-5 and 
-Strudel use rather than npm. On macOS (I don't know about other platforms), 
-you may need to specifically install node@18.
+ 1. Absolutely no changes or patches are made to any code in the `strudel` 
+    directory of this repository. The cloud-5 build invokes the Strudel build, 
+    and once that has completed, the cloud-5 build copies pieces 
+    and other files from the `cloud-5` root directory to Strudel's Web root 
+    directory (`cloud-5/strudel/website/dist`), and renames some files.
+    
+ 2. The end product is a static cloud-5 Web site in 
+    `cloud-5/strudel/website/dist`. Once this site has been built, a composer 
+    can simply drop new pieces (.html files) into that directory, and they 
+    will run. At any time, this directory can be published as a public 
+    Web site.
 
-To initialize the local repository, obtain dependencies, build a static Web 
-site, and run it locally, execute the following commands in the root directory:
+The actual build steps are:
 
-```
-cmake .
-make
-```
-These commands will patch Strudel with my addons; build everything; and make a 
-distributable copy of the cloud-5 Web site in the repository's root directory, 
-with all resources statically served. Examine `CMakeLists.txt` and 
-`package.json` for details. 
+ 1. Clone the [cloud-5 GitHub repository](https://github.com/gogins/cloud-5.git).
 
-To test your build, run a local Web server and browse a piece such as 
-[cloud_music_no_9](http://localhost:8000/cloud_music_no_9.html), which uses 
-many facilities of the system.
+ 2. Install [pnpm](https://www.npmjs.com/package/pnpm), which cloud-5 and 
+    Strudel use rather than npm. On macOS (I don't know about other platforms), 
+    you may need to specifically install node@18.
 
-The build may fail due to failure to build `canvas.node` (not actually used 
-here). If that happens, execute `cd cloud-5/strudel/packages/canvas` and 
-`node-gyp rebuild`, and try again from `pnpm run build`.
+ 2. Change to the `cloud-5` directory.
 
-Before updating Strudel from GitHub, make a branch to contain the updates if 
-they break cloud-5.
+ 3. Execute `pnpm install` to update dependencies of cloud-5.
 
-If you see warnings or errors, don't panic unless browsing localhost does not 
-open a working Web site with playable pieces! 
+ 4. Execute `pnpm run setup` to bring in the Strudel submodule.
 
-It may be necessary to clear the browser cache and application site data to 
-see updated pieces.
+ 5. Execute `pnpm run build` to build Strudel and copy cloud-5 into 
+    `strudel/website/dist`.
 
-The `csound-wasm` and `csound-node` targets will rebuild if the upstream Git 
-sources are newer than the local sources, or if the targets of the build are 
-missing. If you still have problems with one of these targets, completely 
-delete the problematic external project source directory, e.g. 
-`rm -rf csound-wasm-prefix/src`, delete `CMakeCache.txt`, and rebuild.
-
-_**NOTE WELL**_: The `gogins.github.io` repository is maintained by hand.
- _DO NOT_ delete any files from `gogins.github.io`, although pieces may be 
- added there. In other words, `gogins.github.io` can be a superset of 
- `cloud-5`. Unzip the cloud-5.zip file in this build, into the 
- `gogins.github.io` directory, add all files thus updated (`git add .`), 
- commit, and push. The same procedure can be used to update other GitHub pages 
- repositories.
+ 6. Execute `pnpm run local` to run a local Web site from your `dist` 
+    directory.
 
 ## Running in NW.js
 
 It also is possible to run cloud-5 pieces locally in [NW.js](https://nwjs.io/) 
-using [csound.node](https://github.com/gogins/csound-extended-node). In this 
-case, csound.node provides a native code build of Csound, and such pieces can 
-load native code plugins and read and write to the local filesystem.
+using [csound.nwjs](https://github.com/gogins/csound-nwjs). In this 
+case, csound.node is a native addon for NW.js based on the Csound shared 
+library, and such pieces can load native code plugins and read and write to 
+the local filesystem.
 
 This involves installing a number of pre-requisites, but the advantages 
 include somewhat higher performance from native code Csound, the ability to 
@@ -358,24 +374,75 @@ ability to read and write in the local filesystem.
 ### Installation
 
  1. Install regular [Csound for desktop computers](https://csound.com/download.html).
+
  2. Install [pnpm](https://pnpm.io/installation).
- 2. Install [csound.node](https://github.com/gogins/csound-extended-node). Note that 
-    the API for csound.node is virtually the same as the API for my WebAssembly build 
-    of Csound.
- 2. Install [NW.js](https://nwjs.io/).
 
-### Configuration and Running
+ 2. Install [csound.node](https://github.com/gogins/csound-nwjs). Note that 
+    the API for csound.node is virtually the same as the API for my 
+    WebAssembly build of Csound.
 
-Read about [csound.node](https://github.com/gogins/csound-extended-node) 
-and make sure that the application directory for your `csound.node` pieces is the 
-`cloud-5` directory, which includes necessary resources.
+ 2. Install [NW.js](https://nwjs.io/). Be sure to install the SDK version of 
+    NW.js.
+
+ 3. On macOS, follow the instructions 
+    [here](https://github.com/gogins/csound-nwjs/blob/main/README.md) 
+    to disable the Gatekeeper for the nwjs app.
+
+### Running
+
+You will need to create a `package.json` in the directory containing your 
+piece, as a manifest for your piece as an NW.js app, in the following format:
+```
+{
+  "main": "MyPiece.html",
+  "name": "MyPiece",
+  "description": "HTML5 with Csound",
+  "version": "0.1.0",
+  "keywords": [ "Csound", "node-webkit" ],
+  "window": {
+    "title": "MyPiece",
+    "icon": "link.png",
+    "toolbar": true,
+    "frame": true,
+    "maximized": true,
+    "position": "mouse",
+    "fullscreen": true
+  },
+   "chromium-args": "--enable-logging=stderr --v=1 --device-scale-factor=2 --allow-running-insecure-content"
+}
+```
+Then, run NW.js with one parameter, the path to the directory containing 
+your `package.json` file, e.g. on macOS:
+```
+/Applications/nwjs.app/Contents/MacOS/nwjs /Users/michaelgogins/cloud-5/strudel/website/dist
+```
+
+NOTE WELL: Do _not_ overwrite the `package.json` file in the cloud-5 
+repository root directory! That is required for building cloud-5.
 
 ## Release Notes
+
+### [v2.0](https://github.com/gogins/cloud-5/releases/tag/v1.2)
+
+ - Moved cloud-5's Web root directory from `cloud-5` to 
+   `cloud-5/strudel/website/dist`. This makes it possible to integrate 
+   Strudel, Csound, and CsoundAC without any patches or other modifications of 
+   Strudel source code.
+
+ - Added one-time singleton creation code for Csound and CsoundAC to 
+   `csound_loader.js`.
+
+ - Simplified the integration of Csound, CsoundAC, and Strudel by ensuring 
+   that Csound and CsoundAC exist as fully initialized global objects in the 
+   JavaScript context (as `globalThis.csound` and `globalThis.csoundac`), 
+   before any HTML elements run.
+
+ - Updated documentation for running cloud-5 pieces in NW.js.
 
 ### [v1.1](https://github.com/gogins/cloud-5/releases/tag/v1.1)
 
  - Made a clearer distinction between the Web site serving showcase for 
- cloud-music pieces, and the README.md for the cloud-5 system.
+   cloud-music pieces, and the README.md for the cloud-5 system.
 
  - Added a global menu with a curated list of better pieces.
 
