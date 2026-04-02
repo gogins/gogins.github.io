@@ -1,0 +1,412 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>WebGPU Mandelbrot → Julia → Csound score</title>
+<style>
+  :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", sans-serif; }
+  body { margin: 0; background: #0b0c10; color: #e5e7eb; }
+  header { padding: 12px 16px; display:flex; gap:16px; align-items:center; border-bottom:1px solid #1f2937; }
+  h1 { font-size: 16px; font-weight: 600; margin:0; }
+  .wrap { display:grid; grid-template-columns: 1fr 1fr; gap: 0; height: calc(100vh - 220px); }
+  .panel { position:relative; }
+  canvas { width: 100%; height: 100%; display:block; background:#000; }
+  .info { position:absolute; left:8px; top:8px; background:rgba(0,0,0,0.55); padding:4px 8px; border-radius:6px; font-size:12px; }
+  footer { padding: 10px 16px; border-top:1px solid #1f2937; display:grid; grid-template-columns: 1fr 1fr; gap:16px; align-items:start; }
+  textarea { width: 100%; height: 180px; background:#0b0c10; color:#e5e7eb; border:1px solid #374151; border-radius:8px; padding:8px; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; font-size:12px; }
+  .controls { display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+  .controls label { font-size:12px; opacity:.9 }
+  .btn { appearance:none; border:1px solid #374151; background:#111827; color:#e5e7eb; padding:6px 10px; border-radius:8px; cursor:pointer; }
+  .btn:disabled { opacity:.5; cursor:not-allowed; }
+  .pill { font-variant-numeric: tabular-nums; }
+  a.btn { text-decoration:none; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>WebGPU Mandelbrot → Julia → Csound score</h1>
+    <div class="controls">
+      <label>Max iters <input id="iters" type="number" min="32" max="8192" step="16" value="512"></label>
+      <label>Palette <select id="palette">
+        <option value="classic">classic</option>
+        <option value="fire">fire</option>
+        <option value="ice">ice</option>
+        <option value="gray">gray</option>
+      </select></label>
+      <label>Julia time bins <input id="tBins" type="number" min="8" max="512" step="8" value="64"></label>
+      <label>Julia pitch bins <input id="pBins" type="number" min="12" max="128" step="1" value="48"></label>
+      <label>Duration (s) <input id="dur" type="number" min="5" max="600" step="1" value="120"></label>
+      <label>Pitch range <input id="pMin" type="number" min="0" max="120" value="36"> – <input id="pMax" type="number" min="0" max="127" value="84"></label>
+      <button class="btn" id="export">Download score</button>
+    </div>
+  </header>
+
+  <div class="wrap">
+    <div class="panel" id="mandPanel">
+      <div class="info">Mandelbrot • wheel=zoom, drag=pan • click selects <span class="pill" id="cOut">c=?</span></div>
+      <canvas id="mand"></canvas>
+    </div>
+    <div class="panel" id="juliaPanel">
+      <div class="info">Julia for c=<span class="pill" id="cOut2">?</span></div>
+      <canvas id="julia"></canvas>
+    </div>
+  </div>
+
+  <footer>
+    <div>
+      <div style="margin-bottom:6px;font-size:12px;opacity:.9">Csound score (instrument, time, dur, key, vel)</div>
+      <textarea id="score"></textarea>
+    </div>
+    <div>
+      <div style="margin-bottom:6px;font-size:12px;opacity:.9">Notes</div>
+      <textarea readonly>
+• Fix: the Mandelbrot view UBO had a 4‑byte padding bug; the corrected packing below makes it visible.
+• Click anywhere on the Mandelbrot view to pick c. The Julia view and score will regenerate.
+• The Julia "measure" here is approximated by the area of the filled Julia set per (timeBin, pitchBin): each pixel that remains bounded contributes to its bin via atomics in a compute shader.
+• For each time bin, we pick up to k pitches with highest mass and map counts → velocity.
+• Uses WebGPU compute for Mandelbrot and Julia + histogram; reads back to CPU for coloring and score generation.
+      </textarea>
+    </div>
+  </footer>
+
+<script type="module">
+async function initGPU() {
+  if (!('gpu' in navigator)) throw new Error('WebGPU not supported. Use a recent Chrome/Edge/Firefox Nightly, secure context.');
+  const adapter = await navigator.gpu.requestAdapter({ powerPreference: 'high-performance' });
+  if (!adapter) throw new Error('No GPU adapter');
+  const device = await adapter.requestDevice();
+  return { adapter, device };
+}
+
+function makeBuffer(device, sizeOrData, usage) {
+  let size = sizeOrData instanceof ArrayBuffer || ArrayBuffer.isView(sizeOrData)
+    ? (sizeOrData.byteLength || sizeOrData.buffer.byteLength)
+    : sizeOrData;
+  const buf = device.createBuffer({ size: ((size + 3) & ~3), usage, mappedAtCreation: !!(ArrayBuffer.isView(sizeOrData) || sizeOrData instanceof ArrayBuffer) });
+  if (buf.getMappedRange) {
+    if (ArrayBuffer.isView(sizeOrData)) new Uint8Array(buf.getMappedRange()).set(new Uint8Array(sizeOrData.buffer, sizeOrData.byteOffset, sizeOrData.byteLength));
+    else if (sizeOrData instanceof ArrayBuffer) new Uint8Array(buf.getMappedRange()).set(new Uint8Array(sizeOrData));
+    buf.unmap();
+  }
+  return buf;
+}
+
+const wgsl = /* wgsl */`
+struct View {
+  center_scale: vec4<f32>, // centerX, centerY, scale, pad
+  dims_iters:  vec4<u32>,  // width, height, maxIter, pad
+};
+
+@group(0) @binding(0) var<uniform> view: View;
+@group(0) @binding(1) var<storage, read_write> iters: array<u32>;
+
+@compute @workgroup_size(16,16)
+fn mand(@builtin(global_invocation_id) gid: vec3<u32>) {
+  let w:u32 = view.dims_iters.x;
+  let h:u32 = view.dims_iters.y;
+  if (gid.x >= w || gid.y >= h) { return; }
+
+  let idx:u32 = gid.y * w + gid.x;
+
+  let x0 = (f32(gid.x) - f32(w) * 0.5) * view.center_scale.z + view.center_scale.x;
+  let y0 = (f32(gid.y) - f32(h) * 0.5) * view.center_scale.z + view.center_scale.y;
+
+  var x = 0.0; var y = 0.0; var i:u32 = 0u;
+  var xx = 0.0; var yy = 0.0; var xy = 0.0;
+  loop {
+    if (i >= view.dims_iters.z || xx + yy > 4.0) { break; }
+    xy = x * y;
+    x = xx - yy + x0;
+    y = 2.0 * xy + y0;
+    xx = x*x; yy = y*y;
+    i += 1u;
+  }
+  iters[idx] = i;
+}
+
+struct JuliaParams { cRe:f32, cIm:f32, timeBins:u32, pitchBins:u32 };
+@group(1) @binding(0) var<uniform> julia: JuliaParams;
+@group(1) @binding(1) var<storage, read_write> hist: array<atomic<u32>>;
+
+@compute @workgroup_size(16,16)
+fn juliaKernel(@builtin(global_invocation_id) gid: vec3<u32>) {
+  let w:u32 = view.dims_iters.x;
+  let h:u32 = view.dims_iters.y;
+  if (gid.x >= w || gid.y >= h) { return; }
+
+  let idx:u32 = gid.y * w + gid.x;
+
+  var x = (f32(gid.x) - f32(w) * 0.5) * view.center_scale.z + view.center_scale.x;
+  var y = (f32(gid.y) - f32(h) * 0.5) * view.center_scale.z + view.center_scale.y;
+
+  var i:u32 = 0u; var xx = x*x; var yy = y*y; var xy = 0.0;
+  loop {
+    if (i >= view.dims_iters.z || xx + yy > 4.0) { break; }
+    xy = x * y;
+    x = xx - yy + julia.cRe;
+    y = 2.0 * xy + julia.cIm;
+    xx = x*x; yy = y*y;
+    i += 1u;
+  }
+
+  iters[idx] = i;
+
+  if (i >= view.dims_iters.z) {
+    let tBin = u32(floor(f32(gid.x) / f32(w) * f32(julia.timeBins)));
+    let pBin = u32(floor(f32(gid.y) / f32(h) * f32(julia.pitchBins)));
+    let hIdx = pBin * julia.timeBins + tBin;
+    atomicAdd(&hist[hIdx], 1u);
+  }
+}
+`;
+
+const mandCanvas = document.querySelector('#mand');
+const juliaCanvas = document.querySelector('#julia');
+const cOut = document.querySelector('#cOut');
+const cOut2 = document.querySelector('#cOut2');
+const scoreTA = document.querySelector('#score');
+const exportBtn = document.querySelector('#export');
+const itersInput = document.querySelector('#iters');
+const paletteSel = document.querySelector('#palette');
+const tBinsInput = document.querySelector('#tBins');
+const pBinsInput = document.querySelector('#pBins');
+const durInput = document.querySelector('#dur');
+const pMinInput = document.querySelector('#pMin');
+const pMaxInput = document.querySelector('#pMax');
+
+const DPR = Math.min(2, window.devicePixelRatio || 1);
+const SIZE = 768;
+mandCanvas.width = juliaCanvas.width = Math.floor(SIZE * DPR);
+mandCanvas.height = juliaCanvas.height = Math.floor(SIZE * DPR);
+
+const { device } = await initGPU();
+
+const module = device.createShaderModule({ code: wgsl });
+const mandPipeline = device.createComputePipeline({ layout: 'auto', compute: { module, entryPoint: 'mand' } });
+const juliaPipeline = device.createComputePipeline({ layout: 'auto', compute: { module, entryPoint: 'juliaKernel' } });
+
+const viewUBO = device.createBuffer({ size: 32, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+const itersBufSize = mandCanvas.width * mandCanvas.height * 4;
+let itersGPU = device.createBuffer({ size: itersBufSize, usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST });
+let itersRead = device.createBuffer({ size: itersBufSize, usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST });
+
+let juliaUBO = device.createBuffer({ size: 16, usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST });
+let histGPU = null; let histRead = null; let histElems = 0;
+
+function ensureHistogram(timeBins, pitchBins) {
+  const n = timeBins * pitchBins;
+  if (n === histElems) return;
+  histElems = n;
+  histGPU = device.createBuffer({ size: n * 4, usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC | GPUBufferUsage.COPY_DST });
+  histRead = device.createBuffer({ size: n * 4, usage: GPUBufferUsage.MAP_READ | GPUBufferUsage.COPY_DST });
+}
+
+let mandBG = device.createBindGroup({ layout: mandPipeline.getBindGroupLayout(0), entries: [
+  { binding: 0, resource: { buffer: viewUBO } },
+  { binding: 1, resource: { buffer: itersGPU } },
+]});
+
+function makeJuliaBG() {
+  return [
+    device.createBindGroup({ layout: juliaPipeline.getBindGroupLayout(0), entries: [
+      { binding: 0, resource: { buffer: viewUBO } },
+      { binding: 1, resource: { buffer: itersGPU } },
+    ]}),
+    device.createBindGroup({ layout: juliaPipeline.getBindGroupLayout(1), entries: [
+      { binding: 0, resource: { buffer: juliaUBO } },
+      { binding: 1, resource: { buffer: histGPU } },
+    ]}),
+  ];
+}
+
+let view = { centerX: -0.6, centerY: 0.0, scale: 3.0 / mandCanvas.height, maxIter: +itersInput.value };
+
+function writeView() {
+  // vec4<f32> then vec4<u32> → 32 bytes
+  const buf = new ArrayBuffer(32);
+  const dv = new DataView(buf);
+
+  // center_scale (f32 x4)
+  dv.setFloat32(0,  view.centerX, true);
+  dv.setFloat32(4,  view.centerY, true);
+  dv.setFloat32(8,  view.scale,   true);
+  dv.setFloat32(12, 0.0,          true);
+
+  // dims_iters (u32 x4)
+  dv.setUint32(16, mandCanvas.width,   true);
+  dv.setUint32(20, mandCanvas.height,  true);
+  dv.setUint32(24, view.maxIter >>> 0, true);
+  dv.setUint32(28, 0,                  true);
+
+  device.queue.writeBuffer(viewUBO, 0, buf);
+}
+
+function writeJuliaParams(cRe, cIm, timeBins, pitchBins) {
+  const buf = new ArrayBuffer(16);
+  const dv = new DataView(buf);
+  dv.setFloat32(0, cRe, true);
+  dv.setFloat32(4, cIm, true);
+  dv.setUint32(8, timeBins, true);
+  dv.setUint32(12, pitchBins, true);
+  device.queue.writeBuffer(juliaUBO, 0, buf);
+}
+
+function dispatch(pipeline, bindGroups, w, h) {
+  const encoder = device.createCommandEncoder();
+  const pass = encoder.beginComputePass();
+  pass.setPipeline(pipeline);
+  bindGroups.forEach((bg, i) => pass.setBindGroup(i, bg));
+  pass.dispatchWorkgroups(Math.ceil(w / 16), Math.ceil(h / 16));
+  pass.end();
+  device.queue.submit([encoder.finish()]);
+}
+
+function colorize(bufferU32, width, height, maxIter, palette) {
+  const img = new ImageData(width, height);
+  for (let i = 0; i < bufferU32.length; i++) {
+    const it = bufferU32[i];
+    const off = i * 4;
+    if (it >= maxIter) { img.data[off+0]=0; img.data[off+1]=0; img.data[off+2]=0; img.data[off+3]=255; continue; }
+    const t = it / maxIter;
+    let r=0,g=0,b=0;
+    switch(palette){
+      case 'fire': r = 255*t; g = 64 + 128*t; b = 32; break;
+      case 'ice': r = 64*t; g = 160*t; b = 255*(0.3 + 0.7*t); break;
+      case 'gray': r=g=b= 255*t; break;
+      default: r = 9*(1-t)*255; g = 36*t*255; b = 128 + 127*Math.sin(6.283*t);
+    }
+    img.data[off+0]=r|0; img.data[off+1]=g|0; img.data[off+2]=b|0; img.data[off+3]=255;
+  }
+  return img;
+}
+
+async function readU32(buf, byteLen) {
+  const encoder = device.createCommandEncoder();
+  encoder.copyBufferToBuffer(buf, 0, itersRead, 0, byteLen);
+  device.queue.submit([encoder.finish()]);
+  await itersRead.mapAsync(GPUMapMode.READ);
+  const arr = new Uint32Array(itersRead.getMappedRange().slice(0));
+  itersRead.unmap();
+  return arr;
+}
+
+async function readHist(nBytes) {
+  const encoder = device.createCommandEncoder();
+  encoder.copyBufferToBuffer(histGPU, 0, histRead, 0, nBytes);
+  device.queue.submit([encoder.finish()]);
+  await histRead.mapAsync(GPUMapMode.READ);
+  const arr = new Uint32Array(histRead.getMappedRange().slice(0));
+  histRead.unmap();
+  return arr;
+}
+
+function drawImageToCanvas(imgData, canvas) {
+  const ctx = canvas.getContext('2d');
+  ctx.putImageData(imgData, 0, 0);
+}
+
+let isDragging=false, startX=0, startY=0, startCenter={x:0,y:0};
+mandCanvas.addEventListener('pointerdown', (e)=>{
+  isDragging=true; startX=e.clientX; startY=e.clientY; startCenter={x:view.centerX,y:view.centerY};
+});
+window.addEventListener('pointerup', ()=> isDragging=false);
+window.addEventListener('pointermove', (e)=>{
+  if(!isDragging) return;
+  const dx = (e.clientX - startX); const dy = (e.clientY - startY);
+  view.centerX = startCenter.x - dx * view.scale;
+  view.centerY = startCenter.y - dy * view.scale;
+  renderMandel();
+});
+mandCanvas.addEventListener('wheel', (e)=>{
+  e.preventDefault();
+  const scaleFactor = Math.pow(1.1, e.deltaY > 0 ? 1 : -1);
+  view.scale *= scaleFactor;
+  renderMandel();
+},{passive:false});
+
+let currentC = { re: -0.4, im: 0.6 };
+mandCanvas.addEventListener('click', async (e)=>{
+  const rect = mandCanvas.getBoundingClientRect();
+  const x = (e.clientX - rect.left) * DPR;
+  const y = (e.clientY - rect.top) * DPR;
+  const cRe = (x - mandCanvas.width * 0.5) * view.scale + view.centerX;
+  const cIm = (y - mandCanvas.height * 0.5) * view.scale + view.centerY;
+  currentC = { re: cRe, im: cIm };
+  cOut.textContent = `c=${cRe.toFixed(6)}${cIm>=0?'+':'−'}${Math.abs(cIm).toFixed(6)}i`;
+  cOut2.textContent = cOut.textContent.substring(2);
+  await renderJuliaAndScore();
+});
+
+itersInput.addEventListener('change', ()=>{ view.maxIter = +itersInput.value; renderMandel(); renderJuliaAndScore(); });
+paletteSel.addEventListener('change', ()=>{ renderMandel(); renderJuliaAndScore(); });
+[tBinsInput,pBinsInput,durInput,pMinInput,pMaxInput].forEach(el=> el.addEventListener('change', ()=>renderJuliaAndScore()));
+
+async function renderMandel(){
+  writeView();
+  dispatch(mandPipeline, [mandBG], mandCanvas.width, mandCanvas.height);
+  const u32 = await readU32(itersGPU, itersBufSize);
+  const img = colorize(u32, mandCanvas.width, mandCanvas.height, view.maxIter, paletteSel.value);
+  drawImageToCanvas(img, mandCanvas);
+}
+
+async function renderJuliaAndScore(){
+  const tBins = Math.max(8, +tBinsInput.value|0);
+  const pBins = Math.max(12, +pBinsInput.value|0);
+  ensureHistogram(tBins, pBins);
+  device.queue.writeBuffer(histGPU, 0, new Uint8Array(histElems*4));
+  writeView();
+  writeJuliaParams(currentC.re, currentC.im, tBins, pBins);
+  const [bg0, bg1] = makeJuliaBG();
+  dispatch(juliaPipeline, [bg0, bg1], juliaCanvas.width, juliaCanvas.height);
+  const u32 = await readU32(itersGPU, itersBufSize);
+  const img = colorize(u32, juliaCanvas.width, juliaCanvas.height, view.maxIter, paletteSel.value);
+  drawImageToCanvas(img, juliaCanvas);
+  const hist = await readHist(histElems*4);
+  generateCsoundScore(hist, tBins, pBins);
+}
+
+function generateCsoundScore(hist, tBins, pBins){
+  const durSec = +durInput.value;
+  const dt = durSec / tBins;
+  const pMin = +pMinInput.value, pMax = +pMaxInput.value;
+  const k = 3;
+  let maxCount = 0; for (let i=0;i<hist.length;i++) if(hist[i]>maxCount) maxCount=hist[i];
+  const lines = [];
+  for (let t=0; t<tBins; t++){
+    const arr = [];
+    for (let p=0; p<pBins; p++){
+      const idx = p * tBins + t;
+      const count = hist[idx];
+      if (count>0) arr.push({p, count});
+    }
+    arr.sort((a,b)=> b.count - a.count);
+    const picks = arr.slice(0,k);
+    for (const {p, count} of picks){
+      const time = (t * dt).toFixed(4);
+      const dur = Math.max(0.05, 0.8*dt).toFixed(4);
+      const midiKey = Math.round(pMin + (p/(pBins-1))*(pMax - pMin));
+      const vel = Math.max(20, Math.round(10 + 117 * (count / (maxCount||1))));
+      lines.push(`i 1 ${time} ${dur} ${midiKey} ${vel}`);
+    }
+  }
+  scoreTA.value = lines.join("\n");
+}
+
+exportBtn.addEventListener('click', ()=>{
+  const blob = new Blob([scoreTA.value + "\n"], { type:'text/plain' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'julia_measure_score.sco';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+await renderMandel();
+currentC = { re: -0.4, im: 0.6 };
+cOut.textContent = `c=${currentC.re.toFixed(6)}+${currentC.im.toFixed(6)}i`;
+cOut2.textContent = cOut.textContent.substring(2);
+await renderJuliaAndScore();
+</script>
+</body>
+</html>

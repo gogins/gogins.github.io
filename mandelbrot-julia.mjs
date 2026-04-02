@@ -1,0 +1,2219 @@
+class MandelbrotJulia extends Cloud5Element {
+  constructor() {
+    super();
+    this._interactions_initialized = false;
+
+    this.attachShadow({ mode: 'open' });
+
+    this._rendering_active = false;
+    this._raf_id = 0;
+    this._render_loop = () => this.render();
+
+    this._gpu_dirty = true;
+    this._last_playhead_update_ms = 0;
+
+    // --- GPU redraw diagnostics ---
+    this._gpu_redraw_seq = 0;
+    this._gpu_redraw_counts = { init: 0, resize: 0, save: 0, restore: 0, other: 0 };
+    this._gpu_redraw_last_reason = '';
+    this._gpu_redraw_last_ms = 0;
+    this._gpu_redraw_min_interval_ms = 250; // guard against accidental rapid redraw storms
+    this._gpu_diag_enabled = true;
+    // --- WebGPU keepalive (prevents some browsers/drivers from dropping idle devices) ---
+    this._gpu_keepalive_interval_ms = 5000;
+    this._gpu_keepalive_id = 0;
+    this._gpu_keepalive_seq = 0;
+    this._gpu_keepalive_tex = null;
+    this._gpu_keepalive_view = null;
+    this._gpu_recover_retry_id = 0;
+    this._gpu_recover_retry_ms = 250;
+    this._gpu_recovering = false;
+
+
+
+    this._render_interval_ms = 100; // match Cloud5Piece display loop (~10 Hz)
+    this._last_render_ms = 0;
+    // Playhead ticker (runs even when WebGPU rendering is paused/hidden).
+    this._playhead_raf_id = 0;
+    this._ext_total_duration_sec = 0;
+
+    this._playhead_loop = () => this._tick_playheads();
+    this._visibility_poll_id = 0;
+
+    const style = document.createElement('style');
+    style.textContent = `
+:host {
+  display: block;
+  height: 100%;
+  font-family: system-ui, sans-serif;
+  color: #ddd;
+  background: #000;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.bar {
+  margin: 8px 12px;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+  font-size: 0.85rem;
+}
+
+.bar input[type="number"] {
+  width: 6rem;
+}
+
+.bar input[type="range"] {
+  width: 6rem;
+}
+
+.bar label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bar button {
+  background: #222;
+  color: #eee;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+}
+
+.bar button:hover {
+  background: #333;
+}
+
+.bar span {
+  font-size: 0.78rem;
+  opacity: 0.8;
+}
+
+select {
+  background: #111;
+  color: #ddd;
+  border: 1px solid #333;
+  border-radius: 6px;
+  padding: 4px 6px;
+}
+
+.canvases {
+  flex: 1 1 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  position: relative;
+  background: #000;
+}
+
+canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+#sel {
+  position: absolute;
+  border: 1px dashed #9cf;
+  pointer-events: none;
+  display: none;
+  background: rgba(100, 150, 255, 0.15);
+  box-shadow: inset 0 0 0 1px rgba(156, 206, 255, 0.25);
+}
+
+#playHead {
+  position: absolute;
+  width: 2px;
+  background: #ff6b4a;
+  opacity: 0.9;
+  pointer-events: none;
+  display: none;
+  box-shadow: 0 0 6px rgba(255, 107, 74, 0.6);
+}
+
+pre {
+  margin: 8px 12px 10px;
+  padding: 8px;
+  background: #121212;
+  border: 1px solid #222;
+  border-radius: 8px;
+  max-height: 25vh;
+  overflow: auto;
+  font-size: 0.78rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+        `;
+
+    const wrapper = document.createElement('div');
+    wrapper.className = 'wrapper';
+    wrapper.innerHTML = `
+  <div class="bar">
+    <label>Exponent:
+      <input id="expP" data-cloud5-bind="exponent" type="number" step="0.01" value="2.0">
+    </label>
+    <label>Max iterations  M:
+      <input id="iterM" data-cloud5-bind="maxIterM" type="number" value="500">
+    </label>
+    <label>Max iterations  J:
+      <input id="iterJ" data-cloud5-bind="maxIterJ" type="number" value="1000">
+    </label>
+    <label>Timesteps:
+      <input id="binsN" data-cloud5-bind="nTime" type="number" value="4096"> 
+    </label>
+    <label>Bass:
+      <input id="bass" data-cloud5-bind="bass" type="number" value="36" min="0" max="127" step="1">
+    </label>    
+    <label>Range:
+      <input id="binsM" data-cloud5-bind="nPitch" type="number" value="60">
+    </label>
+    <label>Base instrument:
+      <input id="base_instrument" data-cloud5-bind="base_instrument" type="number" value="1">
+    </label>
+    <label>Instruments:
+      <input id="binsK" data-cloud5-bind="nInst" type="text" value="4">
+    </label>
+    <label>Seconds:
+      <input id="seconds" data-cloud5-bind="seconds" type="number" value="60" min="1" max="3600" step="1" style="width:5.0rem">
+    </label>
+    <label>Density:
+      <input id="density" data-cloud5-bind="density" type="number" min=".001" max="1" value="0.01" step="0.001"/>
+    </label>
+    <label>Max voices/slice:
+      <input id="maxVoices" data-cloud5-bind="maxVoicesPerSlice" type="number" value="4" min="1" step="1" style="width:4.5rem">
+    </label>    
+    <label>Velocity threshhold:
+      <input id="velocityThreshold" data-cloud5-bind="velocityThreshold" type="number" value="20" min="01" step="1" style="width:4.5rem">
+    </label>
+    <label>MIDI Out:
+      <select id="midiOut">
+        <option value="">(no MIDI outputs)</option>
+      </select>
+    </label>
+    <button id="btnScore">Play MIDI</button>
+    <button id="btnStop">Stop MIDI</button>
+    <span>
+      Click Mandelbrot = set Julia point • Option-Click = zoom in • Shift+Option-Click = zoom out • Drag on Julia = ROI
+    </span>
+  </div>
+  <div class="canvases" id="gridRoot">
+    <canvas id="canvasM"></canvas>
+    <canvas id="canvasJ"></canvas>
+    <div id="sel"></div>
+    <div id="playHead"></div>
+  </div>
+  <pre id="log">score will print here…</pre>
+        `;
+
+    this.shadowRoot.append(style, wrapper);
+
+    this.canvasM = this.shadowRoot.getElementById('canvasM');
+    this.canvasJ = this.shadowRoot.getElementById('canvasJ');
+    this.sel = this.shadowRoot.getElementById('sel');
+    this.playHead = this.shadowRoot.getElementById('playHead');
+    this._rootDiv = this.shadowRoot.getElementById('gridRoot');
+
+    // Defaults
+    this.nTime = 4096;  // N time default
+    this.nPitch = 60;   // M pitch default
+    this.bass = 36;    // bass MIDI note number default (C2)
+    this.nInst = '4';
+    this.maxIterM = 500;
+    this.maxIterJ = 1000;
+    this.exponent = 2.0;
+
+    this.seconds = 60;
+    this.bpm = 120; // derived from seconds + timesteps
+    this.density = 0.02;     // 0..1
+    this.maxVoicesPerSlice = 999; // top-K per time slice by velocity
+    this.velocityThreshold = 20; // MIDI velocity threshold for triggering notes
+
+    // playback bookkeeping
+    this._timers = [];
+    this._activeAudio = new Set();
+    this._playing = false;
+    this._playStartMS = 0;
+    this._playTotalBeats = 0;
+
+    this.viewM = { cx: -0.5, cy: 0.0, scale: 2.5 };
+    this.viewJ = { cx: 0.0, cy: 0.0, scale: 1.5 };
+    this.c = { x: -0.8, y: 0.156 };
+    this.roiJ = null; // {minx,maxx,miny,maxy} in Julia complex space
+
+    // MIDI state
+    this._midi = null;
+    this._midiOutId = localStorage.getItem('mj.midiOutId') || '';
+
+    this._last_resize_w = 0;
+    this._last_resize_h = 0;
+    this._resizeObserver = new ResizeObserver(() => {
+      const r = this.getBoundingClientRect();
+      const w = Math.round(r.width);
+      const h = Math.round(r.height);
+      if (w <= 0 || h <= 0) {
+        return;
+      }
+      if (w === this._last_resize_w && h === this._last_resize_h) {
+        return;
+      }
+      this._last_resize_w = w;
+      this._last_resize_h = h;
+
+      this.resize();
+      this._updateSelectionOverlay();
+      // Playhead overlay is driven by the playhead ticker; no need to force it here.
+      this._request_gpu_redraw('resize');
+    });
+  }
+
+  // FIXME: timesteps 
+  _beats_per_timestep() { return 1 / 8; } // each time bin = 32nd note (1/8 of a beat)
+
+  _update_bpm_from_seconds() {
+    // Derive BPM so that (nTime * stepBeats) beats last exactly `seconds`.
+    // This keeps the time grid semantics (beats) unchanged; only the tempo changes.
+    const timesteps = this.nTime;
+    const beats_per_timestep = this._beats_per_timestep();
+    const beats_ = timesteps * beats_per_timestep;
+    this.bpm = (60.0 * beats_) / this.seconds;
+  }
+
+  _secondsForBeats(beats) {
+    this._update_bpm_from_seconds();
+    return beats * (60.0 / this.bpm);
+  }
+
+  _beatsForMillis(ms) {
+    this._update_bpm_from_seconds();
+    return (ms / 1000.) * (this.bpm / 60.0);
+  }
+
+  _clearTimers() { for (const id of this._timers) clearTimeout(id); this._timers.length = 0; }
+
+  _panicMIDI() {
+    const out = this._currentMIDIOutput();
+    if (!out) return;
+    for (let ch = 0; ch < 16; ch++) {
+      out.send([0xB0 | ch, 120, 0]); // All Sound Off
+      out.send([0xB0 | ch, 123, 0]); // All Notes Off
+      out.send([0xB0 | ch, 121, 0]); // Reset All Controllers
+      for (let k = 0; k < 128; k += 8) out.send([0x80 | ch, k, 0]);
+    }
+  }
+
+  _stopWebAudio() {
+    for (const node of this._activeAudio) {
+      try { node.stop(0); } catch { }
+      try { node.disconnect(); } catch { }
+    }
+    this._activeAudio.clear();
+  }
+
+  on_state_restored(restored_state) {
+    super.on_state_restored(restored_state);
+
+    // Backward compatibility: older saved state used bpm instead of seconds.
+    // If seconds is missing but bpm exists, infer seconds so duration stays consistent.
+    if (restored_state && (restored_state.seconds == null) && (restored_state.bpm != null)) {
+      const n_time = Math.max(1, this.nTime | 0);
+      const total_beats = n_time * this._beats_per_timestep();
+      const bpm = Math.max(20, Math.min(300, +restored_state.bpm || 120));
+      this.seconds = Math.max(1, Math.round((total_beats * 60.0) / bpm));
+    }
+    this._update_bpm_from_seconds();
+
+    // Your existing behavior (you already have something like this)
+    this.sync_to_controls();
+
+    // Ensure layout is ready, then draw the ROI as if it had been dragged.
+    requestAnimationFrame(() => {
+      // If you rely on resize() elsewhere, it is safe to call here too.
+      this.resize?.();
+      this._updateSelectionOverlay();
+      this._request_gpu_redraw('resize');
+    });
+  }
+
+
+  async connectedCallback() {
+    await super.connectedCallback();
+    if (!('gpu' in navigator)) {
+      this.shadowRoot.innerHTML = `<div style="padding:1rem;color:#f88">WebGPU not available. Use Chrome/Edge with WebGPU enabled.</div>`;
+      return;
+    }
+    this._resizeObserver.observe(this);
+    await this.initGPU();
+    this.initPipelines();
+    this.initInteractions();
+    this.resize();
+    this._updateSelectionOverlay();
+    this._request_gpu_redraw('init');
+
+    // Initialize Web MIDI and prefer IAC
+    this.initMIDI();
+  }
+
+  disconnectedCallback() {
+    this._stop_rendering();
+    this._stop_gpu_keepalive();
+    this._resizeObserver.disconnect();
+  }
+
+  on_shown() {
+    // Overlay became visible again.
+    this.resize();
+    this._updateSelectionOverlay();
+  }
+
+  on_hidden() {
+    // Overlay is invisible; stop submitting work.
+    this._stop_rendering();
+    this._stop_gpu_keepalive();
+  }
+
+  on_score_time(a_sec, b_sec) {
+    if (this._playing) {
+      return;
+    }
+
+    if (!(typeof a_sec === 'number' && isFinite(a_sec) && a_sec >= 0)) {
+      this.playHead.style.display = 'none';
+      return;
+    }
+
+    try {
+      if (this.cloud5_piece) {
+        this.cloud5_piece.latest_score_time = a_sec;
+        this.cloud5_piece.total_duration = Math.max(1, this.seconds || 0);
+      }
+    }
+    catch (e) {
+    }
+
+    this._start_playhead_ticker();
+  }
+
+  _tick_playheads() {
+    const piece = this.cloud5_piece;
+
+    let display_time_sec = 0;
+    let display_total_sec = 0;
+    let ticker_active = false;
+
+    if (this._playing) {
+      const now_ms = performance.now();
+      const elapsed_ms = Math.max(0, now_ms - (this._playStartMS || now_ms));
+      const elapsed_beats = this._beatsForMillis(elapsed_ms);
+
+      display_time_sec = this._secondsForBeats(elapsed_beats);
+      display_total_sec = this._secondsForBeats(Math.max(0, this._playTotalBeats || 0));
+      ticker_active = true;
+    }
+    else {
+      const ext_time = piece?.latest_score_time;
+      const ext_total = piece?.total_duration;
+
+      const time_ok =
+        typeof ext_time === 'number' &&
+        isFinite(ext_time) &&
+        ext_time >= 0;
+
+      const total_ok =
+        typeof ext_total === 'number' &&
+        isFinite(ext_total) &&
+        ext_total > 0;
+
+      if (time_ok) {
+        display_time_sec = ext_time;
+        display_total_sec = total_ok ? ext_total : 0;
+
+        if (total_ok) {
+          ticker_active = ext_time <= ext_total;
+        }
+        else {
+          ticker_active = true;
+        }
+      }
+    }
+
+    if (!ticker_active) {
+      this._playhead_raf_id = 0;
+      return;
+    }
+
+    const now_ms = performance.now();
+    if (!this._last_playhead_update_ms || (now_ms - this._last_playhead_update_ms) >= 33) {
+      this._last_playhead_update_ms = now_ms;
+      try {
+        this._updatePlayheadOverlay();
+      }
+      catch (e) {
+      }
+    }
+
+    this._playhead_raf_id = requestAnimationFrame(this._playhead_loop);
+
+    let delta = Math.max(0, display_time_sec);
+
+    const days = Math.floor(delta / 86400);
+    delta -= days * 86400;
+
+    const hours = Math.floor(delta / 3600);
+    delta -= hours * 3600;
+
+    const minutes = Math.floor(delta / 60);
+    delta -= minutes * 60;
+
+    const seconds = delta;
+
+    $("#mini_console").html(
+      sprintf(
+        "d:%4d h:%02d m:%02d s:%06.3f",
+        days,
+        hours,
+        minutes,
+        seconds
+      )
+    );
+  }
+
+  _start_playhead_ticker() {
+    if (this._playhead_raf_id) return;
+    this._playhead_raf_id = requestAnimationFrame(this._playhead_loop);
+  }
+
+  _stop_playhead_ticker() {
+    if (this._playhead_raf_id) {
+      cancelAnimationFrame(this._playhead_raf_id);
+      this._playhead_raf_id = 0;
+    }
+  }
+
+  _schedule_visibility_poll() {
+    if (this._visibility_poll_id) return;
+    this._visibility_poll_id = window.setInterval(() => {
+      if (this._isActuallyVisible()) {
+        window.clearInterval(this._visibility_poll_id);
+        this._visibility_poll_id = 0;
+        this._start_rendering();
+      }
+    }, 250);
+  }
+  _request_gpu_redraw(reason = 'other') {
+    const now_ms = performance.now();
+
+    // Count reason
+    if (this._gpu_redraw_counts && Object.prototype.hasOwnProperty.call(this._gpu_redraw_counts, reason)) {
+      this._gpu_redraw_counts[reason] += 1;
+    } else if (this._gpu_redraw_counts) {
+      this._gpu_redraw_counts.other += 1;
+    }
+
+    // Guard against accidental rapid redraw storms (e.g., ResizeObserver loops)
+    if (this._gpu_redraw_last_ms && (now_ms - this._gpu_redraw_last_ms) < this._gpu_redraw_min_interval_ms) {
+      if (this._gpu_diag_enabled) {
+        console.warn(`[MJ] GPU redraw suppressed (too soon): reason=${reason} dt_ms=${(now_ms - this._gpu_redraw_last_ms).toFixed(1)}`);
+      }
+      return;
+    }
+
+    this._gpu_redraw_last_ms = now_ms;
+    this._gpu_redraw_last_reason = reason;
+
+    this._gpu_dirty = true;
+    if (!this._rendering_active) {
+      // Allow a one-shot draw even if we are not in the continuous render mode.
+      this._rendering_active = true;
+    }
+    if (!this._raf_id) {
+      this._raf_id = requestAnimationFrame(this._render_loop);
+    }
+
+    if (this._gpu_diag_enabled) {
+      const seq = (this._gpu_redraw_seq = (this._gpu_redraw_seq | 0) + 1);
+      const counts = this._gpu_redraw_counts || {};
+      console.log(`[MJ] GPU redraw requested #${seq}: reason=${reason} counts=${JSON.stringify(counts)}`);
+    }
+  }
+
+  _start_rendering() {
+    // Historical name; now schedules a single GPU redraw.
+    this._request_gpu_redraw('other');
+  }
+
+  _stop_rendering() {
+    this._rendering_active = false;
+    if (this._raf_id) {
+      cancelAnimationFrame(this._raf_id);
+      this._raf_id = 0;
+    }
+    if (this._visibility_poll_id) {
+      window.clearInterval(this._visibility_poll_id);
+      this._visibility_poll_id = 0;
+    }
+  }
+
+  _start_gpu_keepalive() {
+    if (this._gpu_keepalive_id) {
+      return;
+    }
+    this._gpu_keepalive_id = window.setInterval(() => {
+      if (!this.device || !this._isActuallyVisible() || !this._gpu_keepalive_view) {
+        return;
+      }
+      try {
+        // Keep the WebGPU device active without touching the onscreen swapchain.
+        // Touching swapchain textures with loadOp:'load' can yield undefined contents
+        // on some stacks and may black out the canvases.
+        const enc = this.device.createCommandEncoder();
+        const pass = enc.beginRenderPass({
+          colorAttachments: [{
+            view: this._gpu_keepalive_view,
+            loadOp: 'load',
+            storeOp: 'store'
+          }]
+        });
+        pass.end();
+        this.device.queue.submit([enc.finish()]);
+        this._gpu_keepalive_seq = (this._gpu_keepalive_seq | 0) + 1;
+        if (this._gpu_diag_enabled && (this._gpu_keepalive_seq % 12) === 0) {
+          // Log roughly once per minute at 5s interval.
+          console.log(`[MJ] GPU keepalive ok: seq=${this._gpu_keepalive_seq}`);
+        }
+      } catch (e) {
+        console.warn('[MJ] GPU keepalive submit failed', e);
+        try { this._recover_gpu_device(e); } catch { }
+      }
+    }, this._gpu_keepalive_interval_ms);
+  }
+
+  _stop_gpu_keepalive() {
+    if (this._gpu_keepalive_id) {
+      window.clearInterval(this._gpu_keepalive_id);
+      this._gpu_keepalive_id = 0;
+    }
+    if (this._gpu_recover_retry_id) {
+      window.clearTimeout(this._gpu_recover_retry_id);
+      this._gpu_recover_retry_id = 0;
+    }
+  }
+
+  async _recover_gpu_device(err_or_info) {
+    if (this._gpu_recovering) {
+      return;
+    }
+    this._gpu_recovering = true;
+    try {
+      this._stop_rendering();
+      this._stop_gpu_keepalive();
+
+      // Drop references so subsequent code cannot accidentally use a lost device.
+      this.device = null;
+      this.adapter = null;
+
+      this._gpu_keepalive_tex = null;
+      this._gpu_keepalive_view = null;
+
+      // Reinitialize GPU resources and pipelines (interactions/state remain intact).
+      await this.initGPU();
+      this.initPipelines();
+      this.resize();
+      this._updateSelectionOverlay();
+      this._request_gpu_redraw('restore');
+      this._gpu_recover_retry_ms = 250;
+    } catch (e) {
+      console.error('[MJ] WebGPU recovery failed', e);
+      try { this.cloud5_piece?.csound_message_callback?.(`WebGPU recovery failed: ${e?.message || e}\n`); } catch { }
+    } finally {
+      this._gpu_recovering = false;
+    }
+  }
+
+  _isActuallyVisible() {
+    // Not in the document?
+    if (!this.isConnected) return false;
+
+    // If the overlay is hidden via display:none or visibility:hidden,
+    // there is no point in rendering.
+    const style = getComputedStyle(this);
+    if (style.display === 'none' || style.visibility === 'hidden') {
+      return false;
+    }
+
+    // If the layout has collapsed to zero size (e.g. overlay hidden),
+    // skip rendering until it gets a real size again.
+    const rect = this.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) {
+      return false;
+    }
+
+    return true;
+  }
+
+  // ---------- MIDI (IAC) ----------
+  async initMIDI() {
+    const sel = this.shadowRoot.getElementById('midiOut');
+
+    const rebuildOptions = () => {
+      const previous = this._midiOutId;
+      sel.innerHTML = '';
+      const outs = this._midi ? Array.from(this._midi.outputs.values()) : [];
+      if (!outs.length) {
+        sel.appendChild(new Option('(no MIDI outputs)', '', true, true));
+        this._midiOutId = '';
+        return;
+      }
+      outs.sort((a, b) => {
+        const ia = /iac|loop|bus/i.test(a.name) ? 0 : 1;
+        const ib = /iac|loop|bus/i.test(b.name) ? 0 : 1;
+        return ia - ib || a.name.localeCompare(b.name);
+      });
+      let toSelect = previous;
+      if (!toSelect) {
+        const iac = outs.find(o => /iac|loop|bus/i.test(o.name));
+        if (iac) toSelect = iac.id; else toSelect = outs[0].id;
+      }
+      for (const o of outs) {
+        const opt = new Option(o.name, o.id, false, o.id === toSelect);
+        sel.appendChild(opt);
+      }
+      this._midiOutId = toSelect;
+      localStorage.setItem('mj.midiOutId', this._midiOutId);
+    };
+
+    try {
+      if (!navigator.requestMIDIAccess) throw new Error('Web MIDI not supported in this browser.');
+      if (!this._midi) {
+        this._midi = await navigator.requestMIDIAccess({ sysex: false });
+        this._midi.addEventListener('statechange', rebuildOptions);
+      }
+      rebuildOptions();
+    } catch (err) {
+      console.warn('MIDI init failed:', err);
+      sel.innerHTML = '';
+      sel.appendChild(new Option('(Web MIDI unsupported)', '', true, true));
+      this._midiOutId = '';
+    }
+
+    sel.addEventListener('change', () => {
+      this._midiOutId = sel.value || '';
+      localStorage.setItem('mj.midiOutId', this._midiOutId);
+    });
+  }
+  _currentMIDIOutput() {
+    if (!this._midi) return null;
+    const outs = this._midi.outputs;
+    if (!outs) return null;
+    if (this._midiOutId && outs.has(this._midiOutId)) return outs.get(this._midiOutId);
+    for (const o of outs.values()) if (/iac|loop|bus/i.test(o.name)) return o;
+    for (const o of outs.values()) return o;
+    return null;
+  }
+
+  async initGPU() {
+    this.adapter = await navigator.gpu.requestAdapter();
+    if (!this.adapter) {
+      throw new Error('WebGPU adapter unavailable');
+    }
+    this.device = await this.adapter.requestDevice();
+    this.device.lost.then((info) => {
+      const msg = `WebGPU device lost: ${info?.message || info?.reason || 'unknown reason'}`;
+      const diag = this._gpu_diag_enabled ? ` last_redraw_reason=${this._gpu_redraw_last_reason} counts=${JSON.stringify(this._gpu_redraw_counts || {})}` : '';
+      console.error(msg + diag);
+      try {
+        this.cloud5_piece?.csound_message_callback?.(msg + diag + '\n');
+      } catch { }
+      try { this._recover_gpu_device(info); } catch { }
+    });
+    const format = navigator.gpu.getPreferredCanvasFormat();
+    this.ctxM = this.canvasM.getContext('webgpu');
+    this.ctxJ = this.canvasJ.getContext('webgpu');
+    this.ctxM.configure({ device: this.device, format, alphaMode: 'premultiplied' });
+    this.ctxJ.configure({ device: this.device, format, alphaMode: 'premultiplied' });
+    this.format = format;
+
+    // Offscreen target for keepalive submissions (avoids touching onscreen swapchains).
+    try {
+      this._gpu_keepalive_tex = this.device.createTexture({
+        size: [1, 1, 1],
+        format: this.format,
+        usage: GPUTextureUsage.RENDER_ATTACHMENT
+      });
+      this._gpu_keepalive_view = this._gpu_keepalive_tex.createView();
+    } catch (e) {
+      // If this fails, keepalive will be disabled; rendering can still work.
+      this._gpu_keepalive_tex = null;
+      this._gpu_keepalive_view = null;
+      console.warn('[MJ] keepalive offscreen texture creation failed', e);
+    }
+
+    // Two separate uniform buffers (one per pass)
+    this.uniformSize = 256;
+    this.uniformBufM = this.device.createBuffer({
+      size: this.uniformSize,
+      usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+    });
+    this.uniformBufJ = this.device.createBuffer({
+      size: this.uniformSize,
+      usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+    });
+
+    // Compute uniforms buffer
+    this.csUniformSize = 256;
+    this.csUniformBuf = this.device.createBuffer({
+      size: this.csUniformSize,
+      usage: GPUBufferUsage.UNIFORM | GPUBufferUsage.COPY_DST
+    });
+
+    // BGLs
+    this.drawBGL = this.device.createBindGroupLayout({
+      entries: [{ binding: 0, visibility: GPUShaderStage.FRAGMENT, buffer: { type: 'uniform' } }]
+    });
+    this.csBGL0 = this.device.createBindGroupLayout({
+      entries: [{ binding: 0, visibility: GPUShaderStage.COMPUTE, buffer: { type: 'uniform' } }]
+    });
+    this.csBGL1 = this.device.createBindGroupLayout({
+      entries: [{ binding: 1, visibility: GPUShaderStage.COMPUTE, buffer: { type: 'storage' } }]
+    });
+  }
+
+  initPipelines() {
+    const vsWGSL = /*wgsl*/`
+      @vertex
+      fn main(@builtin(vertex_index) vid: u32) -> @builtin(position) vec4<f32> {
+        var pos = array<vec2<f32>,3>(
+          vec2<f32>(-1.0, -3.0),
+          vec2<f32>( 3.0,  1.0),
+          vec2<f32>(-1.0,  1.0)
+        );
+        let p = pos[vid];
+        return vec4<f32>(p, 0.0, 1.0);
+      }
+    `;
+
+    const fsWGSL = /*wgsl*/`
+struct DrawUniforms {
+  a: vec4<f32>,  // center_hi.xy, scale, p
+  b: vec4<f32>,  // center_lo.xy, viewport.xy
+  c: vec4<f32>,  // cParam.xy, maxIter, mode
+  d: vec4<f32>,  // aspect, 0, 0, 0
+};
+@group(0) @binding(0) var<uniform> U : DrawUniforms;
+
+// ----- complex helpers -----
+fn clog(z: vec2<f32>) -> vec2<f32> {
+  let r = length(z);
+  let th = atan2(z.y, z.x);
+  return vec2<f32>(log(max(r, 1e-30)), th);
+}
+fn cexp(w: vec2<f32>) -> vec2<f32> {
+  let a = exp(w.x);
+  return vec2<f32>(a * cos(w.y), a * sin(w.y));
+}
+fn cpow(z: vec2<f32>, p: f32) -> vec2<f32> {
+  let zsafe = select(z, vec2<f32>(1e-30, 0.0), all(z == vec2<f32>(0.0,0.0)));
+  let w = clog(zsafe) * vec2<f32>(p, p);
+  return cexp(w);
+}
+
+// ----- palettes -----
+fn hsv2rgb(h: f32, s: f32, v: f32) -> vec3<f32> {
+  let h6 = h * 6.0;
+  let i_u = u32(floor(h6));
+  let f   = h6 - floor(h6);
+  let p = v * (1.0 - s);
+  let q = v * (1.0 - s * f);
+  let t = v * (1.0 - s * (1.0 - f));
+  var rgb: vec3<f32>;
+  if (i_u == 0u)      { rgb = vec3<f32>(v, t, p); }
+  else if (i_u == 1u) { rgb = vec3<f32>(q, v, p); }
+  else if (i_u == 2u) { rgb = vec3<f32>(p, v, t); }
+  else if (i_u == 3u) { rgb = vec3<f32>(p, q, v); }
+  else if (i_u == 4u) { rgb = vec3<f32>(t, p, v); }
+  else                { rgb = vec3<f32>(v, p, q); }
+  return rgb;
+}
+fn palette(t: f32) -> vec3<f32> {
+  let pi = 3.141592653589793;
+  let a  = vec3<f32>(0.5, 0.5, 0.5);
+  let b  = vec3<f32>(0.5, 0.5, 0.5);
+  let c  = vec3<f32>(1.0, 1.0, 1.0);
+  let d  = vec3<f32>(0.00, 0.33, 0.67);
+  return a + b * cos(2.0 * pi * (c * t + d));
+}
+
+@fragment
+fn main(@builtin(position) pos: vec4<f32>) -> @location(0) vec4<f32> {
+  let center_hi = U.a.xy;
+  let center_lo = U.b.xy;
+  let center    = center_hi + center_lo;
+
+  let scale     = U.a.z;
+  let p         = U.a.w;
+
+  let viewport  = U.b.zw;
+
+  let cParam    = U.c.xy;
+  let maxIter   = u32(U.c.z);
+  let mode      = u32(U.c.w);
+
+  let aspect    = U.d.x;
+
+  let ndc = (pos.xy / viewport) * 2.0 - vec2<f32>(1.0,1.0);
+
+  // Compute pixel deltas in f32 and add them to a split (hi+lo) center.
+  let dx = ndc.x * scale;
+  let dy = -ndc.y * scale / aspect;
+  var z = center + vec2<f32>(dx, dy);
+
+  var c = vec2<f32>(0.0, 0.0);
+  if (mode == 0u) {
+    c = z; z = vec2<f32>(0.0, 0.0);   // Mandelbrot
+  } else {
+    c = cParam;                        // Julia
+  }
+
+  var n: u32 = 0u;
+  let R = 4.0;
+  loop {
+    if (n >= maxIter) { break; }
+    z = cpow(z, p) + c;
+    if (dot(z,z) > R*R) { break; }
+    n = n + 1u;
+  }
+
+  if (n >= maxIter) {
+    return vec4<f32>(0.0, 0.0, 0.0, 1.0); // set interiors black
+  }
+
+  let r = length(z);
+  let smooth_ = (f32(n) + 1.0
+                 - log(max(log(max(r, 1e-30)), 1e-30)) / log(max(p, 1.0001)))
+                / f32(maxIter);
+  let t = clamp(pow(smooth_, 0.85), 0.0, 1.0);
+
+  if (mode == 1u) {
+    let fadeIn = clamp((t - 0.01) / 0.05, 0.0, 1.0);
+    let hue = t - floor(t);
+    let rainbow = hsv2rgb(hue, 1.0, 1.0);
+    let toWhite = clamp((t - 0.90) / 0.08, 0.0, 1.0);
+    let withWhite = mix(rainbow, vec3<f32>(1.0,1.0,1.0), toWhite);
+    let col = withWhite * fadeIn;
+    return vec4<f32>(col, 1.0);
+  }
+
+let col = palette(t) * (1.0 - 0.65 * t); // base darkening
+
+// Fade-in so the far exterior stays black
+let fade0 = smoothstep(0.03, 0.15, t);
+
+// Brightness boost centered on the boundary
+// Peaks around t ≈ 0.2–0.4 and falls off smoothly
+let boundary_boost =
+    smoothstep(0.05, 0.20, t) *
+    (1.0 - smoothstep(0.45, 0.70, t));
+
+let bright_col = col * (1.0 + 1.2 * boundary_boost);
+
+return vec4<f32>(bright_col * fade0, 1.0);
+
+}
+`;
+
+    const csWGSL = /*wgsl*/`
+struct CsUniforms {
+  u0: vec4<f32>, // cParam.xy, roi_center_hi.xy
+  u1: vec4<f32>, // roi_center_lo.xy, roi_half.xy
+  u2: vec4<f32>, // N, M, K, ton
+  u3: vec4<f32>, // p, maxIter (as float), gamma, -
+};
+@group(0) @binding(0) var<uniform> U : CsUniforms;
+
+struct Cell { v: u32, };
+@group(1) @binding(1) var<storage, read_write> GRID : array<Cell>;
+
+fn clog(z: vec2<f32>) -> vec2<f32> {
+  let r = length(z);
+  let th = atan2(z.y, z.x);
+  return vec2<f32>(log(max(r, 1e-30)), th);
+}
+fn cexp(w: vec2<f32>) -> vec2<f32> {
+  let a = exp(w.x);
+  return vec2<f32>(a * cos(w.y), a * sin(w.y));
+}
+fn cpow(z: vec2<f32>, p: f32) -> vec2<f32> {
+  let w = clog(z) * vec2<f32>(p, p);
+  return cexp(w);
+}
+
+@compute @workgroup_size(8,8,1)
+fn main(@builtin(global_invocation_id) gid: vec3<u32>) {
+  let N = u32(U.u2.x);
+  let M = u32(U.u2.y);
+  let K = u32(U.u2.z);
+  if (gid.x >= N || gid.y >= M) { return; }
+
+  let cParam = U.u0.xy;
+  let roi_center_hi = U.u0.zw;
+  let roi_center_lo = U.u1.xy;
+  let roi_center = roi_center_hi + roi_center_lo;
+  let roi_half = U.u1.zw;
+
+  let p      = U.u3.x;
+  let maxIter= u32(U.u3.y);
+  let ton    = U.u2.w;
+  let gamma  = U.u3.z;
+
+  let tx = (f32(gid.x) + 0.5) / f32(N);
+  let ty = (f32(gid.y) + 0.5) / f32(M);
+
+  // Compute deltas in the local ROI coordinate system, then add to split center.
+  let dx = mix(-roi_half.x, roi_half.x, tx);
+  let dy = mix(-roi_half.y, roi_half.y, ty);   // low pitch (j=0) -> bottom (negative dy)
+
+  let z0 = roi_center + vec2<f32>(dx, dy);
+  var z = z0;
+  var th_prev = atan2(z.y, z.x);
+  var sumTh = 0.0;
+
+  var n: u32 = 0u;
+  let R = 4.0;
+  loop {
+    if (n >= maxIter) { break; }
+    let zsafe = select(z, vec2<f32>(1e-30, 0.0), all(z == vec2<f32>(0.0,0.0)));
+    let zp = cpow(zsafe, p) + cParam;
+    let th = atan2(zp.y, zp.x);
+    var dth = th - th_prev;
+    if (dth >  3.14159265) { dth -= 6.2831853; }
+    if (dth < -3.14159265) { dth += 6.2831853; }
+    sumTh += dth;
+    z = zp;
+    n = n + 1u;
+    if (dot(z,z) > R*R) { break; }
+    th_prev = th;
+  }
+
+  var tvel = 0.0;
+  if (n < maxIter) {
+    let r = length(z);
+    tvel = clamp(
+      (f32(n) + 1.0 - log(max(log(max(r, 1e-30)), 1e-30)) / log(max(p, 1.0001)))
+      / f32(maxIter), 0.0, 1.0);
+  }
+  let vel = u32(clamp(1.0 + 126.0 * pow(tvel, gamma), 1.0, 127.0));
+  let on  = select(0u, 1u, tvel >= ton);
+
+  let tRot = fract(sumTh / 6.2831853);
+  let inst = u32(min(floor(tRot * f32(K)), f32(K - 1u)));
+
+  let packed = (on & 0xffu) | ((vel & 0xffu) << 8u) | ((inst & 0xffu) << 16u);
+  let idx = gid.x * M + gid.y;
+  GRID[idx].v = packed;
+}
+    `;
+
+    this.shaderVS = this.device.createShaderModule({ code: vsWGSL });
+    this.shaderFS = this.device.createShaderModule({ code: fsWGSL });
+    this.shaderCS = this.device.createShaderModule({ code: csWGSL });
+
+    this.pipeline = this.device.createRenderPipeline({
+      layout: this.device.createPipelineLayout({ bindGroupLayouts: [this.drawBGL] }),
+      vertex: { module: this.shaderVS, entryPoint: 'main' },
+      fragment: { module: this.shaderFS, entryPoint: 'main', targets: [{ format: this.format }] },
+      primitive: { topology: 'triangle-list' }
+    });
+
+    // Two draw bind groups (one per canvas)
+    this.drawBindGroupM = this.device.createBindGroup({
+      layout: this.drawBGL,
+      entries: [{ binding: 0, resource: { buffer: this.uniformBufM } }]
+    });
+    this.drawBindGroupJ = this.device.createBindGroup({
+      layout: this.drawBGL,
+      entries: [{ binding: 0, resource: { buffer: this.uniformBufJ } }]
+    });
+
+    this.csPipeline = this.device.createComputePipeline({
+      layout: this.device.createPipelineLayout({ bindGroupLayouts: [this.csBGL0, this.csBGL1] }),
+      compute: { module: this.shaderCS, entryPoint: 'main' }
+    });
+  }
+
+  // ------- uniforms writers (vec4-only) -------
+  _split_f64_to_f32_pair(x) {
+    // Represent a JS float64 value as hi+lo float32 parts for deep zoom stability.
+    const hi = Math.fround(x);
+    const lo = Math.fround(x - hi);
+    return { hi, lo };
+  }
+
+  writeDrawUniforms({ mode, canvas, center, scale, maxIter, cParam, targetBuffer }) {
+    const dpr = Math.min(1.5, Math.max(1, window.devicePixelRatio || 1));
+    const w = Math.floor(canvas.clientWidth * dpr);
+    const h = Math.floor(canvas.clientHeight * dpr);
+    const aspect = w / Math.max(1, h);
+
+    const cx = this._split_f64_to_f32_pair(center.cx);
+    const cy = this._split_f64_to_f32_pair(center.cy);
+
+    // 4 vec4<f32> = 16 floats
+    const f = new Float32Array(16);
+
+    // a: center_hi.xy, scale, p
+    f[0] = cx.hi; f[1] = cy.hi; f[2] = scale; f[3] = this.exponent;
+
+    // b: center_lo.xy, viewport.xy
+    f[4] = cx.lo; f[5] = cy.lo; f[6] = w; f[7] = h;
+
+    // c: cParam.xy, maxIter, mode
+    f[8] = cParam?.x ?? 0; f[9] = cParam?.y ?? 0; f[10] = maxIter; f[11] = mode;
+
+    // d: aspect, 0, 0, 0
+    f[12] = aspect; f[13] = 0; f[14] = 0; f[15] = 0;
+
+    this.device.queue.writeBuffer(targetBuffer, 0, f.buffer);
+    return { w, h };
+  }
+
+  writeComputeUniforms(roi, N, M, K) {
+    const ton = 0.2, gamma = 0.9;
+
+    // Encode ROI as split center + half-extents to preserve precision at deep zoom.
+    const roi_cx = (roi.minx + roi.maxx) * 0.5;
+    const roi_cy = (roi.miny + roi.maxy) * 0.5;
+    const roi_hx = (roi.maxx - roi.minx) * 0.5;
+    const roi_hy = (roi.maxy - roi.miny) * 0.5;
+
+    const cx = this._split_f64_to_f32_pair(roi_cx);
+    const cy = this._split_f64_to_f32_pair(roi_cy);
+
+    const f = new Float32Array(16);
+
+    // u0: cParam.xy, roi_center_hi.xy
+    f[0] = this.c.x; f[1] = this.c.y; f[2] = cx.hi; f[3] = cy.hi;
+
+    // u1: roi_center_lo.xy, roi_half.xy
+    f[4] = cx.lo; f[5] = cy.lo; f[6] = roi_hx; f[7] = roi_hy;
+
+    // u2: N, M, K, ton
+    f[8] = N; f[9] = M; f[10] = K; f[11] = ton;
+
+    // u3: p, maxIter, gamma, -
+    f[12] = this.exponent; f[13] = this.maxIterJ; f[14] = gamma; f[15] = 0;
+
+    this.device.queue.writeBuffer(this.csUniformBuf, 0, f.buffer);
+  }
+
+  resize() {
+    const dpr = Math.min(1.5, Math.max(1, window.devicePixelRatio || 1));
+    for (const c of [this.canvasM, this.canvasJ]) {
+      const w = Math.floor(c.clientWidth * dpr), h = Math.floor(c.clientHeight * dpr);
+      if (w && h && (c.width !== w || c.height !== h)) { c.width = w; c.height = h; }
+    }
+  }
+
+  render() {
+    // One-shot GPU redraw. This intentionally does not reschedule itself.
+    this._raf_id = 0;
+
+    if (!this._rendering_active) {
+      return;
+    }
+
+    if (!this.device || !this.ctxM || !this.ctxJ || !this._isActuallyVisible()) {
+      // Do not submit GPU work while hidden/collapsed.
+      // If we were asked to draw while layout is not ready, retry once it becomes visible.
+      this._schedule_visibility_poll();
+      return;
+    }
+
+    if (!this._gpu_dirty) {
+      return;
+    }
+    this._gpu_dirty = false;
+
+    if (this._gpu_diag_enabled) {
+      console.log(`[MJ] GPU redraw executing: reason=${this._gpu_redraw_last_reason}`);
+    }
+
+
+    const enc = this.device.createCommandEncoder();
+
+    // Mandelbrot (left)
+    this.writeDrawUniforms({
+      mode: 0, canvas: this.canvasM,
+      center: this.viewM, scale: this.viewM.scale,
+      maxIter: this.maxIterM, cParam: null, targetBuffer: this.uniformBufM
+    });
+    const passM = enc.beginRenderPass({
+      colorAttachments: [{
+        view: this.ctxM.getCurrentTexture().createView(),
+        loadOp: 'clear', storeOp: 'store', clearValue: { r: 0, g: 0, b: 0, a: 1 }
+      }]
+    });
+    passM.setPipeline(this.pipeline);
+    passM.setBindGroup(0, this.drawBindGroupM);
+    passM.draw(3, 1, 0, 0);
+    passM.end();
+
+    // Julia (right)
+    this.writeDrawUniforms({
+      mode: 1, canvas: this.canvasJ,
+      center: this.viewJ, scale: this.viewJ.scale,
+      maxIter: this.maxIterJ, cParam: this.c, targetBuffer: this.uniformBufJ
+    });
+    const passJ = enc.beginRenderPass({
+      colorAttachments: [{
+        view: this.ctxJ.getCurrentTexture().createView(),
+        loadOp: 'clear', storeOp: 'store', clearValue: { r: 0, g: 0, b: 0, a: 1 }
+      }]
+    });
+    passJ.setPipeline(this.pipeline);
+    passJ.setBindGroup(0, this.drawBindGroupJ);
+    passJ.draw(3, 1, 0, 0);
+    passJ.end();
+
+    try {
+      this.device.queue.submit([enc.finish()]);
+    } catch (e) {
+      console.error(`[MJ] queue.submit failed: last_redraw_reason=${this._gpu_redraw_last_reason}`, e);
+      try { this.cloud5_piece?.csound_message_callback?.(`queue.submit failed: ${e?.message || e}\n`); } catch { }
+    }
+  }
+
+  // ---- Overlay helpers ----
+  _complexToCanvasCss(x, y) {
+    const rJ = this.canvasJ.getBoundingClientRect();
+    const rRoot = this._rootDiv.getBoundingClientRect();
+    const dpr = Math.min(1.5, Math.max(1, window.devicePixelRatio || 1));
+    const w = Math.max(1, this.canvasJ.width), h = Math.max(1, this.canvasJ.height);
+    const aspect = w / h;
+
+    const ndcX = (x - this.viewJ.cx) / this.viewJ.scale;             // -1..1
+    const ndcY = - (y - this.viewJ.cy) * (aspect / this.viewJ.scale);
+    const pxX = (ndcX * 0.5 + 0.5) * w;                               // device px
+    const pxY = (ndcY * 0.5 + 0.5) * h;
+
+    const cssX = rJ.left - rRoot.left + pxX / dpr;
+    const cssY = rJ.top - rRoot.top + pxY / dpr;
+    return { x: cssX, y: cssY };
+  }
+
+  _updateSelectionOverlay() {
+    if (!this.roiJ) { this.sel.style.setProperty('display', 'none', 'important'); return; }
+    const { minx, maxx, miny, maxy } = this.roiJ;
+    const a = this._complexToCanvasCss(minx, maxy); // top-left
+    const b = this._complexToCanvasCss(maxx, miny); // bottom-right
+    const L = Math.min(a.x, b.x), T = Math.min(a.y, b.y);
+    const W = Math.abs(b.x - a.x), H = Math.abs(b.y - a.y);
+    this.sel.style.setProperty('display', 'block', 'important');
+    Object.assign(this.sel.style, {
+      display: 'block',
+      left: `${L}px`,
+      top: `${T}px`,
+      width: `${W}px`,
+      height: `${H}px`,
+    });
+  }
+
+  _updatePlayheadOverlay() {
+    // Two playhead drivers:
+    //   1) MIDI playback in this class (this._playing === true)
+    //   2) External/Csound playback via cloud5_piece.latest_score_time
+    if (!this._playing) {
+      try {
+        const piece = this.cloud5_piece;
+        const score_time_sec = piece?.latest_score_time;
+
+        if (typeof score_time_sec === 'number' && isFinite(score_time_sec) && score_time_sec >= 0) {
+          const total_duration_sec = Math.max(1, this.seconds || 0);
+          this._updatePlayheadFromSeconds(score_time_sec, total_duration_sec);
+          try { piece?.piano_roll_overlay?.show_score_time?.(); } catch (e) { }
+          return;
+        }
+      }
+      catch (e) {
+      }
+
+      this.playHead.style.display = 'none';
+      return;
+    }
+    if (this._playTotalBeats <= 0) {
+      this.playHead.style.display = 'none';
+      return;
+    }
+    // Compute elapsed beats since start
+    const now = performance.now();
+    const elapsedBeats = this._beatsForMillis(now - this._playStartMS);
+
+    // Drive the piano-roll playhead (red ball) during MIDI playback by
+    // publishing score time in seconds to the Cloud5Piece.
+    try {
+      if (this.cloud5_piece) {
+        this.cloud5_piece.latest_score_time = this._secondsForBeats(elapsedBeats);
+        // Also publish a reasonable total duration for any other followers.
+        if (this._playTotalBeats > 0) {
+          this.cloud5_piece.total_duration = this._secondsForBeats(this._playTotalBeats);
+        }
+      }
+      // Ensure the piano-roll playhead (red ball) advances during MIDI playback.
+      try { this.cloud5_piece.piano_roll_overlay?.show_score_time?.(); } catch (e) { }
+    } catch (e) {
+    }
+
+    const frac = Math.max(0, Math.min(1, elapsedBeats / this._playTotalBeats));
+
+    // Use ROI if present; otherwise use full Julia viewport bounds
+    const roi = this.roiJ ?? {
+      minx: this.viewJ.cx - this.viewJ.scale,
+      maxx: this.viewJ.cx + this.viewJ.scale,
+      miny: this.viewJ.cy - this.viewJ.scale,
+      maxy: this.viewJ.cy + this.viewJ.scale
+    };
+
+    const topLeft = this._complexToCanvasCss(roi.minx, roi.maxy);
+    const botRight = this._complexToCanvasCss(roi.maxx, roi.miny);
+    const L = Math.min(topLeft.x, botRight.x);
+    const T = Math.min(topLeft.y, botRight.y);
+    const W = Math.abs(botRight.x - topLeft.x);
+    const H = Math.abs(botRight.y - topLeft.y);
+
+    const x = L + W * frac;
+    Object.assign(this.playHead.style, {
+      display: 'block',
+      left: `${Math.round(x)}px`,
+      top: `${T}px`,
+      height: `${H}px`,
+    });
+
+    // Hide after the sweep completes
+    if (frac >= 1) this.playHead.style.display = 'none';
+  }
+
+  _updatePlayheadFromSeconds(score_time_sec, total_duration_sec) {
+    const total = Math.max(0, total_duration_sec || 0);
+    if (!(total > 0)) {
+      this.playHead.style.display = 'none';
+      return;
+    }
+    const frac = Math.max(0, Math.min(1, (score_time_sec || 0) / total));
+
+    // Use ROI if present; otherwise use full Julia viewport bounds
+    const roi = this.roiJ ?? {
+      minx: this.viewJ.cx - this.viewJ.scale,
+      maxx: this.viewJ.cx + this.viewJ.scale,
+      miny: this.viewJ.cy - this.viewJ.scale,
+      maxy: this.viewJ.cy + this.viewJ.scale,
+    };
+
+    const topLeft = this._complexToCanvasCss(roi.minx, roi.maxy);
+    const botRight = this._complexToCanvasCss(roi.maxx, roi.miny);
+    const L = Math.min(topLeft.x, botRight.x);
+    const T = Math.min(topLeft.y, botRight.y);
+    const W = Math.abs(botRight.x - topLeft.x);
+    const H = Math.abs(botRight.y - topLeft.y);
+
+    const x = L + W * frac;
+    Object.assign(this.playHead.style, {
+      display: 'block',
+      left: `${Math.round(x)}px`,
+      top: `${Math.round(T)}px`,
+      height: `${Math.round(H)}px`,
+    });
+
+    if (frac >= 1) this.playHead.style.display = 'none';
+  }
+
+  sync_from_controls() {
+    const pIn = this.shadowRoot.getElementById('expP');
+    const mIn = this.shadowRoot.getElementById('iterM');
+    const jIn = this.shadowRoot.getElementById('iterJ');
+    const nIn = this.shadowRoot.getElementById('binsN');
+    const MIn = this.shadowRoot.getElementById('binsM');
+    const bassIn = this.shadowRoot.getElementById('bass');
+
+    const kIn = this.shadowRoot.getElementById('binsK');
+    const secIn = this.shadowRoot.getElementById('seconds');
+    const denIn = this.shadowRoot.getElementById('density');
+    const maxVIn = this.shadowRoot.getElementById('maxVoices');
+    const velocityThresholdIn = this.shadowRoot.getElementById('velocityThreshold');
+    const base_instrument = this.shadowRoot.getElementById('base_instrument');
+
+    this.exponent = Math.max(1.0001, parseFloat(pIn.value) || 2.0);
+    this.maxIterM = parseInt(mIn.value);
+    this.maxIterJ = parseInt(jIn.value);
+    this.nTime = parseInt(nIn.value);
+    this.bass = parseInt(bassIn.value);
+    this.nPitch = parseInt(MIn.value);
+    this.base_instrument = parseInt(base_instrument.value);
+    // Preserve exact user text for snapshots/restores.
+    this.nInst = (kIn.value || '').trim();
+    this.instruments = (kIn.value || '').trim();
+    const instrument_numbers = this.instruments
+      .split(/\s+/)
+      .map(value => parseInt(value, 10))
+      .filter(value => Number.isFinite(value));
+    this.instrument_numbers = instrument_numbers.length > 1 ? instrument_numbers : null;
+    this.seconds = Math.max(1, parseFloat(secIn.value) || 180);
+    this._update_bpm_from_seconds();
+    this.density = parseFloat(denIn.value);
+    this.maxVoicesPerSlice = Math.max(1, parseInt(maxVIn.value) || 999);
+    this.velocityThreshold = parseInt(velocityThresholdIn.value);
+  };
+
+  sync_to_controls() {
+    const pIn = this.shadowRoot.getElementById('expP');
+    const mIn = this.shadowRoot.getElementById('iterM');
+    const jIn = this.shadowRoot.getElementById('iterJ');
+    const nIn = this.shadowRoot.getElementById('binsN');
+    const MIn = this.shadowRoot.getElementById('binsM');
+    const bassIn = this.shadowRoot.getElementById('bass');
+    const kIn = this.shadowRoot.getElementById('binsK');
+    const secIn = this.shadowRoot.getElementById('seconds');
+    const denIn = this.shadowRoot.getElementById('density');
+    const maxVIn = this.shadowRoot.getElementById('maxVoices');
+    const base_instrument = this.shadowRoot.getElementById('base_instrument');
+    const velocityThresholdIn = this.shadowRoot.getElementById('velocityThreshold');
+    pIn.value = `${this.exponent ?? 2.0}`;
+    mIn.value = `${this.maxIterM ?? 500}`;
+    jIn.value = `${this.maxIterJ ?? 1000}`;
+    nIn.value = `${this.nTime ?? 4096}`;
+    bassIn.value = `${this.bass ?? 36}`;
+    MIn.value = `${this.nPitch ?? 60}`;
+    base_instrument.value = `${this.base_instrument ?? 1}`;
+    kIn.value = `${this.nInst ?? 4}`;
+    secIn.value = `${this.seconds ?? 60}`;
+    this._update_bpm_from_seconds();
+    denIn.value = `${this.density ?? 0.01}`;
+    maxVIn.value = `${this.maxVoicesPerSlice ?? 999}`;
+    velocityThresholdIn.value = `${this.velocityThreshold ?? 20}`;
+  };
+
+  initInteractions() {
+    if (this._interactions_initialized) {
+      return;
+    }
+    this._interactions_initialized = true;
+    const pIn = this.shadowRoot.getElementById('expP');
+    const mIn = this.shadowRoot.getElementById('iterM');
+    const jIn = this.shadowRoot.getElementById('iterJ');
+    const nIn = this.shadowRoot.getElementById('binsN');
+    const MIn = this.shadowRoot.getElementById('binsM');
+    const bassIn = this.shadowRoot.getElementById('bass');
+    const kIn = this.shadowRoot.getElementById('binsK');
+    const btnS = this.shadowRoot.getElementById('btnScore');
+    const secIn = this.shadowRoot.getElementById('seconds');
+    const denIn = this.shadowRoot.getElementById('density');
+    const maxVIn = this.shadowRoot.getElementById('maxVoices');
+    const btnStop = this.shadowRoot.getElementById('btnStop');
+    const base_instrument = this.shadowRoot.getElementById('base_instrument');
+    const velocityThresholdIn = this.shadowRoot.getElementById('velocityThreshold');
+    [pIn, mIn, jIn, nIn, MIn, bassIn, base_instrument, kIn, secIn, denIn, maxVIn, velocityThresholdIn]
+      .forEach(el => el.addEventListener('input', () => this.sync_from_controls()));
+    this.sync_from_controls();
+
+    btnStop.addEventListener('click', () => this.stopPlayback());
+
+    // --- Mandelbrot click/zoom ---
+    this.canvasM.addEventListener('click', (e) => {
+      const { altKey, shiftKey } = e;
+      const dpr = Math.min(1.5, Math.max(1, window.devicePixelRatio || 1));
+      const rect = this.canvasM.getBoundingClientRect();
+      const x = (e.clientX - rect.left) * dpr;
+      const y = (e.clientY - rect.top) * dpr;
+      const w = this.canvasM.width, h = this.canvasM.height;
+      const ndc = { x: x / w * 2 - 1, y: y / h * 2 - 1 };
+      const aspect = w / Math.max(1, h);
+
+      const zx = this.viewM.cx + ndc.x * this.viewM.scale;
+      const zy = this.viewM.cy - ndc.y * this.viewM.scale / aspect;
+
+      this.c = { x: zx, y: zy };
+
+      // Zooming with Option-click should recenter the Mandelbrot view on the
+      // selected point (c) and persist the updated view into the piece state.
+
+      this.viewM.cx = zx;
+      this.viewM.cy = zy;
+      if (altKey && shiftKey) {
+        this.viewM.scale *= 1.5;
+      } else if (altKey) {
+        this.viewM.scale *= 0.6667;
+      }
+
+      try {
+        // Persist viewM (and c) to the local *.state.json used by Cloud5.
+        cloud5_save_state_if_needed(this.cloud5_piece);
+        this._request_gpu_redraw('restore');
+      } catch (err) {
+        console.warn('Failed to persist Mandelbrot view state:', err);
+      }
+
+      // Keep Julia centered logically (we just set c); selection overlay will re-map itself each frame
+      this._updateSelectionOverlay();
+    });
+
+    // --- Julia drag ROI (lasso persists) ---
+    let dragging = false;
+    let startPx = { x: 0, y: 0 };
+    let curPx = { x: 0, y: 0 };
+
+    const beginDrag = (e) => {
+      if (e.button !== 0) return;
+      dragging = true;
+      const rJ = this.canvasJ.getBoundingClientRect();
+      startPx.x = e.clientX;
+      startPx.y = e.clientY;
+      curPx.x = e.clientX;
+      curPx.y = e.clientY;
+      this.sel.style.display = 'block';
+      this._placeSelRect(rJ, startPx, curPx);
+      e.preventDefault();
+    };
+    const moveDrag = (e) => {
+      if (!dragging) return;
+      const rJ = this.canvasJ.getBoundingClientRect();
+      curPx.x = Math.min(Math.max(e.clientX, rJ.left), rJ.right);
+      curPx.y = Math.min(Math.max(e.clientY, rJ.top), rJ.bottom);
+      this._placeSelRect(rJ, startPx, curPx);
+    };
+    const endDrag = (e) => {
+      if (!dragging) return;
+      dragging = false;
+      const rJ = this.canvasJ.getBoundingClientRect();
+      const dpr = Math.min(1.5, Math.max(1, window.devicePixelRatio || 1));
+      const x0 = (Math.min(startPx.x, curPx.x) - rJ.left) * dpr;
+      const y0 = (Math.min(startPx.y, curPx.y) - rJ.top) * dpr;
+      const x1 = (Math.max(startPx.x, curPx.x) - rJ.left) * dpr;
+      const y1 = (Math.max(startPx.y, curPx.y) - rJ.top) * dpr;
+
+      if (Math.abs(x1 - x0) < 3 || Math.abs(y1 - y0) < 3) return;
+
+      const w = this.canvasJ.width, h = this.canvasJ.height;
+      const aspect = w / Math.max(1, h);
+
+      const toComplex = (px, py) => {
+        const ndcX = px / w * 2 - 1;
+        const ndcY = py / h * 2 - 1;
+        return {
+          x: this.viewJ.cx + ndcX * this.viewJ.scale,
+          y: this.viewJ.cy - ndcY * this.viewJ.scale / aspect
+        };
+      };
+
+      const zA = toComplex(x0, y0);
+      const zB = toComplex(x1, y1);
+      this.roiJ = {
+        minx: Math.min(zA.x, zB.x),
+        maxx: Math.max(zA.x, zB.x),
+        miny: Math.min(zA.y, zB.y),
+        maxy: Math.max(zA.y, zB.y),
+      };
+
+      // Do NOT hide the lasso; keep it visible
+      this._updateSelectionOverlay();
+    };
+
+    this.canvasJ.addEventListener('mousedown', beginDrag);
+    window.addEventListener('mousemove', moveDrag);
+    window.addEventListener('mouseup', endDrag);
+
+    // --- Hotkeys ---
+    window.addEventListener('keydown', async (e) => {
+      const key = (e.key || '').toLowerCase();
+
+      if ((key === 's') && (e.altKey || e.metaKey)) {
+        e.preventDefault(); e.stopPropagation();
+        const score = this.generate_score(); // auto-download happens there
+        this.playMIDIFromScore();
+      }
+
+      if ((key === 'r') && (e.altKey || e.metaKey)) {
+        e.preventDefault(); e.stopPropagation();
+        // Keep the last selection visible; do not clear roiJ here.
+        this.sel.style.setProperty('display', 'none', 'important');
+      }
+
+      if ((key === 'm') && (e.altKey && e.ctrlKey)) {
+        e.preventDefault(); e.stopPropagation();
+        this.playMIDIFromScore();
+      }
+    }, { capture: true });
+
+    btnS.addEventListener('click', async () => { 
+      await this.generate_score(); 
+      await cloud5_save_state_if_needed(this.cloud5_piece);
+      this.playMIDIFromScore(); 
+    });
+  }
+
+  _placeSelRect(rJ, startPx, curPx) {
+    const rRoot = this._rootDiv.getBoundingClientRect();
+    const left = Math.min(startPx.x, curPx.x) - rRoot.left;
+    const top = Math.min(startPx.y, curPx.y) - rRoot.top;
+    const width = Math.abs(curPx.x - startPx.x);
+    const height = Math.abs(curPx.y - startPx.y);
+
+    const jl = rJ.left - rRoot.left, jt = rJ.top - rRoot.top;
+    const jr = rJ.right - rRoot.left, jb = rJ.bottom - rRoot.top;
+    const L = Math.max(left, jl);
+    const T = Math.max(top, jt);
+    const R = Math.min(left + width, jr);
+    const B = Math.min(top + height, jb);
+
+    Object.assign(this.sel.style, {
+      left: `${L}px`,
+      top: `${T}px`,
+      width: `${Math.max(0, R - L)}px`,
+      height: `${Math.max(0, B - T)}px`,
+    });
+  }
+
+  // --- Tonalization helpers driven by Julia rotation (inst) ---
+
+  _scaleDegrees(major = true) { // pitch classes
+    return major ? [0, 2, 4, 5, 7, 9, 11] : [0, 2, 3, 5, 7, 8, 10];
+  }
+  _pcNearestInScale(pc, scale) {
+    // return the closest pitch-class in scale (ties prefer upward)
+    let best = scale[0], bestDist = 12;
+    for (const d of scale) {
+      let dist = Math.min((pc - d + 12) % 12, (d - pc + 12) % 12);
+      if (dist < bestDist || (dist === bestDist && ((d - pc + 12) % 12) < ((best - pc + 12) % 12))) {
+        best = d; bestDist = dist;
+      }
+    }
+    return best;
+  }
+  _quantizeToKey(pc, tonic_pc, major = true) {
+    const scale = this._scaleDegrees(major);
+    // shift to relative to tonic, snap, then unshift
+    const rel = (pc - tonic_pc + 120) % 12;
+    const snapped = this._pcNearestInScale(rel, scale);
+    return (snapped + tonic_pc) % 12;
+  }
+  _circleOfFifths(pc, steps) { // steps can be +/-; each step is +7 mod 12
+    let x = pc;
+    for (let i = 0; i < Math.abs(steps); i++) x = (x + (steps > 0 ? 7 : 5)) % 12;
+    return x;
+  }
+
+  // Build a per-slice plan: tonic_pc[i], majorMinor[i], chordFunction[i]
+  _buildKeyPlanFromGrid(active, vel, inst, N, M, K) {
+    const plan = new Array(N);
+    const smoothWin = 8; // slices
+    let tRotBuf = new Array(N).fill(0);
+    let bright = new Array(N).fill(0);
+
+    for (let i = 0; i < N; i++) {
+      let sumW = 0, sumInst = 0, sumVel = 0;
+      for (let j = 0; j < M; j++) if (active[i][j]) {
+        const v = vel[i][j] | 0;
+        const k = inst[i][j] | 0;
+        sumW += v;
+        sumVel += v;
+        sumInst += v * (k + 0.5) / Math.max(1, K); // proxy for tRot via inst
+      }
+      const tRot = sumW ? (sumInst / sumW) % 1.0 : 0.0;
+      const vMean = sumW ? (sumVel / sumW) : 0;
+      tRotBuf[i] = tRot;
+      bright[i] = vMean;
+    }
+
+    // Smooth tRot
+    const tRotSm = new Array(N).fill(0);
+    for (let i = 0; i < N; i++) {
+      let s = 0, w = 0;
+      for (let d = -smoothWin; d <= smoothWin; d++) {
+        const k = i + d; if (k < 0 || k >= N) continue;
+        const wt = 1 / (1 + Math.abs(d));
+        s += tRotBuf[k] * wt; w += wt;
+      }
+      tRotSm[i] = s / Math.max(1e-6, w);
+    }
+
+    // Map to key and mode
+    for (let i = 0; i < N; i++) {
+      const t = tRotSm[i];
+      const fifthSteps = Math.round(12 * t);                // circle of fifths
+      const tonic_pc = (7 * (fifthSteps % 12) + 120) % 12;  // 0=C, 7=G, etc.
+      const maj = bright[i] >= 80; // threshold; tune to taste
+      plan[i] = { tonic_pc, major: maj, func: 'I' };
+    }
+
+    // Harmonic rhythm + cadences
+    const barBeats = 4;
+    const binsPerBar = Math.round(barBeats / this._beats_per_timestep()); // e.g., 32
+    for (let i = 0; i < N; i += binsPerBar) {
+      const end = Math.min(N - 1, i + binsPerBar - 1);
+      // pick a function around trend: favor I, IV, V; drift with tRot change
+      const keys = ['I', 'vi', 'IV', 'ii', 'V'];
+      plan[i].func = (i / binsPerBar) % 4 === 3 ? 'V' : keys[(Math.round(tRotSm[i] * 4)) % keys.length];
+      // cadence: every 4 bars enforce V→I
+      if ((i / binsPerBar) % 4 === 3) plan[end].func = 'V';
+      if ((i / binsPerBar) % 4 === 0 && i > 0) plan[i].func = 'I';
+    }
+
+    return { plan, binsPerBar };
+  }
+
+  // Given a function and key, return allowed chord-tone pitch classes
+  _chordPCs(func, tonic_pc, major = true) {
+    // triads + sevenths common tones
+    // in major: I(0,4,7,11), IV(5,9,0,2), V(7,11,2,5), vi(9,0,4,7), ii(2,5,9,0)
+    // in minor: approximate harmonic minor functions
+    const MAJ = {
+      I: [0, 4, 7, 11],
+      IV: [5, 9, 0, 2],
+      V: [7, 11, 2, 5],
+      vi: [9, 0, 4, 7],
+      ii: [2, 5, 9, 0],
+    };
+    const MIN = {
+      i: [0, 3, 7, 10],
+      iv: [5, 8, 0, 2],
+      V: [7, 11, 2, 5],  // harmonic dominant
+      VI: [8, 0, 3, 7],
+      ii7b5: [2, 5, 8, 11],  // half-diminished flavor
+    };
+    const bank = major ? MAJ : MIN;
+    const name = major ? (['I', 'IV', 'V', 'vi', 'ii'].includes(func) ? func : 'I')
+      : (['i', 'iv', 'V', 'VI', 'ii7b5'].includes(func) ? func : 'i');
+    const pcs = bank[name].map(pc => (pc + tonic_pc) % 12);
+    return pcs;
+  }
+
+
+  _tie_adjacent_notes(score) {
+    if (!Array.isArray(score) || score.length < 2) return score;
+
+    // Ensure deterministic processing order (time, channel, key).
+    score.sort((a, b) =>
+      (a[1] - b[1]) ||
+      ((a[0] | 0) - (b[0] | 0)) ||
+      ((a[3] | 0) - (b[3] | 0))
+    );
+
+    const eps = 1e-9; // beats tolerance for float math
+    const out = [];
+    // Map "ch:key" -> index in out of the last note we can potentially extend.
+    const last_index_by_ck = new Map();
+
+    for (const ev of score) {
+      const ch = (ev[0] | 0) & 0x0f;
+      const t = +ev[1];
+      const d = +ev[2];
+      const key = ev[3] | 0;
+      const vel = ev[4] | 0;
+
+      const ck = `${ch}:${key}`;
+      const last_idx = last_index_by_ck.get(ck);
+
+      if (last_idx !== undefined) {
+        const prev = out[last_idx];
+        const prev_t = +prev[1];
+        const prev_d = +prev[2];
+        const prev_end = prev_t + prev_d;
+
+        // Tie/merge if overlapping OR exactly contiguous.
+        if (t <= prev_end + eps) {
+          const this_end = t + d;
+          const new_end = Math.max(prev_end, this_end);
+          prev[2] = new_end - prev_t;
+
+          // Velocity merge policy: keep the max so the merged note isn't quieter.
+          continue;
+        }
+      }
+      const new_note = [ch, t, d, key, vel];
+      out.push(new_note);
+      last_index_by_ck.set(ck, out.length - 1);
+    }
+    // Rescale velocities.
+    // First obtain existing scale.
+    const first_event = out.at(0);
+    let minimum_velocity = first_event[4];
+    let maximum_velocity = minimum_velocity;
+    for (const ev of out) {
+      let velocity = ev[4];
+      if (velocity < minimum_velocity) {
+        minimum_velocity = velocity;
+      }
+      if (velocity > maximum_velocity) {
+        maximum_velocity = velocity;
+      }
+    }
+    const existing_range = maximum_velocity - minimum_velocity;
+    const target_range = 20.;
+    const scale = existing_range > 0 ? target_range / existing_range : 1.0;
+    // Then rescale to target range while preserving relative dynamics.
+    for (let ev of out) {
+      let velocity = ev[4];
+      velocity = velocity - minimum_velocity; // shift to zero-based
+      velocity = velocity * scale;
+      velocity = velocity + 80; // shift to target center (80 is a common "mezzo-forte" velocity in MIDI)
+      ev[4] = Math.round(Math.max(1, Math.min(127, velocity))); // clamp to MIDI range
+    }
+    return out;
+  }
+
+  // Nudges each note to a scale/chord pitch with light voice-leading cost
+  _tonalizeScore(score, plan, binsPerBar) {
+    if (!score.length) return score;
+
+    // Build a slice index for each event
+    const step = this._beats_per_timestep();
+    const out = [];
+    const lastPitchByChan = new Map();
+
+    for (const ev of score) {
+      const [ch, tBeats, dBeats, key, vel] = ev;
+      const slice = Math.max(0, Math.floor(tBeats / step));
+      const { tonic_pc, major, func } = plan[Math.min(plan.length - 1, slice)];
+
+      // base: quantize to scale
+      const pc = key % 12;
+      const pcScale = this._quantizeToKey(pc, tonic_pc, major);
+
+      // chord push near barlines / cadence
+      const inBarPos = (slice % binsPerBar);
+      let pcsChord = null;
+      if (inBarPos >= binsPerBar - 4) { // last half-beat of bar: prefer chord tones
+        pcsChord = this._chordPCs(func, tonic_pc, major);
+      }
+
+      // choose target pc with minimal voice-leading
+      const prev = lastPitchByChan.has(ch) ? lastPitchByChan.get(ch) : key;
+      const targets = pcsChord ?? [pcScale];
+      let bestKey = key, bestCost = 1e9;
+      for (const tgtPC of targets) {
+        // search nearby octaves (±2 octaves)
+        for (let o = -2; o <= 2; o++) {
+          const cand = (Math.floor(key / 12) + o) * 12 + tgtPC;
+          const cost = Math.abs(cand - prev) + (pcsChord ? 0 : 2); // favor chord over scale at cadences
+          if (cost < bestCost) { bestCost = cost; bestKey = cand; }
+        }
+      }
+
+      lastPitchByChan.set(ch, bestKey);
+      out.push([ch, tBeats, dBeats, bestKey, vel]);
+    }
+    return out;
+  }
+
+  async generate_score() {
+    const N = this.nTime;
+    const M = this.nPitch;
+
+    const instrument_numbers = `${this.nInst ?? ''}`
+      .trim()
+      .split(/\s+/)
+      .map(value => parseInt(value, 10))
+      .filter(value => Number.isFinite(value));
+
+    const K = instrument_numbers.length > 1
+      ? instrument_numbers.length
+      : Math.max(1, parseInt(this.nInst, 10) || 1);
+
+    console.log("generate_score: timesteps:", N, " bass:", this.bass, " range:", M, " instruments:", K);
+
+    const roi = this.roiJ ?? {
+      minx: this.viewJ.cx - this.viewJ.scale,
+      maxx: this.viewJ.cx + this.viewJ.scale,
+      miny: this.viewJ.cy - this.viewJ.scale,
+      maxy: this.viewJ.cy + this.viewJ.scale
+    };
+    this.writeComputeUniforms(roi, N, M, K);
+
+    const gridSize = N * M * 4;
+    const grid = this.device.createBuffer({ size: gridSize, usage: GPUBufferUsage.STORAGE | GPUBufferUsage.COPY_SRC });
+    const csBG0 = this.device.createBindGroup({ layout: this.csBGL0, entries: [{ binding: 0, resource: { buffer: this.csUniformBuf } }] });
+    const csBG1 = this.device.createBindGroup({ layout: this.csBGL1, entries: [{ binding: 1, resource: { buffer: grid } }] });
+
+    const enc = this.device.createCommandEncoder();
+    const pass = enc.beginComputePass();
+    pass.setPipeline(this.csPipeline);
+    pass.setBindGroup(0, csBG0);
+    pass.setBindGroup(1, csBG1);
+    pass.dispatchWorkgroups(Math.ceil(N / 8), Math.ceil(M / 8), 1);
+    pass.end();
+
+    const readBuf = this.device.createBuffer({ size: gridSize, usage: GPUBufferUsage.COPY_DST | GPUBufferUsage.MAP_READ });
+    enc.copyBufferToBuffer(grid, 0, readBuf, 0, gridSize);
+    this.device.queue.submit([enc.finish()]);
+    await readBuf.mapAsync(GPUMapMode.READ);
+    const u32grid = new Uint32Array(readBuf.getMappedRange().slice(0));
+    readBuf.unmap();
+
+    const dtBeats = this._beats_per_timestep(); // 1/8 beat per time bin
+    const active = Array.from({ length: N }, _ => new Uint8Array(M));
+    const vel = Array.from({ length: N }, _ => new Uint8Array(M));
+    const inst = Array.from({ length: N }, _ => new Uint8Array(M));
+    for (let i = 0; i < N; i++) {
+      for (let j = 0; j < M; j++) {
+        const v = u32grid[i * M + j];
+        active[i][j] = v & 0xFF;
+        vel[i][j] = (v >>> 8) & 0xFF;
+        inst[i][j] = (v >>> 16) & 0xFF;
+      }
+    }
+
+    // --- Adaptive per-slice normalization of density ---
+    const perSliceKeep = Math.max(1, Math.min(this.maxVoicesPerSlice, Math.round(this.density * M)));
+    for (let i = 0; i < N; i++) {
+      const pairs = new Array(M);
+      for (let j = 0; j < M; j++) pairs[j] = [j, vel[i][j]];
+      pairs.sort((a, b) => (b[1] | 0) - (a[1] | 0));
+      const cutoff = pairs[Math.min(perSliceKeep - 1, pairs.length - 1)][1] | 0;
+      for (let j = 0; j < M; j++) {
+        const was_on = active[i][j] !== 0;
+        active[i][j] = was_on && ((vel[i][j] | 0) >= cutoff) ? 1 : 0;
+      }
+    }
+
+    const runOn = Array.from({ length: M }, _ => Array(K).fill(false));
+    const runI0 = Array.from({ length: M }, _ => Array(K).fill(0));
+    const runV0 = Array.from({ length: M }, _ => Array(K).fill(0));
+    const score = [];
+
+    for (let i = 0; i <= N; i++) {
+      for (let j = 0; j < M; j++) {
+        const on = (i < N) ? active[i][j] : 0;
+        const vv = (i < N) ? vel[i][j] : 0;
+        const kk = (i < N) ? inst[i][j] : 0;
+
+        for (let k = 0; k < K; k++) {
+          if (runOn[j][k] && (i === N || k !== kk || !on)) {
+            const i0 = runI0[j][k];
+            const i1 = i - 1;
+            score.push([k, i0 * dtBeats, (i1 - i0 + 1) * dtBeats, j, runV0[j][k]]);
+            runOn[j][k] = false;
+          }
+        }
+        if (i < N && on && vv >= this.velocityThreshold) {
+          if (!runOn[j][kk]) {
+            runOn[j][kk] = true;
+            runI0[j][kk] = i;
+            runV0[j][kk] = vv;
+          }
+        }      
+      }
+    }
+
+    const log = this.shadowRoot.getElementById('log');
+    log.textContent = `Score notes: ${score.length}\n` +
+      score.slice(0, 32).map(n => JSON.stringify(n)).join('\n') +
+      (score.length > 32 ? `\n… (${score.length - 32} more)` : '');
+    // Build the per-slice tonal plan from Julia-driven 'inst' and velocities
+    const { plan, binsPerBar } = this._buildKeyPlanFromGrid(active, vel, inst, N, M, K);
+    const thinned_score = this._thinScore(score);
+    const tonalized_score = this._tonalizeScore(thinned_score, plan, binsPerBar);
+    const tied_score = this._tie_adjacent_notes(tonalized_score);
+    // Move bass as the very last step to avoid changing the key before tonalization and tying.
+    for (let ev of tied_score) {
+      let key = ev[3] | 0;
+      key = this.bass + key;
+      if ( key >= 0 && key <= 127) {
+        ev[3] = key;
+      }
+    }
+    this._lastScore = tied_score;
+    try {
+      const effectiveROI = roi;
+      const state = this._collectState(effectiveROI);
+      this._exportMIDI(tied_score, document.title+ '.mid');
+    } catch (e) { 
+      console.warn('Export failed:', e); 
+    }
+    return tied_score;
+  }
+
+  _thinScore(score) {
+    if (!score.length) return score;
+    const keep = [];
+    const q = new Map(); // integer slice index -> array of notes
+    for (const n of score) {
+      const [ch, t, d, key, vel] = n;
+      const tKey = Math.round(t / this._beats_per_timestep());
+      if (!q.has(tKey)) q.set(tKey, []);
+      q.get(tKey).push(n);
+    }
+    for (const [, arr] of q.entries()) {
+      arr.sort((a, b) => (b[4] | 0) - (a[4] | 0));
+      const top = arr.slice(0, this.maxVoicesPerSlice);
+      keep.push(...top);
+    }
+    keep.sort((a, b) => a[1] - b[1] || a[0] - b[0] || a[3] - b[3]);
+    return keep;
+  }
+
+  getScore() { return this._lastScore ?? []; }
+
+  _publish_midi_score_to_piano_roll(score) {
+    const piece = this.cloud5_piece;
+    const piano_roll = piece?.piano_roll_overlay;
+    if (!piece || !piano_roll) return;
+    const SilencioScore = globalThis.Silencio?.Score;
+    if (!SilencioScore) return;
+
+    const silencio_score = new SilencioScore();
+    for (const note of score) {
+      const ch = (note[0] | 0) & 0x0f;
+      const t_beats = +note[1];
+      const d_beats = +note[2];
+      const key = note[3] | 0;
+      const vel = note[4] | 0;
+
+      const t_sec = this._secondsForBeats(t_beats);
+      const d_sec = this._secondsForBeats(d_beats);
+
+      // Silencio.Score.add signature:
+      // add(time, duration, status, channel, key, velocity, x, y, z, phase)
+      silencio_score.add(t_sec, d_sec, 144, ch, key, vel, 0, 0, 0, 0);
+    }
+
+    try { piano_roll.draw_silencio_score(silencio_score); } catch (e) { }
+    try { piano_roll.recenter?.(); } catch (e) { }
+    try { piano_roll.on_shown?.(); } catch (e) { }
+  }
+
+
+  async playMIDIFromScore() {
+    this.stopPlayback();
+    let score = this._lastScore;
+    if (!Array.isArray(score) || !score.length) { console.warn('No score to play'); return; }
+    // Ensure the piano roll has geometry to draw (progress3D alone does not render notes).
+    this._publish_midi_score_to_piano_roll(score);
+    this._playing = true;
+    this._clearTimers();
+    const out = this._currentMIDIOutput();
+    const step = (beats) => this._secondsForBeats(beats) * 1000; // ms
+    this._playStartMS = performance.now();
+    this._start_playhead_ticker();
+    this._playTotalBeats = Math.max(0, ...score.map(n => n[1] + n[2]));
+    if (out) {
+      console.log(`Playing MIDI: total beats: ${this._playTotalBeats}, estimated duration: ${(step(this._playTotalBeats) / 1000).toFixed(2)}s`);
+      const t0 = this._playStartMS;
+      for (const [ch, tBeats, dBeats, key, vel] of score) {
+        let vel_ = 78. + vel / 5.
+        const c = (ch | 0) & 0x0f;
+        const on = 0x90 | c;
+        const off = 0x80 | c;
+        const whenOn = t0 + step(tBeats);
+        const whenOff = t0 + step(tBeats + dBeats);
+        const on_time = this._secondsForBeats(tBeats);
+        const duration = this._secondsForBeats(dBeats);
+        const message_ = sprintf("Note on: t: %9.4f d: %9.4f c: %3d k: %4d v: %4d", on_time, duration, ch, key, vel_);
+        this._timers.push(setTimeout(() => { 
+          if (this._playing) { 
+            out.send([on, key & 0x7f, Math.max(1, Math.min(127, vel_ | 0))]); 
+            // Bypass the buffering of log messages.
+            this.cloud5_piece?.log_overlay?.log(message_ + "\n");
+            console.log(message_);
+          }
+        }, Math.max(0, whenOn - performance.now())));
+        this._timers.push(setTimeout(() => { if (this._playing) out.send([off, key & 0x7f, 0]); }, Math.max(0, whenOff - performance.now())));
+      }
+      this._timers.push(setTimeout(() => this.stopPlayback(), Math.ceil(step(this._playTotalBeats) + 50)));
+      return;
+    }
+
+    // ---- WebAudio fallback ----
+    if (!this._audio) {
+      this._audio = new (window.AudioContext || window.webkitAudioContext)();
+      this._master = this._audio.createGain();
+      this._master.gain.value = 0.2;
+      this._master.connect(this._audio.destination);
+    }
+    const ac = this._audio;
+    const start = ac.currentTime;
+    const mtof = (n) => 440 * Math.pow(2, (n - 69) / 12);
+
+    for (const [_ch, tBeats, dBeats, key, vel] of score) {
+      const t0 = start + this._secondsForBeats(tBeats);
+      const t1 = t0 + this._secondsForBeats(dBeats);
+      const osc = ac.createOscillator();
+      const amp = ac.createGain();
+      const v = Math.max(0.02, Math.min(1, (vel | 0) / 127));
+      osc.type = 'sawtooth';
+      osc.frequency.setValueAtTime(mtof(key | 0), t0);
+      amp.gain.setValueAtTime(0.0001, t0);
+      amp.gain.linearRampToValueAtTime(v, t0 + 0.01);
+      amp.gain.exponentialRampToValueAtTime(0.001, t1);
+      osc.connect(amp).connect(this._master);
+      osc.start(t0);
+      osc.stop(t1 + 0.05);
+      this._activeAudio.add(osc);
+      this._timers.push(setTimeout(() => this._activeAudio.delete(osc), Math.ceil((t1 - ac.currentTime + 0.1) * 1000)));
+    }
+    this._timers.push(setTimeout(() => this.stopPlayback(), Math.ceil(this._secondsForBeats(this._playTotalBeats) * 1000 + 50)));
+  }
+
+  stopPlayback() {
+    this._playing = false;
+    this._stop_playhead_ticker();
+    this._playTotalBeats = 0;
+    this.playHead.style.display = 'none';
+    this._clearTimers();
+    this._panicMIDI();
+    this._stopWebAudio();
+    // Reset external/Csound playhead state so the next performance starts at 0.
+    try {
+      if (this.cloud5_piece) {
+        this.cloud5_piece.latest_score_time = 0;
+        this.cloud5_piece.total_duration = 0;
+      }
+    } catch (e) { }
+    this._ext_total_duration_sec = 0;
+  }
+
+  _timestamp() {
+    return new Date().toISOString().replace(/[:.]/g, '-');
+  }
+
+  _collectState(roi) {
+    const s = this._currentState();
+    if (roi) s.roiJ = { ...roi };
+    s.timestamp = this._timestamp();
+    return s;
+  }
+
+  _currentState() {
+    const roi = this.roiJ ?? {
+      minx: this.viewJ.cx - this.viewJ.scale,
+      maxx: this.viewJ.cx + this.viewJ.scale,
+      miny: this.viewJ.cy - this.viewJ.scale,
+      maxy: this.viewJ.cy + this.viewJ.scale
+    };
+    const outName = this._currentMIDIOutput();
+    return {
+      timestamp: new Date().toISOString(),
+      exponent: this.exponent,
+      maxIterM: this.maxIterM,
+      maxIterJ: this.maxIterJ,
+      nTime: this.nTime,
+      bass: this.bass,
+      nPitch: this.nPitch,
+      nInst: this.nInst,
+      seconds: this.seconds,
+      bpm: this.bpm,
+      density: this.density,
+      maxVoicesPerSlice: this.maxVoicesPerSlice,
+      velocityThreshold: this.velocityThreshold,
+      stepBeats: this._beats_per_timestep(),
+      viewM: { ...this.viewM },
+      viewJ: { ...this.viewJ },
+      c: { ...this.c },
+      roiJ: this.roiJ ? { ...this.roiJ } : null,
+      midiOutId: this._midiOutId || null,
+      midiOutName: outName ? outName.name : null,
+      version: 1
+    };
+  }
+
+  // --------- MIDI file export ---------
+  _exportMIDI(score, baseName) {
+    if (!score || !score.length) return;
+    const PPQ = 480;
+    this._update_bpm_from_seconds();
+    const tempoMicro = Math.round(60000000 / Math.max(20, this.bpm));
+
+    const events = [];
+    for (const [ch, tBeats, dBeats, key, vel] of score) {
+      const start = Math.max(0, Math.round(tBeats * PPQ));
+      const end = Math.max(start + 1, Math.round((tBeats + dBeats) * PPQ));
+      const c = (ch | 0) & 0x0f;
+      const v = Math.max(1, Math.min(127, vel | 0));
+      events.push({ tick: start, type: 1, ch: c, key: key & 0x7f, vel: v });
+      events.push({ tick: end, type: 0, ch: c, key: key & 0x7f, vel: 0 });
+    }
+    events.sort((a, b) => a.tick - b.tick || a.type - b.type);
+
+    const VLQ = (n) => {
+      let buffer = n & 0x7f;
+      const bytes = [];
+      while ((n >>= 7)) { buffer <<= 8; buffer |= ((n & 0x7f) | 0x80); }
+      while (true) { bytes.push(buffer & 0xff); if (buffer & 0x80) buffer >>= 8; else break; }
+      return bytes;
+    };
+
+    const track = [];
+    const push = (...xs) => track.push(...xs);
+
+    push(...VLQ(0), 0xFF, 0x51, 0x03,
+      (tempoMicro >> 16) & 0xFF,
+      (tempoMicro >> 8) & 0xFF,
+      tempoMicro & 0xFF);
+
+    let lastTick = 0;
+    for (const ev of events) {
+      const dt = ev.tick - lastTick; lastTick = ev.tick;
+      push(...VLQ(dt));
+      if (ev.type === 1) {
+        push(0x90 | ev.ch, ev.key, ev.vel);
+      } else {
+        push(0x80 | ev.ch, ev.key, 0);
+      }
+    }
+    push(...VLQ(0), 0xFF, 0x2F, 0x00);
+
+    const header = new Uint8Array([
+      0x4d, 0x54, 0x68, 0x64,
+      0x00, 0x00, 0x00, 0x06,
+      0x00, 0x00,
+      0x00, 0x01,
+      (PPQ >> 8) & 0xFF, PPQ & 0xFF,
+    ]);
+    const trkLen = track.length;
+    const trkHeader = new Uint8Array([
+      0x4d, 0x54, 0x72, 0x6b,
+      (trkLen >>> 24) & 0xFF, (trkLen >>> 16) & 0xFF, (trkLen >>> 8) & 0xFF, trkLen & 0xFF,
+    ]);
+    const bytes = new Uint8Array(header.length + trkHeader.length + trkLen);
+    bytes.set(header, 0);
+    bytes.set(trkHeader, header.length);
+    bytes.set(new Uint8Array(track), header.length + trkHeader.length);
+    cloud5_save_data(bytes, `${baseName}`);
+  }
+
+  async on_generate() {
+    const generated_score = await this.generate_score();
+    this.cloud5_piece.score.clear();
+
+    const instrument_numbers = `${this.nInst ?? ''}`
+      .trim()
+      .split(/\s+/)
+      .map(value => parseInt(value, 10))
+      .filter(value => Number.isFinite(value));
+
+    const use_mapping = instrument_numbers.length > 1;
+    const instrument_count = use_mapping
+      ? instrument_numbers.length
+      : Math.max(1, parseInt(this.nInst, 10) || 1);
+
+    for (const note of generated_score) {
+      let time = this._secondsForBeats(note[1]);
+      let duration = this._secondsForBeats(note[2]);
+      let status = 144;
+      let instrument = use_mapping
+        ? instrument_numbers[note[0] % instrument_count]
+        : note[0] + this.base_instrument;
+      let pitch = note[3];
+      let loudness = note[4];
+
+      this.cloud5_piece.score.append(
+        time, duration, status, instrument, pitch, loudness, 0, 0, 0, 0, 4095
+      );
+    }
+    await cloud5_save_state_if_needed(this.cloud5_piece);
+  }
+}
+
+customElements.define('mandelbrot-julia', MandelbrotJulia);
