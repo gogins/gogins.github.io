@@ -792,6 +792,12 @@ async function cloud5_save_state_if_needed(piece) {
 }
 
 async function cloud5_load_state_if_present(piece) {
+  // FIXME: This is a hack to work around a bug where
+  // something unknown is duplicating the main menu element.
+  const menus = document.querySelectorAll('#main_menu');
+  for (let i = 1; i < menus.length; i++) {
+    menus[i].remove();
+  }
   if (!cloud5_is_local_context()) {
     return;
   }
@@ -833,9 +839,9 @@ async function cloud5_load_state_if_present(piece) {
   }
   // FIXME: This is a hack to work around a bug where
   // something unknown is duplicating the main menu element.
-  const menus = document.querySelectorAll('#main_menu');
-  for (let i = 1; i < menus.length; i++) {
-    menus[i].remove();
+  const menus_ = document.querySelectorAll('#main_menu');
+  for (let i = 1; i < menus_.length; i++) {
+    menus_[i].remove();
   }
 }
 
