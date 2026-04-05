@@ -837,12 +837,6 @@ async function cloud5_load_state_if_present(piece) {
       console.warn(`Failed to load state via fetch from "${filename}": `, e);
     }
   }
-  // FIXME: This is a hack to work around a bug where
-  // something unknown is duplicating the main menu element.
-  const menus_ = document.querySelectorAll('#main_menu');
-  for (let i = 1; i < menus_.length; i++) {
-    menus_[i].remove();
-  }
 }
 
 /**

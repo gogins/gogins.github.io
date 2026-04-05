@@ -77,7 +77,7 @@
   "mandelbrot_julia_overlay.exponent": 2,
   "mandelbrot_julia_overlay.maxIterM": 500,
   "mandelbrot_julia_overlay.maxIterJ": 1000,
-  "mandelbrot_julia_overlay.nTime": 4096,
+  "mandelbrot_julia_overlay.nTime": 400,
   "mandelbrot_julia_overlay.nPitch": 60,
   "mandelbrot_julia_overlay.nInst": 4,
   "mandelbrot_julia_overlay.bpm": 300,
