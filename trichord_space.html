@@ -86,9 +86,9 @@
                     <dl>
                         <dt>Equivalence class</dt>
                         <dd>Sets the current equivalence class of the orbifold. The possibilities are OP
-                            (octave equivalence and permutational equivalence), OPTg (octave equivalence,
+                            (octave equivalence and permutational equivalence), OPT (octave equivalence,
                             permutational equivalence, and transpositional equivalence; maps to normal form),
-                            or OPTIg (octave equivalence, permutational equivalence, transpositional
+                            or OPTI (octave equivalence, permutational equivalence, transpositional
                             equivalence, and inversional equivalence; maps to prime form).
                         <dd>
                         <dt>Play</dt>
@@ -100,7 +100,7 @@
                         <dd>Transposes the selected chord up (+ key) or down (- key) by 1 semitone.</dd>
                         <dt>Invert [I]</dt>
                         <dd>Inverts the selected chord, i.e. reflects it in the inversion flat that
-                            divides each OPTg domain into two OPTIg domains.</dd>
+                            divides each OPT domain into two OPTI domains.</dd>
                         <dt>Move voice 1 [1]</dt>
                         <dd>Moves voice 1 of the selected chord up or down by 1 semitone.</dd>
                         <dt>Move voice 2 [2]</dt>
@@ -352,11 +352,11 @@ function escape_html(text)
             if (value === "OP") {
                 chord_space = new ChordSpace("RP", 12.);
             }
-            if (value === "OPTg") {
+            if (value === "OPT") {
                 chord_space = new ChordSpace("RPTg", 12.);
             }
-            if (value === "OPTIg") {
-                chord_space = new ChordSpace("RPTIg", 12.);
+            if (value === "OPTI") {
+                chord_space = new ChordSpace("RPTgI", 12.);
             }
             chord_space_view = new ChordSpaceView(chord_space);
             chord_space_view.draw3D(document.getElementById("canvas"));
@@ -475,7 +475,7 @@ function escape_html(text)
                 add_slider(Master, 'gi_Reverb_delay_modulation', 0, 3);
                 add_slider(Master, 'gk_Reverb_frequency_cutoff', 5000, 20000);
                 add_slider(Master, 'gk_MasterOutput_level', -80, 80);
-                gui.add(gui_parameters, 'equivalence_class', ['OP', 'OPTg', 'OPTIg']).name('Equivalence class').onChange(draw_fundamental_domain);
+                gui.add(gui_parameters, 'equivalence_class', ['OP', 'OPT', 'OPTI']).name('Equivalence class').onChange(draw_fundamental_domain);
                 gui.add(gui_parameters, 'transpose').name('Transpose [T]');
                 gui.add(gui_parameters, 'invert').name('Invert [I]');
                 let Neo_Reimannian = gui.addFolder('Neo-Riemannian Transformations');
@@ -546,7 +546,7 @@ function escape_html(text)
                 csound_message_callback("ChordSpace constructor: " + equivalence_class_ + ", " + range_ + "\n");
                 this.equivalence_class = equivalence_class_;
                 this.range = range_;
-                this.chords = CsoundAC.allOfEquivalenceClass(3, this.equivalence_class, this.range, 1., 0., true);
+                this.chords = CsoundAC.allOfEquivalenceClass(3, this.equivalence_class, this.range, 1., 0, false);
             }
             contains(a) {
                 let n = this.chords.size();
@@ -609,36 +609,6 @@ function escape_html(text)
                  * Maps Chord ids to Three.js object ids.
                  */
                 this.balls_for_chords = new Map();
-                /**
-                 * OPT sector used for inversion.  Chords on shared sector facets
-                 * belong to several sectors; reflection must use the same flat
-                 * for both halves of an invert/invert pair.
-                 */
-                this.pickedSector = 0;
-            }
-            /**
-             * Canonical OPT sector for a chord (lowest index among ties).
-             */
-            sector_for_chord(chord) {
-                try {
-                    const sectors = chord.opt_domain_sectors();
-                    if (sectors != null) {
-                        if (typeof sectors.size === 'function' && sectors.size() > 0) {
-                            return sectors.get(0);
-                        }
-                        if (sectors.length > 0) {
-                            return sectors[0];
-                        }
-                    }
-                } catch (e) {
-                    csound_message_callback("sector_for_chord: " + e.message + "\n");
-                }
-                for (let s = 0; s < chord.voices(); ++s) {
-                    if (chord.is_in_rpt_sector_g(s, 12., 1.0) === true) {
-                        return s;
-                    }
-                }
-                return 0;
             }
             /**
              * Returns the chord associated with the object, or undefined if the chord 
@@ -660,21 +630,13 @@ function escape_html(text)
                 if (chord == null) {
                     return;
                 }
-                // Use toString() (pitch-based) as the key, not name(), because
-                // name() returns "" for any chord without a standard musical name,
-                // causing all unnamed chords to alias the same map entry.
-                let chord_id = chord.toString();
+                let chord_id = chord.name();
                 let ball_id = this.balls_for_chords.get(chord_id);
-                if (ball_id != null) {
-                    return this.view.scene.getObjectById(ball_id);
+                if (ball_id == null) {
+                    return;
                 }
-                // Exact string keys can miss after Rg; match by pitch equality.
-                for (const [object_id, stored] of this.chords_for_balls.entries()) {
-                    if (stored.equals(chord)) {
-                        return this.view.scene.getObjectById(object_id);
-                    }
-                }
-                return;
+                let object_ = this.view.scene.getObjectById(ball_id);
+                return object_;
             }
             current_chord() {
                 return this.chord_for_ball(this.pickedObject);
@@ -687,21 +649,38 @@ function escape_html(text)
                 chord = chord.T(semitone).eOP();
                 this.select_chord(chord);
             }
+            /*
+            Chord self = chord;
+            if (predicate<EQUIVALENCE_RELATION_RPTgI>(self, range, g, opt_sector) == true) {
+                return self;
+            } else {
+                auto rptt = equate<EQUIVALENCE_RELATION_RPTg>(self, range, g, opt_sector);
+                if (predicate<EQUIVALENCE_RELATION_I>(rptt, range, g, opt_sector) == true) {
+                    return rptt;
+                } else {
+                    auto rptt_i = equate<EQUIVALENCE_RELATION_I>(rptt, range, g, opt_sector);
+                    auto rptt_i_rptt = equate<EQUIVALENCE_RELATION_RPTg>(rptt_i, range, g, opt_sector);
+                    return rptt_i_rptt;
+                }
+            }
+            */
             invert() {
                 let chord = this.current_chord();
                 if (chord == null) {
                     return;
                 }
-                csound_message_callback(sprintf("invert: chord:      %s\n", chord.toString()));
-                csound_message_callback(sprintf("invert: sector:     %d\n", this.pickedSector));
-                // Rg maps to a cached RPg partner on the ET lattice (same as before).
-                // Continuous R() can land off-lattice and miss every plotted ball.
-                let reflection = chord.Rg(this.pickedSector, 1.0);
-                reflection = reflection.eET(1.0);
+                csound_message_callback(sprintf("invert: chord:      %s\n", chord.name()));
+                let s = 0;
+                for ( ; s < chord.voices(); ++s) {
+                    if (chord.is_in_rpt_sector(s, 12.) == true) {
+                        break;
+                    }
+                }
+                csound_message_callback(sprintf("invert: sector:     %d\n", s));
+                let reflection = chord.reflect(s);
+                reflection.clamp(12.0);
                 csound_message_callback(sprintf("invert: reflection: %s\n", reflection.toString()));
-                // Keep pickedSector: facet chords may move to a different sector
-                // after reflection, but involution requires the same flat.
-                this.select_chord(reflection, false);
+                this.select_chord(reflection);
             } 
             nrr() {
                 let chord = this.current_chord();
@@ -791,20 +770,14 @@ function escape_html(text)
                 let text = chord.information();
                 monospace_alert(text);
             }
-            select_chord(chord, updateSector = true) {
+            select_chord(chord) {
                 let ball = this.ball_for_chord(chord);
                 // Note: "variable == null" is true if the variable is either undefined or null.
                 if (ball == null) {
-                    csound_message_callback(sprintf("select_chord: no ball for %s\n", chord.toString()));
                     return;
                 }
-                const mapped = this.chord_for_ball(ball);
-                const selected = (mapped != null) ? mapped : chord;
-                if (updateSector) {
-                    this.pickedSector = this.sector_for_chord(selected);
-                }
                 this.select_ball(ball);
-                this.view.on_picked_chord(selected);
+                this.view.on_picked_chord(chord);
             }
             select_ball(ball) {
                 // Restore the state of a previoiusly picked chord.
@@ -833,7 +806,6 @@ function escape_html(text)
                         if (chord == null) {
                             continue;
                         } else {
-                            this.pickedSector = this.sector_for_chord(chord);
                             this.select_ball(picked_);
                             break;
                         }
@@ -1017,9 +989,7 @@ function escape_html(text)
                 ball.position.y = chord.getPitch(1);
                 ball.position.z = chord.getPitch(2);
                 this.scene.add(ball);
-                // Use toString() (pitch-based) as the key so that every chord
-                // gets its own unique entry regardless of whether it has a name.
-                this.controller.balls_for_chords.set(chord.toString(), ball.id);
+                this.controller.balls_for_chords.set(chord.name(), ball.id);
                 this.controller.chords_for_balls.set(ball.id, chord);
                 ///csound_message_callback("plotChord3D: normal_form: " + chord.normal_form().toString() + " chord: " + chord.name() + "\n");
             }
