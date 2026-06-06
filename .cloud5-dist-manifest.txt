@@ -9,6 +9,7 @@ CsoundAC.wasm
 CsoundAudioNode.js
 CsoundAudioProcessor.js
 LICENSE
+PUBLISHING.md
 ParametricLindenmayer5.js
 ParametricLindenmayerE.js
 ParametricLindenmayerSystem.js
@@ -90,7 +91,9 @@ circler.html
 cloud-5.css
 cloud-5.js
 cloud-5.pdf
+cloud-5.zip
 cloud-music.html
+cloud5-example-parametric-lindenmayer-pitv.html
 cloud5-example-parametric-lindenmayer.html
 cloud5-example-score-generator.html
 cloud5-example-strudel.html
@@ -284,6 +287,7 @@ piano.json
 player.html
 pnpm-lock.yaml
 polymetric.html
+publish.sh
 pwa/strudel-linux.png
 pwa/strudel-macos.png
 readme.css
