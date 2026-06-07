@@ -93,7 +93,6 @@ cloud-5.js
 cloud-5.pdf
 cloud-5.zip
 cloud-music.html
-cloud5-example-parametric-lindenmayer-pitv.html
 cloud5-example-parametric-lindenmayer.html
 cloud5-example-score-generator.html
 cloud5-example-strudel.html
