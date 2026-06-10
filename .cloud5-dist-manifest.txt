@@ -123,7 +123,6 @@ de/workshop/getting-started/index.html
 de/workshop/index.html
 de/workshop/pattern-effects/index.html
 de/workshop/recap/index.html
-deploy.bash
 dough/index.html
 droner.html
 embed/index.html
