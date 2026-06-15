@@ -5,6 +5,7 @@ CMakeLists.txt
 CNAME
 ChordSpace.js
 CsoundAC.js
+CsoundAC.md
 CsoundAC.wasm
 CsoundAudioNode.js
 CsoundAudioProcessor.js
@@ -195,7 +196,7 @@ jsdocs/Cloud5PianoRoll.html
 jsdocs/Cloud5Piece.html
 jsdocs/Cloud5ShaderToy.html
 jsdocs/Cloud5Strudel.html
-jsdocs/CsoundAC.js.html
+jsdocs/CsoundAC.html
 jsdocs/CsoundAudioNode.html
 jsdocs/CsoundAudioNode.js.html
 jsdocs/ParametricLindenmayerSystem.js.html

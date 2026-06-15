@@ -2075,23 +2075,47 @@ gS_cloud5_soundfile_name init "${output_soundfile_name}"
     write_file(csd_filename_parameters, csd);
     await cloud5_write_text_to_snapshot_dir_if_available(csd_filename_parameters, csd, "application/x-csound");
 
-    // Start performance in all components.
+    // Start performance in all components (including Strudel via cloud5-strudel).
     if (!(this?.csound.getNode)) {
       this.csound.perform();
-      for (const overlay of this._get_all_overlays()) {
-        overlay?.on_play();
-      }
     }
-    if (typeof strudel_view !== 'undefined') {
-      if (strudel_view !== null) {
-        console.info("strudel_view:", this.strudel_view);
-        strudel_view?.setCsound(this.csound);
-        strudel_view?.setCsoundAC(this.csoundac);
-        strudel_view?.setParameters(this.control_parameters_addon);
-        strudel_view?.startPlaying();
-      }
+    for (const overlay of this._get_all_overlays()) {
+      await overlay?.on_play?.();
     }
+    await this._start_legacy_strudel();
     this?.csound_message_callback("Csound is playing...\n");
+  }
+
+  /**
+   * Standalone <strudel-repl-component> elements (not inside cloud5-strudel).
+   */
+  _standalone_strudel_repls() {
+    return [...document.querySelectorAll('strudel-repl-component')].filter(
+      (el) => !el.closest('cloud5-strudel'),
+    );
+  }
+
+  async _start_legacy_strudel() {
+    const repls = this._standalone_strudel_repls();
+    if (!repls.length) {
+      return;
+    }
+    await Promise.all(
+      repls.map(async (legacy) => {
+        legacy.setCsound?.(this.csound);
+        legacy.setCsoundAC?.(this.csoundac);
+        legacy.setParameters?.(this.control_parameters_addon);
+        await legacy.startPlaying?.();
+      }),
+    );
+  }
+
+  async _stop_legacy_strudel() {
+    const repls = this._standalone_strudel_repls();
+    if (!repls.length) {
+      return;
+    }
+    await Promise.all(repls.map((legacy) => legacy.stopPlaying?.()));
   }
   /**
    * Stops both Csound and Strudel from performing.
@@ -2100,13 +2124,15 @@ gS_cloud5_soundfile_name init "${output_soundfile_name}"
     this.csound_message_callback("cloud-5 is stopping...\n");
     this.is_performing = false;
     // Stop performance in all components.
-    await this.csound.stop();
-    await this.csound.cleanup();
-    this.csound.reset();
-    this.strudel_overlay?.stop();
-    for (const overlay of this._get_all_overlays()) {
-      overlay?.on_stop();
+    if (this.csound) {
+      await this.csound.stop();
+      await this.csound.cleanup();
+      this.csound.reset();
     }
+    for (const overlay of this._get_all_overlays()) {
+      overlay?.on_stop?.();
+    }
+    await this._stop_legacy_strudel();
     /// await cloud5_save_state_if_needed(this);
     this._stop_display_loop();
     this._stop_ui_timer();
@@ -2628,21 +2654,37 @@ class Cloud5Strudel extends Cloud5Element {
       console.log("strudel_component lost focus.");
     });
 
-    let menu_button = document.getElementById("menu_item_strudel");
-    menu_button.style.display = 'inline';
-  }  /**
-   * Starts the Strudel performance loop (the Cyclist).
-   */
-  start() {
-    this.strudel_component.startPlaying();
-
+    const menu_button = document.getElementById("menu_item_strudel");
+    if (menu_button) {
+      menu_button.style.display = 'inline';
+    }
   }
-  /**
-   * Stops the Strudel performance loop (the Cyclist).
-   */
-  stop() {
-    this.strudel_component.stopPlaying();
 
+  /**
+   * Wire host Csound into the iframe and start the Strudel cyclist.
+   */
+  async on_play() {
+    const comp = this.strudel_component;
+    if (!comp) return;
+    const piece = this.cloud5_piece;
+    comp.setCsound?.(piece?.csound);
+    comp.setCsoundAC?.(piece?.csoundac);
+    comp.setParameters?.(this.#control_parameters_addon ?? piece?.control_parameters_addon);
+    await comp.startPlaying?.();
+  }
+
+  on_stop() {
+    this.strudel_component?.stopPlaying?.();
+  }
+
+  /** @deprecated use on_play */
+  start() {
+    return this.on_play();
+  }
+
+  /** @deprecated use on_stop */
+  stop() {
+    this.on_stop();
   }
   #strudel_code_addon = null;
   /**
@@ -3067,10 +3109,13 @@ customElements.define("cloud5-strudel", Cloud5Strudel);
     } else {
       let csound = this?.cloud5_piece?.csound;
       if (csound) {
-        var node;
-        if (typeof csound.getNode == 'undefined') {
-        } else {
-          node = await csound.getNode()
+        let node = null;
+        if (typeof csound.getNode === 'function') {
+          node = await csound.getNode();
+        } else if (csound instanceof AudioNode) {
+          node = csound;
+        }
+        if (node) {
           this.analyser = new AnalyserNode(node.context);
           this.analyser.fftSize = 2048;
           console.info("Analyzer buffer size: " + this.analyser.frequencyBinCount);
