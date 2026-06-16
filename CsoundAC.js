@@ -1228,6 +1228,13 @@ var findStringEnd = (heapOrArray, idx, maxBytesToRead, ignoreNul) => {
           return size;
         },
   write(stream, buffer, offset, length, position, canOwn) {
+          // If the buffer is located in main memory (HEAP), and if
+          // memory can grow, we can't hold on to references of the
+          // memory buffer, as they may get invalidated. That means we
+          // need to copy its contents.
+          if (buffer.buffer === HEAP8.buffer) {
+            canOwn = false;
+          }
   
           if (!length) return 0;
           var node = stream.node;
@@ -4732,6 +4739,140 @@ var findStringEnd = (heapOrArray, idx, maxBytesToRead, ignoreNul) => {
     };
   var __embind_register_emval = (rawType) => registerType(rawType, EmValType);
 
+  
+  var enumReadValueFromPointer = (name, width, signed) => {
+      switch (width) {
+        case 1: return signed ?
+          function(pointer) { return this.fromWireType(HEAP8[pointer]) } :
+          function(pointer) { return this.fromWireType(HEAPU8[pointer]) };
+        case 2: return signed ?
+          function(pointer) { return this.fromWireType(HEAP16[((pointer)>>1)]) } :
+          function(pointer) { return this.fromWireType(HEAPU16[((pointer)>>1)]) };
+        case 4: return signed ?
+          function(pointer) { return this.fromWireType(HEAP32[((pointer)>>2)]) } :
+          function(pointer) { return this.fromWireType(HEAPU32[((pointer)>>2)]) };
+        default:
+          throw new TypeError(`invalid integer width (${width}): ${name}`);
+      }
+    };
+  
+  
+  
+  function getEnumValueType(rawValueType) {
+      // This must match the values of enum_value_type in wire.h
+      return rawValueType === 0 ? 'object' : (rawValueType === 1 ? 'number' : 'string');
+    }
+  /** @suppress {globalThis} */
+  var __embind_register_enum = (rawType, name, size, isSigned, rawValueType) => {
+      name = AsciiToString(name);
+      const valueType = getEnumValueType(rawValueType);
+  
+      switch (valueType) {
+        case 'object': {
+          function ctor() {}
+          ctor.values = {};
+  
+          registerType(rawType, {
+            name,
+            constructor: ctor,
+            valueType,
+            fromWireType: function(c) {
+              return this.constructor.values[c];
+            },
+            toWireType: (destructors, c) => c.value,
+            readValueFromPointer: enumReadValueFromPointer(name, size, isSigned),
+            destructorFunction: null,
+          });
+  
+          exposePublicSymbol(name, ctor);
+          break;
+        }
+        case 'number': {
+          var keysMap = {};
+  
+          registerType(rawType, {
+            name: name,
+            keysMap,
+            valueType,
+            fromWireType: (c) => c,
+            toWireType: (destructors, c) => c,
+            readValueFromPointer: enumReadValueFromPointer(name, size, isSigned),
+            destructorFunction: null,
+          });
+  
+          exposePublicSymbol(name, keysMap);
+          // Just exposes a simple dict. argCount is meaningless here,
+          delete Module[name].argCount;
+          break;
+        }
+        case 'string': {
+          var valuesMap = {};
+          var reverseMap = {};
+          var keysMap = {};
+  
+          registerType(rawType, {
+            name: name,
+            valuesMap,
+            reverseMap,
+            keysMap,
+            valueType,
+            fromWireType: function(c) {
+              return this.reverseMap[c];
+            },
+            toWireType: function(destructors, c) {
+              return this.valuesMap[c];
+            },
+            readValueFromPointer: enumReadValueFromPointer(name, size, isSigned),
+            destructorFunction: null,
+          });
+  
+          exposePublicSymbol(name, keysMap);
+          // Just exposes a simple dict. argCount is meaningless here,
+          delete Module[name].argCount;
+          break;
+        }
+      }
+    };
+
+  
+  
+  
+  
+  var requireRegisteredType = (rawType, humanName) => {
+      var impl = registeredTypes[rawType];
+      if (undefined === impl) {
+        throwBindingError(`${humanName} has unknown type ${getTypeName(rawType)}`);
+      }
+      return impl;
+    };
+  var __embind_register_enum_value = (rawEnumType, name, enumValue) => {
+      var enumType = requireRegisteredType(rawEnumType, 'enum');
+      name = AsciiToString(name);
+  
+      switch (enumType.valueType) {
+        case 'object': {
+          var Enum = enumType.constructor;
+          var Value = Object.create(enumType.constructor.prototype, {
+            value: {value: enumValue},
+            constructor: {value: createNamedFunction(`${enumType.name}_${name}`, function() {})},
+          });
+          Enum.values[enumValue] = Value;
+          Enum[name] = Value;
+          break;
+        }
+        case 'number': {
+          enumType.keysMap[name] = enumValue;
+          break;
+        }
+        case 'string': {
+          enumType.valuesMap[name] = enumValue;
+          enumType.reverseMap[enumValue] = name;
+          enumType.keysMap[name] = name;
+          break;
+        }
+      }
+    };
+
   var floatReadValueFromPointer = (name, width) => {
       switch (width) {
         case 4: return function(pointer) {
@@ -5240,15 +5381,6 @@ var findStringEnd = (heapOrArray, idx, maxBytesToRead, ignoreNul) => {
       return id;
     };
   
-  
-  
-  var requireRegisteredType = (rawType, humanName) => {
-      var impl = registeredTypes[rawType];
-      if (undefined === impl) {
-        throwBindingError(`${humanName} has unknown type ${getTypeName(rawType)}`);
-      }
-      return impl;
-    };
   var emval_lookupTypes = (argCount, argTypes) => {
       var a = new Array(argCount);
       for (var i = 0; i < argCount; ++i) {
@@ -5455,14 +5587,78 @@ ${functionBody}
   }
 
 
-  var abortOnCannotGrowMemory = (requestedSize) => {
-      abort('OOM');
+  var getHeapMax = () =>
+      // Stay one Wasm page short of 4GB: while e.g. Chrome is able to allocate
+      // full 4GB Wasm memories, the size will wrap back to 0 bytes in Wasm side
+      // for any code that deals with heap sizes, which would require special
+      // casing all heap size related code to treat 0 specially.
+      2147483648;
+  
+  var alignMemory = (size, alignment) => {
+      return Math.ceil(size / alignment) * alignment;
+    };
+  
+  var growMemory = (size) => {
+      var oldHeapSize = wasmMemory.buffer.byteLength;
+      var pages = ((size - oldHeapSize + 65535) / 65536) | 0;
+      try {
+        // round size grow request up to wasm page size (fixed 64KB per spec)
+        wasmMemory.grow(pages); // .grow() takes a delta compared to the previous size
+        updateMemoryViews();
+        return 1 /*success*/;
+      } catch(e) {
+      }
+      // implicit 0 return to save code size (caller will cast "undefined" into 0
+      // anyhow)
     };
   var _emscripten_resize_heap = (requestedSize) => {
       var oldSize = HEAPU8.length;
       // With CAN_ADDRESS_2GB or MEMORY64, pointers are already unsigned.
       requestedSize >>>= 0;
-      abortOnCannotGrowMemory(requestedSize);
+      // With multithreaded builds, races can happen (another thread might increase the size
+      // in between), so return a failure, and let the caller retry.
+  
+      // Memory resize rules:
+      // 1.  Always increase heap size to at least the requested size, rounded up
+      //     to next page multiple.
+      // 2a. If MEMORY_GROWTH_LINEAR_STEP == -1, excessively resize the heap
+      //     geometrically: increase the heap size according to
+      //     MEMORY_GROWTH_GEOMETRIC_STEP factor (default +20%), At most
+      //     overreserve by MEMORY_GROWTH_GEOMETRIC_CAP bytes (default 96MB).
+      // 2b. If MEMORY_GROWTH_LINEAR_STEP != -1, excessively resize the heap
+      //     linearly: increase the heap size by at least
+      //     MEMORY_GROWTH_LINEAR_STEP bytes.
+      // 3.  Max size for the heap is capped at 2048MB-WASM_PAGE_SIZE, or by
+      //     MAXIMUM_MEMORY, or by ASAN limit, depending on which is smallest
+      // 4.  If we were unable to allocate as much memory, it may be due to
+      //     over-eager decision to excessively reserve due to (3) above.
+      //     Hence if an allocation fails, cut down on the amount of excess
+      //     growth, in an attempt to succeed to perform a smaller allocation.
+  
+      // A limit is set for how much we can grow. We should not exceed that
+      // (the wasm binary specifies it, so if we tried, we'd fail anyhow).
+      var maxHeapSize = getHeapMax();
+      if (requestedSize > maxHeapSize) {
+        return false;
+      }
+  
+      // Loop through potential heap size increases. If we attempt a too eager
+      // reservation that fails, cut down on the attempted size and reserve a
+      // smaller bump instead. (max 3 times, chosen somewhat arbitrarily)
+      for (var cutDown = 1; cutDown <= 4; cutDown *= 2) {
+        var overGrownHeapSize = oldSize * (1 + 0.2 / cutDown); // ensure geometric growth
+        // but limit overreserving (default to capping at +96MB overgrowth at most)
+        overGrownHeapSize = Math.min(overGrownHeapSize, requestedSize + 100663296 );
+  
+        var newSize = Math.min(maxHeapSize, alignMemory(Math.max(requestedSize, overGrownHeapSize), 65536));
+  
+        var replacement = growMemory(newSize);
+        if (replacement) {
+  
+          return true;
+        }
+      }
+      return false;
     };
 
   var ENV = {
@@ -5848,6 +6044,10 @@ var wasmImports = {
   _embind_register_class_property: __embind_register_class_property,
   /** @export */
   _embind_register_emval: __embind_register_emval,
+  /** @export */
+  _embind_register_enum: __embind_register_enum,
+  /** @export */
+  _embind_register_enum_value: __embind_register_enum_value,
   /** @export */
   _embind_register_float: __embind_register_float,
   /** @export */
