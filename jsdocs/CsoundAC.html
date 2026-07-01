@@ -3029,9 +3029,15 @@ the CsoundAC module namespace described below.</p>
 </section>
 <section class="member" id="class-Scale-method-secondary">
 <h4><code>secondary</code> <span class="cpp">(<code>csound::Scale::secondary</code>)</span></h4>
-<div class="doc">Returns the current Chord mutated, if possible, to one or more function(s) with respect to another Chord in its Scale .</p><p>Not &quot;secondary function of this chord,&quot; but &quot;this chord as secondary<br>function of another (tonicized) chord.&quot; If that is not possible, an empty Chord is returned. The number of voices defaults to that of the current Chord . Can be used to generate secondary dominants (function = 5), secondary supertonics (function = 2), secondary subtonics (function = 6), and so on. It is then up to the user to perform an appropriate progression by number of scale degrees in the original Scale .</div>
+<div class="doc">Returns the current Chord mutated, if possible, to one or more function(s) with respect to another Chord in its Scale .</p><p>Not &quot;secondary function of this chord,&quot; but &quot;this chord as secondary<br>function of another (tonicized) chord.&quot; If that is not possible, an empty Chord is returned. The number of voices defaults to that of the current Chord . Can be used to generate secondary dominants (function = 5), secondary supertonics (function = 2), secondary submediants (function = 6), and so on. It is then up to the user to perform an appropriate progression by number of scale degrees in the original Scale .</div>
 <table class="params"><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>current_chord</code></td><td></td></tr><tr><td><code>secondary_function</code></td><td></td></tr><tr><td><code>voices_</code></td><td></td></tr></tbody></table>
 <p class="returns"><strong>Returns:</strong> <code>std::vector&lt; Chord &gt;</code></p>
+</section>
+<section class="member" id="class-Scale-method-secondary_to_degree">
+<h4><code>secondary_to_degree</code> <span class="cpp">(<code>csound::Scale::secondary_to_degree</code>)</span></h4>
+<div class="doc">Returns the current Chord mutated, if possible, have the specified function with respect to the target scale degree of the Scale .</p><p>Not &quot;secondary function of this chord,&quot; but &quot;this chord as secondary<br>function of another (tonicized) chord.&quot; The number of voices defaults to that of the current Chord . Can be used to generate secondary dominants (function = 5), secondary supertonics (function = 2), secondary submediants (function = 6), and so on. It is then up to the user to perform an appropriate progression by number of scale degrees in the original Scale . If no such mutation can be found, nothing is done; i.e., the current Chord is returned.</div>
+<table class="params"><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>current_chord</code></td><td></td></tr><tr><td><code>secondary_function</code></td><td></td></tr><tr><td><code>target_degree</code></td><td></td></tr><tr><td><code>chord_voices</code></td><td></td></tr></tbody></table>
+<p class="returns"><strong>Returns:</strong> <code>Chord</code></p>
 </section>
 <section class="member" id="class-Scale-method-semitones_for_degree">
 <h4><code>semitones_for_degree</code> <span class="cpp">(<code>csound::Scale::semitones_for_degree</code>)</span></h4>
@@ -3386,15 +3392,15 @@ the CsoundAC module namespace described below.</p>
 <p><strong>Extends:</strong> <code>Score</code></p>
 <div class="doc">Score equipped with chords.</p><p>The notes in the score may be conformed to the chord that obtains at the time of the notes. The times and durations of notes and chords are rescaled together. This is done by finding minimum and maximum times by counting both note times and chord times.</div>
 <h4>Properties</h4>
-<section class="member" id="class-ChordScore-prop-chords_for_times">
-<h4><code>chords_for_times</code> <span class="cpp">(<code>csound::ChordScore::chords_for_times</code>)</span></h4>
+<section class="member" id="class-ChordScore-prop-harmonies_for_times">
+<h4><code>harmonies_for_times</code> <span class="cpp">(<code>csound::ChordScore::harmonies_for_times</code>)</span></h4>
 
-<p class="returns"><strong>Returns:</strong> <code>std::map&lt; double, Chord &gt;</code></p>
+<p class="returns"><strong>Returns:</strong> <code>std::map&lt; double, HarmonyEntry &gt;</code></p>
 </section>
 <h4>Methods</h4>
 <section class="member" id="class-ChordScore-method-conformToChords">
 <h4><code>conformToChords</code> <span class="cpp">(<code>csound::ChordScore::conformToChords</code>)</span></h4>
-<div class="doc">Conforms each note to the chord from getChord at that note's time.</div>
+<div class="doc">Conforms each note using the harmony entry from getHarmony at that note's onset time.</p><p>The octave_equivalence flag applies only to entries inserted with insertChord(time, chord) and mode Default.</div>
 <table class="params"><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>tie_overlaps</code></td><td></td></tr><tr><td><code>octave_equivalence</code></td><td></td></tr></tbody></table>
 <p class="returns"><strong>Returns:</strong> <code>void</code></p>
 </section>
@@ -3404,10 +3410,32 @@ the CsoundAC module namespace described below.</p>
 <table class="params"><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>time_</code></td><td></td></tr></tbody></table>
 <p class="returns"><strong>Returns:</strong> <code>Chord *</code></p>
 </section>
+<section class="member" id="class-ChordScore-method-getHarmony">
+<h4><code>getHarmony</code> <span class="cpp">(<code>csound::ChordScore::getHarmony</code>)</span></h4>
+<div class="doc">Returns the most recent harmony entry at or before time_ , or if none exists, the soonest entry after time_ .</p><p>Null if the timeline is empty.</div>
+<table class="params"><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>time_</code></td><td></td></tr></tbody></table>
+<p class="returns"><strong>Returns:</strong> <code>HarmonyEntry *</code></p>
+</section>
+<section class="member" id="class-ChordScore-method-gatherSoundingChord">
+<h4><code>gatherSoundingChord</code> <span class="cpp">(<code>csound::ChordScore::gatherSoundingChord</code>)</span></h4>
+<div class="doc">Returns pitches of notes sounding at time , considering score events with onset in [ prior_harmony_time , time ) whose off time is after time .</div>
+<table class="params"><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>score</code></td><td></td></tr><tr><td><code>prior_harmony_time</code></td><td></td></tr><tr><td><code>time</code></td><td></td></tr></tbody></table>
+<p class="returns"><strong>Returns:</strong> <code>Chord</code></p>
+</section>
 <section class="member" id="class-ChordScore-method-insertChord">
 <h4><code>insertChord</code> <span class="cpp">(<code>csound::ChordScore::insertChord</code>)</span></h4>
-<div class="doc">Records the turtle chord on the harmony timeline at tyme .</div>
+<div class="doc">Records a reference chord on the harmony timeline with mode Default.</div>
 <table class="params"><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>tyme</code></td><td></td></tr><tr><td><code>chord</code></td><td></td></tr></tbody></table>
+<p class="returns"><strong>Returns:</strong> <code>void</code></p>
+</section>
+<section class="member" id="class-ChordScore-method-insertChordWithMode">
+<h4><code>insertChordWithMode</code></h4>
+
+</section>
+<section class="member" id="class-ChordScore-method-insertFunctionalHarmony">
+<h4><code>insertFunctionalHarmony</code> <span class="cpp">(<code>csound::ChordScore::insertFunctionalHarmony</code>)</span></h4>
+<div class="doc">Records functional harmony at scale_degree of scale with mode Hd or Hds .</div>
+<table class="params"><thead><tr><th>Parameter</th><th>Description</th></tr></thead><tbody><tr><td><code>tyme</code></td><td></td></tr><tr><td><code>scale</code></td><td></td></tr><tr><td><code>scale_degree</code></td><td></td></tr><tr><td><code>voices</code></td><td></td></tr><tr><td><code>mode</code></td><td></td></tr><tr><td><code>voice_leading_range</code></td><td></td></tr></tbody></table>
 <p class="returns"><strong>Returns:</strong> <code>void</code></p>
 </section>
 <section class="member" id="class-ChordScore-method-getTimelineDuration">

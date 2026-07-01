@@ -1,0 +1,1365 @@
+/*jshint nomen: true */
+/**
+ @description PARAMETRIC LINDENMAYER SYSTEM
+
+Copyright (C) 2014, 2024 by Michael Gogins
+
+This software is licensed under the terms of the
+GNU Lesser General Public License
+
+Part of cloud-5, a browser-based algorithmic music composition system for 
+Csound and Strudel.
+
+For more complete documentation, see PLSYSTEM.md.
+*/
+
+(async function () {
+
+    var PLSystem = {};
+
+    /**
+
+    This one is redone, for the sake of ever-loving consistency, to use:
+
+    Event.TIME = 0;
+    Event.DURATION = 1;
+    Event.STATUS = 2;
+    Event.CHANNEL = 3;
+    Event.KEY = 4;
+    Event.VELOCITY = 5;
+    Event.X = 6;
+    Event.Y = 7;
+    Event.Z = 8;
+    Event.PHASE = 9;
+    Event.HOMOGENEITY = 10;
+    Event.COUNT = 11;
+
+    Or:
+
+    t, d, s, c, k, v, x
+
+    */
+
+    // There has to be a better way to do this. For now we just hope that CsoundAC is 
+    // in scope and not undefined when it is needed.
+    try {
+        window.CsoundAC = await createCsoundAC();
+        window.pitv = new CsoundAC.PITV();
+    } catch (ex) {
+        console.error(ex);
+    }
+    console.info("CsoundAC: " + CsoundAC);
+    console.info("pitv: " + pitv);
+
+    const GRAMMAR_DISCRETE_OBJECTS = new Set(['d', 'p', 'i', 't', 'v']);
+    const GRAMMAR_BUILTIN_NAMES = [
+        'Wcd', 'Wc', 'Wn', 'Hcv', 'Hcs', 'Hds', 'Hd', 'Hc', 'R', 'Q', 'M', 'S', 'K', 'I', 'F', 'T', '[', ']'
+    ];
+
+    PLSystem.harmony_mode = function (name) {
+        const modes = CsoundAC.HarmonyConformMode;
+        if (modes && typeof modes[name] !== 'undefined') {
+            return modes[name];
+        }
+        const fallback = {
+            Default: 0,
+            Hc: 1,
+            Hcv: 2,
+            Hcs: 3,
+            Hd: 4,
+            Hds: 5
+        };
+        return fallback[name];
+    };
+
+    PLSystem.is_identifier_expression = function (text) {
+        return /^[A-Za-z_$][\w$]*$/.test(text.trim());
+    };
+
+    PLSystem.formal_parameters_from_item = function (word) {
+        return word.actual_parameter_expressions.filter(expr => PLSystem.is_identifier_expression(expr));
+    };
+
+    PLSystem.is_legacy_word_text = function (text) {
+        return /^[A-Za-z_$][\w$]*\s*\(/.test(text.trim());
+    };
+
+    PLSystem.formal_parameter_index = function (word, formal_name) {
+        let index = word.actual_parameter_expressions.indexOf(formal_name);
+        if (index < 0) {
+            let parent_formals = PLSystem.formal_parameters_from_item(word);
+            index = parent_formals.indexOf(formal_name);
+        }
+        return index;
+    };
+
+    PLSystem.split_expressions = function (text) {
+        let expressions = [];
+        let current = '';
+        let depth_paren = 0;
+        let depth_brace = 0;
+        let depth_bracket = 0;
+        for (let i = 0; i < text.length; i++) {
+            let c = text[i];
+            if (c === '(') {
+                depth_paren++;
+                current += c;
+            } else if (c === ')') {
+                depth_paren--;
+                current += c;
+            } else if (c === '{') {
+                depth_brace++;
+                current += c;
+            } else if (c === '}') {
+                depth_brace--;
+                current += c;
+            } else if (c === '[') {
+                depth_bracket++;
+                current += c;
+            } else if (c === ']') {
+                depth_bracket--;
+                current += c;
+            } else if (c === ',' && depth_paren === 0 && depth_brace === 0 && depth_bracket === 0) {
+                expressions.push(current.trim());
+                current = '';
+            } else {
+                current += c;
+            }
+        }
+        if (current.length > 0) {
+            expressions.push(current.trim());
+        }
+        return expressions;
+    };
+
+    PLSystem.parse_vector_literal = function (text) {
+        text = text.trim();
+        if (text.charAt(0) !== '{') {
+            return null;
+        }
+        let values = [];
+        let token = '';
+        for (let i = 1; i < text.length; i++) {
+            let c = text[i];
+            if (c === '}') {
+                if (token.length > 0) {
+                    values.push(parseFloat(token));
+                }
+                break;
+            } else if (c === ',') {
+                if (token.length > 0) {
+                    values.push(parseFloat(token));
+                    token = '';
+                }
+            } else if (!/\s/.test(c)) {
+                token += c;
+            }
+        }
+        return values;
+    };
+
+    PLSystem.round_if_discrete = function (object_name, value) {
+        if (GRAMMAR_DISCRETE_OBJECTS.has(object_name)) {
+            return Math.round(value);
+        }
+        return value;
+    };
+
+    PLSystem.chord_from_pitches = function (pitches) {
+        let chord = new CsoundAC.Chord();
+        chord.resize(pitches.length);
+        for (let i = 0; i < pitches.length; i++) {
+            chord.setPitch(i, pitches[i]);
+        }
+        return chord;
+    };
+
+    PLSystem.scale_from_pitches = function (pitches) {
+        let scale = new CsoundAC.Scale();
+        scale.resize(pitches.length);
+        for (let i = 0; i < pitches.length; i++) {
+            scale.setPitch(i, pitches[i]);
+        }
+        return scale;
+    };
+
+    PLSystem.parse_legacy_word = function (word, text) {
+        word.grammar = 'legacy';
+        word.kind = 'symbol';
+        word.name = /s*([^(]*)/.exec(text)[1].trim();
+        word.actual_parameter_expressions = [];
+        let opening_parenthesis = text.indexOf('(');
+        let ending_parenthesis = text.lastIndexOf(')');
+        if (opening_parenthesis != -1 && ending_parenthesis != -1) {
+            word.actual_parameter_expressions = text.substring(opening_parenthesis + 1, ending_parenthesis).split(/, /);
+        }
+        word.key = word.name + '(' + word.actual_parameter_expressions.length + ')';
+    };
+
+    PLSystem.parse_grammar_word = function (word, text) {
+        word.grammar = 'plsystem';
+        let arithmetic_match = text.match(/^([nomcsdpitv])\s*([=+\-*/^])\s*(.+)$/);
+        if (arithmetic_match) {
+            word.kind = 'command';
+            word.command_type = 'arithmetic';
+            word.object = arithmetic_match[1];
+            word.operator = arithmetic_match[2];
+            word.name = word.object + word.operator;
+            word.actual_parameter_expressions = PLSystem.split_expressions(arithmetic_match[3]);
+            word.key = word.name + '(' + word.actual_parameter_expressions.length + ')';
+            return;
+        }
+        for (let i = 0; i < GRAMMAR_BUILTIN_NAMES.length; i++) {
+            let builtin_name = GRAMMAR_BUILTIN_NAMES[i];
+            if (text === builtin_name) {
+                word.kind = 'command';
+                word.command_type = 'builtin';
+                word.builtin_name = builtin_name;
+                word.name = builtin_name;
+                word.actual_parameter_expressions = [];
+                word.key = builtin_name + '()';
+                return;
+            }
+            if (text.indexOf(builtin_name + ' ') === 0) {
+                word.kind = 'command';
+                word.command_type = 'builtin';
+                word.builtin_name = builtin_name;
+                word.name = builtin_name;
+                word.actual_parameter_expressions = PLSystem.split_expressions(text.substring(builtin_name.length).trim());
+                word.key = builtin_name + '(' + word.actual_parameter_expressions.length + ')';
+                return;
+            }
+        }
+        let symbol_match = text.match(/^([A-Za-z_$][\w$]*)\s*(.*)$/);
+        if (symbol_match) {
+            word.kind = 'symbol';
+            word.name = symbol_match[1];
+            let remainder = symbol_match[2].trim();
+            word.actual_parameter_expressions = remainder.length > 0 ? PLSystem.split_expressions(remainder) : [];
+            word.key = word.name + '(' + word.actual_parameter_expressions.length + ')';
+            return;
+        }
+        word.kind = 'symbol';
+        word.name = text;
+        word.actual_parameter_expressions = [];
+        word.key = word.name + '(0)';
+    };
+
+    /**
+     * @class
+     * @classdesc
+     * 
+     * Represents the position of a "pen" that is moving about 
+     * and writing upon a Score. The state of the Turtle includes a note, 
+     * a chord, and another chord defining the scale of the Score.
+     * 
+     * @param {Event} note_ The current position of the Turtle in the chord 
+     * space.
+     * 
+     * @param {Chord} chord_ The current Chord to which the Turtle will bre 
+     * conformed.
+     * 
+     * @param {Chord} scale_ The scale of the chord space, which 
+     * controls the effect of certain chord transormations.
+     */
+    PLSystem.Turtle = class {
+        constructor(note_, chord_, scale_) {
+            this.orientation = [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1];
+            this.magnitude = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1];
+            if (typeof note_ === "undefined") {
+                this.note = new CsoundAC.Event();
+            } else {
+                this.note = note_;
+            }
+            if (typeof chord_ === "undefined") {
+                this.chord = new CsoundAC.Chord();
+            } else {
+                this.chord = chord_.clone();
+            }
+            this.prior_chord = this.chord.clone();
+            if (typeof scale_ === "undefined") {
+                this.scale = new CsoundAC.Scale();
+            } else {
+                this.scale = scale_.clone();
+            }
+            this.degree = 1;
+        }
+        /**
+         * Creates a clone of this Turtle.
+         * 
+         * @returns {Turtle} A value copy of this Turtle.
+         */
+        clone() {
+            let clone_ = new PLSystem.Turtle();
+            clone_.orientation = this.orientation.slice();
+            clone_.magnitude = this.magnitude.slice();
+            clone_.note = this.note.clone();
+            clone_.chord = this.chord.clone();
+            clone_.scale = this.scale.clone();
+            clone_.degree = this.degree;
+            clone_.prior_chord = this.prior_chord.clone();
+            clone_.pitv = this.pitv;
+            return clone_;
+        }
+        pitv_from_chord() {
+            if (typeof this.pitv === "undefined") {
+                throw new Error('Turtle.pitv is not set; assign lsystem.pitv to the turtle.');
+            }
+            return this.pitv.fromChord(this.chord);
+        }
+        apply_pitv(pitv) {
+            this.chord = this.pitv.toChord(pitv.P, pitv.I, pitv.T, pitv.V, this.chord).revoicing;
+        }
+        get o() {
+            return this.orientation;
+        }
+        set o(value) {
+            this.orientation = value;
+        }
+        get m() {
+            return this.magnitude;
+        }
+        set m(value) {
+            this.magnitude = value;
+        }
+        get n() {
+            return this.note;
+        }   
+        set n(value) {
+            this.note = value;
+        }
+        get c() {
+            return this.chord;
+        }
+        set c(value) {
+            this.chord = value;
+        }
+        get s() {
+            return this.scale;
+        }
+        set s(value) {
+            this.scale = value;
+        }
+        get d() {
+            return this.degree;
+        }
+        set d(value) {
+            this.degree = value;
+        }
+        get p() {
+            let pitv = this.pitv_from_chord();
+            return pitv.P;
+        }
+        set p(value) {
+            let pitv = this.pitv_from_chord();
+            pitv.P = value;
+            this.apply_pitv(pitv);
+        }
+        get i() {
+            let pitv = this.pitv_from_chord();
+            return pitv.I;
+        }
+        set i(value) {
+            let pitv = this.pitv_from_chord();
+            pitv.I = value;
+            this.apply_pitv(pitv);
+        }
+        get t() {
+            let pitv = this.pitv_from_chord();
+            return pitv.T;
+        }
+        set t(value) {
+            let pitv = this.pitv_from_chord();
+            pitv.T = value;
+            this.apply_pitv(pitv);
+        }
+        get v() {
+            let pitv = this.pitv_from_chord();
+            return pitv.V;
+        }
+        set v(value) {
+            let pitv = this.pitv_from_chord();
+            pitv.V = value;
+            this.apply_pitv(pitv);
+        }
+    };
+
+    /**
+     * @class 
+     * @classdesc 
+     * 
+     * Creates a Word with a name, a list of actual parameter expressions,
+     * an empty list of actual parameter values, and a Production-matching key
+     * from the text of the Word. 
+     * 
+     * @param {string} text Parsed to produce the parts of this Word. Both 
+     * formal parameters and actual parameters must be seperated by a comma 
+     * and a space (`", "`). _Actual_ parameters may contain or be expressions; 
+     * if so, no comma within such an expression may be followed by a space 
+     * (this prevents incorrect parsing into malformed parameters). Example: 
+     * `"J(2, myfunction(4,t/2,6) + p)"`.
+     */
+    PLSystem.Word = class {
+        constructor(text) {
+            this.text = text.trim();
+            this.actual_parameter_values = [];
+            if (PLSystem.is_legacy_word_text(this.text)) {
+                PLSystem.parse_legacy_word(this, this.text);
+            } else {
+                PLSystem.parse_grammar_word(this, this.text);
+            }
+            for (let i = 0; i < this.actual_parameter_expressions.length; i++) {
+                this.actual_parameter_values.push(null);
+            }
+        }
+        /**
+         * Creates a clone of this Word.
+         * 
+         * @returns {Word} A deep value copy of this Word.
+         */
+        clone() {
+            let clone_ = new PLSystem.Word('');
+            clone_.text = this.text;
+            clone_.key = this.key;
+            clone_.name = this.name;
+            clone_.grammar = this.grammar;
+            clone_.kind = this.kind;
+            clone_.command_type = this.command_type;
+            clone_.object = this.object;
+            clone_.operator = this.operator;
+            clone_.builtin_name = this.builtin_name;
+            clone_.actual_parameter_expressions = this.actual_parameter_expressions.slice();
+            clone_.actual_parameter_values = this.actual_parameter_values.slice();
+            return clone_;
+        }
+        /**
+         * Rewrites this Word by replacing it with a new Word or series of Words based 
+         * on the replacement rules and the values of the actual parameters.
+         * 
+         * @param {PLSyste} lsystem A ParametricLindenmayerSystem instance.
+         * @param {Array<Word>} current_production The current production of the ParametricLindenmayerSystem.
+         */
+        rewrite(lsystem, current_production) {
+            let rule = lsystem.rule_for_word(this);
+            if (typeof rule === "undefined") {
+                let rule_less = this.clone();
+                lsystem.evaluate_actual_parameter_expressions(null, rule_less);
+                current_production.push(rule_less);
+            } else {
+                let productions_for_conditions = rule.productions_for_conditions;
+                for (let condition in productions_for_conditions) {
+                    if (productions_for_conditions.hasOwnProperty(condition)) {
+                        let production = productions_for_conditions[condition];
+                        if (lsystem.evaluate_condition_expression(this, condition) === true) {
+                            for (let i = 0; i < production.length; i++) {
+                                let child = production[i].clone();
+                                lsystem.evaluate_actual_parameter_expressions(this, child);
+                                current_production.push(child);
+                            }
+                        }
+                    } else {
+                        console.log('Condition "false", skipping rewriting of ' + this.text + '.');
+                    }
+                }
+            }
+        }
+    };
+
+    PLSystem.Rule = class {
+        constructor(word_, condition_, production_) {
+            if (typeof word_ === typeof '') {
+                this.word = new PLSystem.Word(word_);
+            } else {
+                this.word = word_.clone();
+            }
+            this.productions_for_conditions = {};
+            this.add_condition(condition_, production_);
+        }
+        add_condition(condition_, production_) {
+            let production = [];
+            let words = production_.split(';');
+            for (let i = 0; i < words.length; i++) {
+                let word = words[i];
+                if (typeof word !== "undefined" && word !== null) {
+                    if (word.length > 0) {
+                        production.push(new PLSystem.Word(word));
+                    }
+                }
+            }
+            this.productions_for_conditions[condition_] = production;
+        }
+    };
+
+    /**
+     * Evaluates code but logs any exceptions thus caused.
+     * 
+     * @param {string} code Text of Javascript expression.
+     */
+
+    PLSystem.evaluate_with_minimal_scope = function (code) {
+        try {
+            let result = eval?.(code);
+            return result;
+        } catch (x) {
+            console.log(x);
+        }
+    }
+
+    /** 
+     * @class 
+     * @classdesc
+     *
+     * This parametric Lindenmayer system for generating musical scores is 
+     * defined as follows. See 
+     * http://hardlikesoftware.com/projects/lsystem/lsystem.html.
+     * For the original definition of this type of system, see Przemyslaw
+     * Prusinkiewicz and Aristid Lindenmayer, _The Algorithmic Beauty of 
+     * Plants_ (New York: Springer Verlag, 1996 [1990]), pp. 40-50.
+     *
+     * _Name_: JavaScript identifier.
+     * 
+     * _Word_: Text for a JavaScript expression consisting of a name, or a 
+     * JavaScript function call with either formal or actual parameters, 
+     * terminated with a semicolon, associated with a Command.
+     * 
+     * _Production_: A sequence of Words.
+     * 
+     * _Command_: A function that modifies the state of a Turtle; may be 
+     * built-in or user-defined. A Word that is not assigned a Command is 
+     * associated with a default builtin identity Command.
+     *
+     * _Turtle_: An abstract pen that writes a musical score by performing the 
+     * Commands in a Production.
+     * 
+     * _Axiom_: The initial Production of a Lindenmayer system, in which any 
+     * parameters are actual.
+     * 
+     * _Rule_: A triple [Word, Condition, Production] in which any parameters 
+     * may be actual or formal, or indeed any JavaScript expression.
+     * 
+     * _Lindenmayer system_: A set of Words, a set of associated Commands, an 
+     * Axiom, one or more Rules, and a finite number N of Iterations. For each 
+     * Word in the Axiom, the Axiom Word is replaced from the Rules; if the 
+     * Axiom Word Name matches the Rule Word Name, and the Axiom Word 
+     * parameters number the same as the Rule Word parameters, then if the 
+     * Condition evaluates as true, the Rule Production replaces the Axiom 
+     * Word after evaluating each Production Word's actual parameter 
+     * expressions after substituting the Axiom Word's actual parameter values 
+     * for any formal parameter names in the Production Word's actual 
+     * parameter expressions; if as false, there is no Production; otherwise, 
+     * the Axiom Word replaces itself. The resulting Production is taken as 
+     * the Axiom for the next iteration. This is repeated N times. Then the 
+     * final Production, consisting of a possibly long string of Words with 
+     * only actual parameters, is evaluated.
+     * 
+     * _Evaluation_: The Command of each Word in the final Production is 
+     * evaluated using the Turtle state and the Command with actual 
+     * parameters, possibly causing the Turtle to write a musical score.
+     *
+     * _Note_: The formal parameter names of the Word must be the same as the 
+     * formal parameter names (after 'lsystem' and 'turtle') of the Word's 
+     * Command (which is not a class member of the Word). The actual 
+     * parameters of the Word may be values or unevaluated expressions; when 
+     * the Command is called, the actual parameter expressions are evaluated 
+     * using the actual parameter values of the parent Word as the values of 
+     * the unevaluated parameters in the actual parameter expressions.
+     *
+     * _Example_: Note(i,t,d,k,v,p) is replaced by 
+     * Note(i*2,t^1.1,d-1,k+3,v*.9,p=Math.random()).
+     *    
+     * Reworked to use CsoundAC.PITV.
+     */
+    PLSystem.PLSystem = class {
+        constructor() {
+            this.score = new CsoundAC.ChordScore();
+            this.chord_score = this.score;
+            this.commands_for_words = {};
+            this.formal_parameters_for_commands = {};
+            this.formal_parameters_for_words = {};
+            this.axiom = [];
+            this.rules_for_words = {};
+            this.pitv = new CsoundAC.PITV();
+            this.chord_space_group = this.pitv;
+            this.turtle = new PLSystem.Turtle();
+            this.turtle.pitv = this.pitv;
+            this.identity_command = function (lsystem, turtle_) {
+                return turtle_;
+            };
+            this.add_command('Assign(dimension, value)', function (lsystem, turtle, dimension, value) {
+                turtle.note[dimension] = value;
+                return turtle;
+            });
+            this.add_command('Scale(dimension, value)', function (lsystem, turtle, dimension, value) {
+                turtle.magnitude[dimension] = value;
+                return turtle;
+            });
+            this.add_command('Move(dimension, value)', function (lsystem, turtle, dimension, value) {
+                turtle.note[dimension] += value;
+                return turtle;
+            });
+            this.add_command('Steps(s)', function (lsystem, turtle, s) {
+                orientation_ = numeric.mul(turtle.orientation, s);
+                orientation_ = numeric.mul(orientation_, turtle.magnitude);
+                turtle.note.data = numeric.add(turtle.note.data, orientation_);
+                return turtle;
+            });
+            this.add_command('Step()', function (lsystem, turtle) {
+                let scaled_direction = numeric.mul(turtle.orientation, turtle.magnitude);
+                turtle.note.data = numeric.add(turtle.note.data, scaled_direction);
+                return turtle;
+            });
+            // http://wscg.zcu.cz/wscg2004/Papers_2004_Short/N29.pdf: main rotations.
+            this.add_command('Turn(from_axis, to_axis, angle)', function (lsystem, turtle, from_axis, to_axis, angle) {
+                let rotation = numeric.identity(turtle.orientation.length);
+                rotation[from_axis][from_axis] = Math.cos(angle);
+                rotation[from_axis][to_axis] = -Math.sin(angle);
+                rotation[to_axis][from_axis] = Math.sin(angle);
+                rotation[to_axis][to_axis] = Math.cos(angle);
+                // The orientation is a row vector, not a column vector.
+                turtle.orientation = numeric.dotVM(turtle.orientation, rotation);
+                return turtle;
+            });
+            this.add_command('Assign(t, d, s, c, k, v, x)', function (lsystem, turtle, t, d, s, c, k, v, x) {
+                turtle.note.setTime(t * turtle.magnitude[0]);
+                turtle.note.setDuration(d * turtle.magnitude[1]);
+                turtle.note.setStatus(s * turtle.magnitude[2]);
+                turtle.note.setInstrument(c * turtle.magnitude[3]);
+                turtle.note.setKey(k * turtle.magnitude[4]);
+                turtle.note.setVelocity(v * turtle.magnitude[5]);
+                turtle.note.setPan(x * turtle.magnitude[6]);
+                return turtle;
+            });
+            this.add_command('Move(t, d, s, c, k, v, x)', function (lsystem, turtle, t, d, s, c, k, v, x) {
+                turtle.note.setTime(turtle.note.getTime() + (t * turtle.magnitude[0]));
+                turtle.note.setDuration(turtle.note.getDuration() + (d * turtle.magnitude[1]));
+                turtle.note.setStatus(turtle.note.getStatus() + (s * turtle.magnitude[2]));
+                turtle.note.setInstrument(turtle.note.getInstrument() + (c * turtle.magnitude[3]));
+                turtle.note.setKey(turtle.note.getKey() + (k * turtle.magnitude[4]));
+                turtle.note.setVelocity(turtle.note.getVelocity() + (v * turtle.magnitude[5]));
+                turtle.note.setPan(turtle.note.getPan() + (x * turtle.magnitude[6]));
+                return turtle;
+            });
+            this.add_command('Note(t, d, s, c, k, v, x)', function (lsystem, turtle, t, d, s, c, k, v, x) {
+                turtle.note.setTime(t * turtle.magnitude[0]);
+                turtle.note.setDuration(d * turtle.magnitude[1]);
+                turtle.note.setStatus(s * turtle.magnitude[2]);
+                turtle.note.setInstrument(c * turtle.magnitude[3]);
+                turtle.note.setKey(k * turtle.magnitude[4]);
+                turtle.note.setVelocity(v * turtle.magnitude[5]);
+                turtle.note.setPan(x * turtle.magnitude[6]);
+                let note = turtle.note.clone();
+                if (turtle.chord !== null) {
+                    note.chord = turtle.chord.clone();
+                }
+                lsystem.score.append_event(note);
+                return turtle;
+            });
+            this.add_command('Note()', function (lsystem, turtle) {
+                let note = turtle.note.clone();
+                lsystem.score.append_event(note);
+                return turtle;
+            });
+            this.add_command('Push()', function (lsystem, turtle) {
+                lsystem.turtle_stack.push(turtle.clone());
+                return turtle;
+            });
+            this.add_command('Pop()', function (lsystem, turtle) {
+                turtle = lsystem.turtle_stack.pop();
+                return turtle;
+            });
+            this.add_command('T(n)', function (lsystem, turtle, n) {
+                turtle.chord = turtle.chord.T(n);
+                lsystem.score.insertChord(turtle.note.getTime(), turtle.chord);
+                return turtle;
+            });
+            this.add_command('I(c)', function (lsystem, turtle, c) {
+                turtle.chord = turtle.chord.I(c);
+                lsystem.score.insertChord(turtle.note.getTime(), turtle.chord);
+                return turtle;
+            });
+            this.add_command('K()', function (lsystem, turtle) {
+                turtle.chord = turtle.chord.K();
+                lsystem.score.insertChord(turtle.note.getTime(), turtle.chord);
+                return turtle;
+            });
+            this.add_command('Q(n)', function (lsystem, turtle, n) {
+                turtle.chord = turtle.chord.Q(n, turtle.scale);
+                return turtle;
+            });
+            this.add_command('J(n, m)', function (lsystem, turtle, n, m) {
+                let inversions = turtle.chord.J(n);
+                if (inversions.length > m) {
+                    turtle.chord = inversions[m];
+                }
+                return turtle;
+            });
+            /**
+             * Assign the parameters P, I, T, and V to the current turtle state.
+             */
+            this.add_command('PitvAssign(P, I, T, V)', function (lsystem, turtle, P, I, T, V) {
+                turtle.chord = lsystem.pitv.toChord(P, I, T, V, turtle.chord).revoicing;
+                return turtle;
+            });
+            /**
+             * Add the parameters P, I, T, and V to the current turtle state.
+             */
+            this.add_command('PitvMove(P, I, T, V', function (lsystem, turtle, P, I, T, V) {
+                let pitv = lsystem.pitv.fromChord(turtle.chord);
+                pitv.P += P;
+                pitv.I += I;
+                pitv.T += T;
+                pitv.V += V;
+                turtle.chord = lsystem.pitv.toChord(pitv.P, pitv.I, pitv.T, pitv.V, turtle.chord).revoicing;
+                return turtle;
+            });
+            /**
+             * Assign the parameter P to the current turtle state.
+             */
+            this.add_command('PAssign(P)', function (lsystem, turtle, P) {
+                let pitv = lsystem.pitv.fromChord(turtle.chord);
+                pitv.P = P;
+                turtle.chord = lsystem.pitv.toChord(pitv.P, pitv.I, pitv.T, pitv.V, turtle.chord).revoicing;
+                return turtle;
+            });
+            /**
+             * Add the parameter P to the current turtle state.
+             */
+            this.add_command('PMove(P)', function (lsystem, turtle, P) {
+                let pitv = lsystem.pitv.fromChord(turtle.chord);
+                pitv.P += P;
+                turtle.chord = lsystem.pitv.toChord(pitv.P, pitv.I, pitv.T, pitv.V, turtle.chord).revoicing;
+                return turtle;
+            });
+            /**
+             * Assign the parameter I to the current turtle state.
+             */
+            this.add_command('IAssign(I)', function (lsystem, turtle, I) {
+                let pitv = lsystem.pitv.fromChord(turtle.chord);
+                pitv.I = I;
+                turtle.chord = lsystem.pitv.toChord(pitv.P, pitv.I, pitv.T, pitv.V, turtle.chord).revoicing;
+                return turtle;
+            });
+            /**
+             * Add the parameter I to the current turtle state.
+             */
+            this.add_command('IMove(I)', function (lsystem, turtle, I) {
+                let pitv = lsystem.pitv.fromChord(turtle.chord);
+                pitv.I += I;
+                turtle.chord = lsystem.pitv.toChord(pitv.P, pitv.I, pitv.T, pitv.V, turtle.chord).revoicing;
+                return turtle;
+            });
+            /**
+             * Assign the parameter T to the current turtle state.
+             */
+            this.add_command('TAssign(T)', function (lsystem, turtle, T) {
+                let pitv = lsystem.pitv.fromChord(turtle.chord);
+                pitv.T = T;
+                turtle.chord = lsystem.pitv.toChord(pitv.P, pitv.I, pitv.T, pitv.V, turtle.chord).revoicing;
+                return turtle;
+            });
+            /**
+             * Add the parameter T to the current turtle state.
+             */
+            this.add_command('TMove(T)', function (lsystem, turtle, T) {
+                let pitv = lsystem.pitv.fromChord(turtle.chord);
+                pitv.T += T;
+                turtle.chord = lsystem.pitv.toChord(pitv.P, pitv.I, pitv.T, pitv.V, turtle.chord).revoicing;
+                return turtle;
+            });
+            /**
+             * Assign the parameter V to the current turtle state.
+             */
+            this.add_command('VAssign(V)', function (lsystem, turtle, V) {
+                let pitv = lsystem.pitv.fromChord(turtle.chord);
+                pitv.V = V;
+                turtle.chord = lsystem.pitv.toChord(pitv.P, pitv.I, pitv.T, pitv.V, turtle.chord).revoicing;
+                return turtle;
+            });
+            /**
+             * Add the parameter V to the current turtle state.
+             */
+            this.add_command('VMove(V)', function (lsystem, turtle, V) {
+                let pitv = lsystem.pitv.fromChord(turtle.chord);
+                pitv.V += V;
+                turtle.chord = lsystem.pitv.toChord(pitv.P, pitv.I, pitv.T, pitv.V, turtle.chord).revoicing;
+                return turtle;
+            });
+            /**
+             * Append the turtle chord as note events in the score. Does not
+             * update the harmony timeline (use Chord() for conformToChords).
+             */
+            this.add_command('ChordNotesDuration(D)', function (lsystem, turtle, D) {
+                turtle.chord.setDuration(D);
+                CsoundAC.insert(lsystem.score, turtle.chord, turtle.note.getTime());
+                turtle.prior_chord = turtle.chord.clone();
+                return turtle;
+            });
+            /** Append the turtle chord as note events (see ChordNotesDuration). */
+            this.add_command('ChordNotes()', function (lsystem, turtle) {
+                CsoundAC.insert(lsystem.score, turtle.chord, turtle.note.getTime());
+                turtle.prior_chord = turtle.chord.clone();
+                return turtle;
+            });
+            /**
+             * Create a chord at the current time and duration from
+             * the current turtle state's P, I, T at the closest voiceleading from
+             * the previous chord. The voiceleading is done between the prior and
+             * current state of the turtle.chord, so may not perform as expected
+             * unless operations are successive in time. Please note, the
+             * PITV of the LSystem must first have been initialized.
+             */
+            this.add_command('ChordNotesVoiceleading()', function (lsystem, turtle) {
+                turtle.chord = CsoundAC.voiceleadingClosestRange(turtle.prior_chord, turtle.chord, lsystem.pitv.range, true);
+                CsoundAC.insert(lsystem.score, turtle.chord, turtle.note.getTime());
+                turtle.prior_chord = turtle.chord.clone();
+                return turtle;
+            });
+            /**
+             * Insert the current turtle chord on the harmony timeline at the
+             * turtle time (same as T/K/I do after transforming). Use when the
+             * chord changes without those commands; see conformToChords.
+             */
+            this.add_command('Chord()', function (lsystem, turtle) {
+                lsystem.score.insertChord(turtle.note.getTime(), turtle.chord);
+                turtle.prior_chord = turtle.chord.clone();
+                return turtle;
+            });
+            this.reset();
+        }
+        formal_parameters_for(word_key) {
+            let formal_parameters = this.formal_parameters_for_commands[word_key];
+            if (typeof formal_parameters === "undefined") {
+                formal_parameters = this.formal_parameters_for_words[word_key];
+            }
+            return formal_parameters;
+        }
+        bind_parent_formals_to_prologue(parent_word, prologue) {
+            let formal_parameters = this.formal_parameters_for(parent_word.key);
+            if (typeof formal_parameters !== "undefined") {
+                for (let i = 0; i < formal_parameters.length; i++) {
+                    let formal_parameter_name = formal_parameters[i];
+                    let parent_actual_parameter_value = parent_word.actual_parameter_values[i];
+                    if (parent_actual_parameter_value === null) {
+                        parent_actual_parameter_value = PLSystem.evaluate_with_minimal_scope(
+                            parent_word.actual_parameter_expressions[i]);
+                    }
+                    prologue += 'let ' + formal_parameter_name + ' = ' + parent_actual_parameter_value + ';';
+                }
+            }
+            return prologue;
+        }
+        register_formal_parameters_for_item(word) {
+            let formals = PLSystem.formal_parameters_from_item(word);
+            if (formals.length > 0) {
+                let existing = this.formal_parameters_for_words[word.key];
+                // Rule LHS patterns (all-identifier formals) must not be replaced by
+                // production RHS lines where only some slots are bare identifiers (e.g. `s`).
+                if (typeof existing === "undefined" || formals.length > existing.length) {
+                    this.formal_parameters_for_words[word.key] = formals;
+                }
+            }
+        }
+        apply_arithmetic_scalar(target, operation, value, object_name) {
+            if (operation === '=') {
+                return PLSystem.round_if_discrete(object_name, value);
+            } else if (operation === '+') {
+                return PLSystem.round_if_discrete(object_name, target + value);
+            } else if (operation === '-') {
+                return PLSystem.round_if_discrete(object_name, target - value);
+            } else if (operation === '*') {
+                return PLSystem.round_if_discrete(object_name, target * value);
+            } else if (operation === '/') {
+                return PLSystem.round_if_discrete(object_name, target / value);
+            } else if (operation === '^') {
+                return PLSystem.round_if_discrete(object_name, Math.pow(target, value));
+            }
+            return target;
+        }
+        apply_arithmetic_array(target, operation, value, index, object_name) {
+            let result = target.slice();
+            if (typeof index === "number" && index >= 0 && index < result.length) {
+                result[index] = this.apply_arithmetic_scalar(result[index], operation, value, object_name);
+            } else {
+                for (let i = 0; i < result.length; i++) {
+                    result[i] = this.apply_arithmetic_scalar(result[i], operation, value, object_name);
+                }
+            }
+            return result;
+        }
+        apply_pitv_component(lsystem, turtle, component, operation, value) {
+            let pitv = lsystem.pitv.fromChord(turtle.chord);
+            pitv[component] = this.apply_arithmetic_scalar(pitv[component], operation, value, component.toLowerCase());
+            turtle.chord = lsystem.pitv.toChord(pitv.P, pitv.I, pitv.T, pitv.V, turtle.chord).revoicing;
+            return turtle;
+        }
+        assign_note_fields(turtle, values, operation) {
+            let fields = [
+                ['setTime', 0],
+                ['setDuration', 1],
+                ['setStatus', 2],
+                ['setInstrument', 3],
+                ['setKey', 4],
+                ['setVelocity', 5],
+                ['setPan', 6]
+            ];
+            for (let i = 0; i < fields.length && i < values.length; i++) {
+                let setter = fields[i][0];
+                let magnitude_index = fields[i][1];
+                let scaled = values[i] * turtle.magnitude[magnitude_index];
+                if (operation === '=') {
+                    turtle.note[setter](scaled);
+                } else if (operation === '+') {
+                    let getter = setter.replace('set', 'get');
+                    turtle.note[setter](turtle.note[getter]() + scaled);
+                } else if (operation === '-') {
+                    let getter = setter.replace('set', 'get');
+                    turtle.note[setter](turtle.note[getter]() - scaled);
+                } else if (operation === '*') {
+                    let getter = setter.replace('set', 'get');
+                    turtle.note[setter](turtle.note[getter]() * scaled);
+                } else if (operation === '/') {
+                    let getter = setter.replace('set', 'get');
+                    turtle.note[setter](turtle.note[getter]() / scaled);
+                } else if (operation === '^') {
+                    let getter = setter.replace('set', 'get');
+                    turtle.note[setter](Math.pow(turtle.note[getter](), scaled));
+                }
+            }
+            return turtle;
+        }
+        interpret_grammar_arithmetic(word, turtle) {
+            let args = word.actual_parameter_values;
+            let object_name = word.object;
+            let operation = word.operator;
+            if (object_name === 'n') {
+                if (operation === '=' && args.length === 7) {
+                    turtle = this.assign_note_fields(turtle, args, '=');
+                    let note = turtle.note.clone();
+                    if (turtle.chord !== null) {
+                        note.chord = turtle.chord.clone();
+                    }
+                    this.score.append_event(note);
+                    return turtle;
+                }
+                if (args.length >= 2) {
+                    let dimension = args[0];
+                    let value = args[1];
+                    if (operation === '=') {
+                        turtle.note[dimension] = value;
+                    } else if (operation === '+') {
+                        turtle.note[dimension] += value;
+                    } else if (operation === '-') {
+                        turtle.note[dimension] -= value;
+                    } else if (operation === '*') {
+                        turtle.note[dimension] *= value;
+                    } else if (operation === '/') {
+                        turtle.note[dimension] /= value;
+                    } else if (operation === '^') {
+                        turtle.note[dimension] = Math.pow(turtle.note[dimension], value);
+                    }
+                }
+                return turtle;
+            }
+            if (object_name === 'o') {
+                if (operation === '=' && args.length === 1) {
+                    let vector = PLSystem.parse_vector_literal(args[0]);
+                    if (vector !== null) {
+                        turtle.orientation = vector;
+                    }
+                } else if (args.length >= 2) {
+                    turtle.orientation = this.apply_arithmetic_array(turtle.orientation, operation, args[1], args[0], object_name);
+                }
+                return turtle;
+            }
+            if (object_name === 'm') {
+                if (operation === '=' && args.length === 1) {
+                    let vector = PLSystem.parse_vector_literal(args[0]);
+                    if (vector !== null) {
+                        turtle.magnitude = vector;
+                    }
+                } else if (args.length >= 2) {
+                    let dimension = args[0];
+                    let value = args[1];
+                    if (operation === '*') {
+                        turtle.magnitude[dimension] = value;
+                    } else {
+                        turtle.magnitude = this.apply_arithmetic_array(turtle.magnitude, operation, value, dimension, object_name);
+                    }
+                }
+                return turtle;
+            }
+            if (object_name === 'c') {
+                if (operation === '=' && args.length === 1) {
+                    let vector = PLSystem.parse_vector_literal(args[0]);
+                    if (vector !== null) {
+                        turtle.chord = PLSystem.chord_from_pitches(vector);
+                    }
+                } else if (args.length >= 2) {
+                    let index = args[0];
+                    let value = args[1];
+                    if (operation === '=') {
+                        turtle.chord.setPitch(index, value);
+                    } else {
+                        let current = turtle.chord.getPitch(index);
+                        turtle.chord.setPitch(index, this.apply_arithmetic_scalar(current, operation, value, object_name));
+                    }
+                }
+                return turtle;
+            }
+            if (object_name === 's') {
+                if (operation === '=' && args.length === 1) {
+                    let vector = PLSystem.parse_vector_literal(args[0]);
+                    if (vector !== null) {
+                        turtle.scale = PLSystem.scale_from_pitches(vector);
+                    }
+                }
+                return turtle;
+            }
+            if (object_name === 'd') {
+                if (args.length >= 1) {
+                    let value = args[0];
+                    if (operation === '=') {
+                        turtle.degree = PLSystem.round_if_discrete('d', value);
+                    } else {
+                        turtle.degree = this.apply_arithmetic_scalar(turtle.degree, operation, value, 'd');
+                    }
+                }
+                return turtle;
+            }
+            if (object_name === 'p') {
+                return this.apply_pitv_component(this, turtle, 'P', operation, args[0]);
+            }
+            if (object_name === 'i') {
+                return this.apply_pitv_component(this, turtle, 'I', operation, args[0]);
+            }
+            if (object_name === 't') {
+                return this.apply_pitv_component(this, turtle, 'T', operation, args[0]);
+            }
+            if (object_name === 'v') {
+                return this.apply_pitv_component(this, turtle, 'V', operation, args[0]);
+            }
+            return turtle;
+        }
+        insert_harmony(turtle, chord, mode_name, voices) {
+            const mode = (typeof mode_name === 'number')
+                ? mode_name
+                : PLSystem.harmony_mode(mode_name);
+            const time = turtle.note.getTime();
+            const voices_arg = (typeof voices === 'number' && voices > 0) ? voices : -1;
+            const range = this.pitv.range;
+            const functional_mode = mode === PLSystem.harmony_mode('Hd')
+                || mode === PLSystem.harmony_mode('Hds');
+            if (functional_mode) {
+                this.score.insertFunctionalHarmony(
+                    time, turtle.scale, turtle.degree, voices_arg, mode, range);
+                const voice_count = voices_arg > 0 ? voices_arg : turtle.chord.voices();
+                turtle.prior_chord = turtle.scale.chord(turtle.degree, voice_count).clone();
+            } else if (typeof this.score.insertChordWithMode === 'function') {
+                const reference = chord || turtle.chord;
+                this.score.insertChordWithMode(time, reference, mode, voices_arg, range);
+                turtle.prior_chord = reference.clone();
+            } else {
+                const reference = chord || turtle.chord;
+                this.score.insertChord(time, reference);
+                turtle.prior_chord = reference.clone();
+            }
+            return turtle;
+        }
+        interpret_grammar_builtin(word, turtle) {
+            let args = word.actual_parameter_values;
+            switch (word.builtin_name) {
+                case 'F': {
+                    let scaled_direction = numeric.mul(turtle.orientation, turtle.magnitude);
+                    turtle.note.data = numeric.add(turtle.note.data, scaled_direction);
+                    return turtle;
+                }
+                case 'R': {
+                    if (args.length >= 3) {
+                        let from_axis = args[0];
+                        let to_axis = args[1];
+                        let angle = args[2];
+                        let rotation = numeric.identity(turtle.orientation.length);
+                        rotation[from_axis][from_axis] = Math.cos(angle);
+                        rotation[from_axis][to_axis] = -Math.sin(angle);
+                        rotation[to_axis][from_axis] = Math.sin(angle);
+                        rotation[to_axis][to_axis] = Math.cos(angle);
+                        turtle.orientation = numeric.dotVM(turtle.orientation, rotation);
+                    }
+                    return turtle;
+                }
+                case 'Wn': {
+                    let note = turtle.note.clone();
+                    this.score.append_event(note);
+                    return turtle;
+                }
+                case 'Wc': {
+                    CsoundAC.insert(this.score, turtle.chord, turtle.note.getTime());
+                    turtle.prior_chord = turtle.chord.clone();
+                    return turtle;
+                }
+                case 'Wcd': {
+                    if (args.length > 0) {
+                        turtle.chord.setDuration(args[0]);
+                    }
+                    CsoundAC.insert(this.score, turtle.chord, turtle.note.getTime());
+                    turtle.prior_chord = turtle.chord.clone();
+                    return turtle;
+                }
+                case 'Hc': {
+                    let voices = args.length > 0 ? args[0] : turtle.chord.voices();
+                    return this.insert_harmony(turtle, turtle.chord, 'Hc', voices);
+                }
+                case 'Hcv': {
+                    return this.insert_harmony(turtle, turtle.chord, 'Hcv');
+                }
+                case 'Hcs': {
+                    return this.insert_harmony(turtle, turtle.chord, 'Hcs');
+                }
+                case 'Hd': {
+                    let voices = args.length > 0 ? args[0] : turtle.chord.voices();
+                    return this.insert_harmony(turtle, null, 'Hd', voices);
+                }
+                case 'Hds': {
+                    let voices = args.length > 0 ? args[0] : turtle.chord.voices();
+                    return this.insert_harmony(turtle, null, 'Hds', voices);
+                }
+                case 'M': {
+                    if (args.length > 0) {
+                        let voices = args.length > 1 ? args[1] : turtle.chord.voices();
+                        let modulations = turtle.scale.modulations_for_voices(turtle.chord, voices);
+                        if (modulations.length > 0) {
+                            let index = args[0];
+                            while (index < 0) {
+                                index += modulations.length;
+                            }
+                            while (index >= modulations.length) {
+                                index -= modulations.length;
+                            }
+                            turtle.scale = modulations[index];
+                        } else {
+                            console.warn('No modulation is possible for the current scale and chord.');
+                        }
+                    }
+                    return turtle;
+                }
+                case 'S': {
+                    if (args.length >= 2) {
+                        let voices = args.length > 2 ? args[2] : -1;
+                        let temporary_chord = turtle.scale.secondary_to_degree(turtle.chord, args[0], args[1], voices);
+                        if (temporary_chord == turtle.chord) {
+                            console.warn('No secondary function to degree mutation is possible for the current scale and chord.');
+                        } else {
+                            turtle.chord = temporary_chord;
+                        }
+                    }
+                    return turtle;
+                }
+                case 'I': {
+                    turtle.chord = turtle.chord.eI();
+                    return turtle;
+                }
+                case 'K': {
+                    turtle.chord = turtle.chord.K();
+                    return turtle;
+                }
+                case 'T': {
+                    if (args.length > 0) {
+                        turtle.chord = turtle.chord.T(args[0]);
+                    }
+                    return turtle;
+                }
+                case 'Q': {
+                    let steps = args.length > 0 ? args[0] : 1;
+                    turtle.chord = turtle.chord.Q(steps, turtle.scale);
+                    return turtle;
+                }
+                case '[': {
+                    this.turtle_stack.push(turtle.clone());
+                    return turtle;
+                }
+                case ']': {
+                    if (this.turtle_stack.length > 0) {
+                        turtle = this.turtle_stack.pop();
+                        turtle.pitv = this.pitv;
+                    }
+                    return turtle;
+                }
+                default:
+                    return turtle;
+            }
+        }
+        interpret_grammar_command(word, turtle) {
+            turtle.pitv = this.pitv;
+            if (word.command_type === 'arithmetic') {
+                return this.interpret_grammar_arithmetic(word, turtle);
+            }
+            if (word.command_type === 'builtin') {
+                return this.interpret_grammar_builtin(word, turtle);
+            }
+            return turtle;
+        }
+        reset(text) {
+            this.iteration = 0;
+            this.turtle_stack = [];
+            this.stack = this.turtle_stack;
+            this.score = new window.CsoundAC.ChordScore();
+            this.chord_score = this.score;
+            this.turtle.pitv = this.pitv;
+        }
+        evaluate_actual_parameter_expressions(parent_word, child_word) {
+            try {
+                let prologue = 'let iteration = ' + this.iteration + ';';
+                if (parent_word !== null) {
+                    prologue = this.bind_parent_formals_to_prologue(parent_word, prologue);
+                }
+                for (let parameterIndex = 0; parameterIndex < child_word.actual_parameter_expressions.length; parameterIndex++) {
+                    let child_word_actual_parameter_expression = child_word.actual_parameter_expressions[parameterIndex];
+                    child_word.actual_parameter_values[parameterIndex] = PLSystem.evaluate_with_minimal_scope(prologue + child_word_actual_parameter_expression);
+                }
+            } catch (err) {
+                console.log(err.stack);
+                throw err;
+            }
+        }
+        evaluate_condition_expression(parent_word, condition) {
+            try {
+                let prologue = 'let iteration = ' + this.iteration + ';';
+                prologue = this.bind_parent_formals_to_prologue(parent_word, prologue);
+                return PLSystem.evaluate_with_minimal_scope(prologue + condition);
+            } catch (err) {
+                console.log(err.stack);
+                throw err;
+            }
+        }
+        set_axiom(text) {
+            this.axiom.length = 0;
+            let words = text.split(';');
+            for (let i = 0; i < words.length; i++) {
+                let word = words[i];
+                if (word.length > 0) {
+                    this.axiom.push(new PLSystem.Word(word));
+                }
+            }
+        }
+        set_turtle(turtle_) {
+            this.turtle = turtle_;
+            this.turtle.pitv = this.pitv;
+        }
+        add_command(word_text, command) {
+            let word = new PLSystem.Word(word_text);
+            this.commands_for_words[word.key] = command;
+            let formal_parameters = this.parameters_from_function_declaration(word_text);
+            this.formal_parameters_for_commands[word.key] = formal_parameters;
+        }
+        add_rule(word_, condition, production) {
+            let word = new PLSystem.Word(word_);
+            this.register_formal_parameters_for_item(word);
+            let rule = this.rule_for_word(word);
+            if (typeof rule === "undefined") {
+                rule = new PLSystem.Rule(word, condition, production);
+                this.rules_for_words[rule.word.key] = rule;
+            } else {
+                rule.add_condition(condition, production);
+            }
+        };
+        command_for_word(word) {
+            let command = this.commands_for_words[word.key];
+            if (typeof command === "undefined") {
+                command = this.identity_command;
+            }
+            return command;
+        }
+        invoke_command(word, turtle) {
+            turtle.pitv = this.pitv;
+            if (word.grammar === 'plsystem' && word.kind === 'command') {
+                return this.interpret_grammar_command(word, turtle);
+            }
+            let actual_parameter_values = word.actual_parameter_values.slice();
+            let command = this.command_for_word(word);
+            actual_parameter_values.splice(0, 0, this, turtle);
+            return command.apply(word, actual_parameter_values);
+        }
+        generate(iterations) {
+            if (typeof iterations !== "undefined") {
+                this.iterations = iterations;
+            }
+            try {
+                let initial_production = this.axiom;
+                let current_production = [];
+                let wordIndex;
+                for (this.iteration = 0; this.iteration < this.iterations; this.iteration++) {
+                    current_production.length = 0;
+                    for (wordIndex = 0; wordIndex < initial_production.length; wordIndex++) {
+                        let parent = initial_production[wordIndex].clone();
+                        parent.rewrite(this, current_production);
+                    }
+                    initial_production = current_production.slice();
+                }
+                let working_turtle = this.turtle.clone();
+                working_turtle.pitv = this.pitv;
+                for (wordIndex = 0; wordIndex < current_production.length; wordIndex++) {
+                    let word = current_production[wordIndex];
+                    working_turtle = this.invoke_command(word, working_turtle);
+                }
+                this.turtle = working_turtle;
+            } catch (ex) {
+                console.log(ex);
+                throw ex;
+            }
+        }
+        rule_for_word(word) {
+            return this.rules_for_words[word.key];
+        }
+        parameters_from_function_declaration(str) {
+            let args = /\(\s*([^)]+?)\s*\)/.exec(str);
+            if (args === null) {
+                return [];
+            }
+            if (args[1]) {
+                args = args[1].split(/\s*,\s*/);
+            }
+            return args;
+        }
+        function_name_from_word(word) {
+            let function_name = /function ([^(]*)/.exec(word)[1];
+            return function_name;
+        }
+        words_from_production(production) {
+            let words = production.split(';');
+            return words;
+        }
+        /**
+         * Conforms the pitch of each event in this,
+         * to the closest pitch-class in its chord.
+         */
+        conformToChords() {
+            this.score.sort();
+            this.score.conformToChords(true, true);
+            
+            //     if (event.status == 144 && event.chord !== null) {
+            //         ChordSpace.conformToChord(event, event.chord, false);
+            //     }
+            // });
+        }
+    };
+
+    //////////////////////////////////////////////////////////////////////////////
+    // EXPORTS
+    //////////////////////////////////////////////////////////////////////////////
+
+    // Node: Export function
+    if (typeof module !== "undefined" && module.exports) {
+        module.exports = PLSystem;
+    }
+    // AMD/requirejs: Define the module
+    else if (typeof define === 'function' && define.amd) {
+        define(function () {
+            return PLSystem;
+        });
+    }
+    // Browser: Expose to window
+    else {
+        window.PLSystem = PLSystem;
+    }
+
+})();
